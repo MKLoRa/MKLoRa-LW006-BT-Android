@@ -5,10 +5,11 @@ public class AdvInfo {
     public int deviceType;
     public int rssi;
     public String mac;
-    public boolean lowPower;
+    public int powerPercent;
     public long scanTime;
     public long intervalTime;
     public int txPower;
     public boolean verifyEnable;
     public boolean connectable;
+    public int batteryVoltage;
 }

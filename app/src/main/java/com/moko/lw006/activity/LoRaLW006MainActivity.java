@@ -130,12 +130,7 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
         mBind.ivRefresh.startAnimation(animation);
         beaconInfoParseable = new AdvInfoAnalysisImpl();
         mokoBleScanner.startScanDevice(this);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mokoBleScanner.stopScanDevice();
-            }
-        }, 1000 * 60);
+        mHandler.postDelayed(() -> mokoBleScanner.stopScanDevice(), 1000 * 60);
     }
 
 
@@ -165,8 +160,7 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
     @Override
     public void onScanDevice(DeviceInfo deviceInfo) {
         AdvInfo beaconInfo = beaconInfoParseable.parseDeviceInfo(deviceInfo);
-        if (beaconInfo == null)
-            return;
+        if (beaconInfo == null) return;
         beaconInfoHashMap.put(beaconInfo.mac, beaconInfo);
     }
 
@@ -375,16 +369,15 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
             dialog.show();
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
-
                 @Override
                 public void run() {
-                    runOnUiThread(() -> dialog.showKeyboard());
+                    runOnUiThread(dialog::showKeyboard);
                 }
             }, 200);
         }
     }
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -458,33 +451,32 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
             OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
             int responseType = response.responseType;
             byte[] value = response.responseValue;
-            switch (orderCHAR) {
-                case CHAR_PASSWORD:
-                    dismissLoadingMessageDialog();
-                    if (value.length == 5) {
-                        int header = value[0] & 0xFF;// 0xED
-                        int flag = value[1] & 0xFF;// read or write
-                        int cmd = value[2] & 0xFF;
-                        if (header != 0xED)
-                            return;
-                        int length = value[3] & 0xFF;
-                        if (flag == 0x01 && cmd == 0x01 && length == 0x01) {
-                            int result = value[4] & 0xFF;
-                            if (1 == result) {
-                                mSavedPassword = mPassword;
-                                SPUtiles.setStringValue(LoRaLW006MainActivity.this, AppConstants.SP_KEY_SAVED_PASSWORD_LW006, mSavedPassword);
-                                XLog.i("Success");
-                                Intent i = new Intent(LoRaLW006MainActivity.this, DeviceInfoActivity.class);
-                                i.putExtra(AppConstants.EXTRA_KEY_DEVICE_TYPE, mDeviceType);
-                                startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
-                            }
-                            if (0 == result) {
-                                isPasswordError = true;
-                                ToastUtils.showToast(LoRaLW006MainActivity.this, "Password Error");
-                                LoRaLW006MokoSupport.getInstance().disConnectBle();
-                            }
+            if (orderCHAR == OrderCHAR.CHAR_PASSWORD) {
+                dismissLoadingMessageDialog();
+                if (value.length == 5) {
+                    int header = value[0] & 0xFF;// 0xED
+                    int flag = value[1] & 0xFF;// read or write
+                    int cmd = value[2] & 0xFF;
+                    if (header != 0xED)
+                        return;
+                    int length = value[3] & 0xFF;
+                    if (flag == 0x01 && cmd == 0x01 && length == 0x01) {
+                        int result = value[4] & 0xFF;
+                        if (1 == result) {
+                            mSavedPassword = mPassword;
+                            SPUtiles.setStringValue(LoRaLW006MainActivity.this, AppConstants.SP_KEY_SAVED_PASSWORD_LW006, mSavedPassword);
+                            XLog.i("Success");
+                            Intent i = new Intent(LoRaLW006MainActivity.this, DeviceInfoActivity.class);
+                            i.putExtra(AppConstants.EXTRA_KEY_DEVICE_TYPE, mDeviceType);
+                            startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
+                        }
+                        if (0 == result) {
+                            isPasswordError = true;
+                            ToastUtils.showToast(LoRaLW006MainActivity.this, "Password Error");
+                            LoRaLW006MokoSupport.getInstance().disConnectBle();
                         }
                     }
+                }
             }
         }
     }

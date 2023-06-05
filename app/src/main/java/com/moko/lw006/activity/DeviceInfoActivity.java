@@ -48,7 +48,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
-
     private Lw006ActivityDeviceInfoBinding mBind;
     private FragmentManager fragmentManager;
     private LoRaFragment loraFragment;
@@ -61,7 +60,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private int mSelectUploadMode;
     private boolean mReceiverTag = false;
     private int disConnectType;
-    // 0x00:LR1110,0x10:L76
+    // 0x00:LR1110,0x01:L76
     private int mDeviceType;
 
     private boolean savedParamsError;

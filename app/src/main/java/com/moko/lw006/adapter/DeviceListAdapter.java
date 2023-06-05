@@ -4,8 +4,11 @@ import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.R;
 import com.moko.lw006.entity.AdvInfo;
+
+import java.util.Arrays;
 
 public class DeviceListAdapter extends BaseQuickAdapter<AdvInfo, BaseViewHolder> {
     public DeviceListAdapter() {
@@ -22,10 +25,10 @@ public class DeviceListAdapter extends BaseQuickAdapter<AdvInfo, BaseViewHolder>
 
         final String intervalTime = item.intervalTime == 0 ? "<->N/A" : String.format("<->%dms", item.intervalTime);
         helper.setText(R.id.tv_track_interval, intervalTime);
-        helper.setText(R.id.tv_battery, item.lowPower ? "Low" : "Full");
+        helper.setText(R.id.tv_battery_percent, item.powerPercent + "%");
+        helper.setText(R.id.tvBattery, MokoUtils.getDecimalFormat("#.###").format(item.batteryVoltage * 0.001)+"V");
         helper.setText(R.id.tv_tx_power, String.format("Tx Power:%ddBm", item.txPower));
         helper.setVisible(R.id.tv_connect, item.connectable);
         helper.addOnClickListener(R.id.tv_connect);
-
     }
 }

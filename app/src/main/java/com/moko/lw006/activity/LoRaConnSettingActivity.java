@@ -35,8 +35,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LoRaConnSettingActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
-
-
     private Lw006ActivityConnSettingBinding mBind;
 
     private boolean mReceiverTag = false;
