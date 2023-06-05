@@ -10,16 +10,16 @@ import android.view.ViewGroup;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.DeviceInfoActivity;
-import com.moko.lw006.databinding.Lw008FragmentDeviceBinding;
+import com.moko.lw006.databinding.Lw006FragmentDeviceBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
 
 import java.util.ArrayList;
 
 public class DeviceFragment extends Fragment {
     private static final String TAG = DeviceFragment.class.getSimpleName();
-    private Lw008FragmentDeviceBinding mBind;
+    private Lw006FragmentDeviceBinding mBind;
 
     private ArrayList<String> mTimeZones;
     private int mSelectedTimeZone;
@@ -44,7 +44,7 @@ public class DeviceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
-        mBind = Lw008FragmentDeviceBinding.inflate(inflater, container, false);
+        mBind = Lw006FragmentDeviceBinding.inflate(inflater, container, false);
         activity = (DeviceInfoActivity) getActivity();
         mTimeZones = new ArrayList<>();
         for (int i = -24; i <= 28; i++) {
@@ -85,20 +85,20 @@ public class DeviceFragment extends Fragment {
             ArrayList<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.setTimeZone(value - 24));
             orderTasks.add(OrderTaskAssembler.getTimeZone());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         });
         dialog.show(activity.getSupportFragmentManager());
     }
 
     public void setShutdownPayload(int enable) {
         mShutdownPayloadEnable = enable == 1;
-        mBind.ivShutdownPayload.setImageResource(mShutdownPayloadEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+        mBind.ivShutdownPayload.setImageResource(mShutdownPayloadEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
     }
 
 
     public void setLowPowerPayload(int enable) {
         mLowPowerPayloadEnable = enable == 1;
-        mBind.ivLowPowerPayload.setImageResource(mLowPowerPayloadEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+        mBind.ivLowPowerPayload.setImageResource(mLowPowerPayloadEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
     }
 
 //    public void setLowPower(int lowPower) {
@@ -113,7 +113,7 @@ public class DeviceFragment extends Fragment {
         ArrayList<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setShutdownPayloadEnable(mShutdownPayloadEnable ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.getShutdownPayloadEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void changeLowPowerPayload() {
@@ -122,7 +122,7 @@ public class DeviceFragment extends Fragment {
         ArrayList<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setLowPowerReportEnable(mLowPowerPayloadEnable ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.getLowPowerPayloadEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
 //    public void showLowPowerDialog() {

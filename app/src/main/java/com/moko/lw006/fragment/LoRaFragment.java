@@ -8,13 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.moko.lw006.activity.DeviceInfoActivity;
-import com.moko.lw006.databinding.Lw008FragmentLoraBinding;
+import com.moko.lw006.databinding.Lw006FragmentLoraBinding;
 
 public class LoRaFragment extends Fragment {
     private static final String TAG = LoRaFragment.class.getSimpleName();
-    private Lw008FragmentLoraBinding mBind;
-
-
+    private Lw006FragmentLoraBinding mBind;
     private DeviceInfoActivity activity;
 
     public LoRaFragment() {
@@ -30,7 +28,7 @@ public class LoRaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
-        mBind = Lw008FragmentLoraBinding.inflate(inflater, container, false);
+        mBind = Lw006FragmentLoraBinding.inflate(inflater, container, false);
         activity = (DeviceInfoActivity) getActivity();
         return mBind.getRoot();
     }

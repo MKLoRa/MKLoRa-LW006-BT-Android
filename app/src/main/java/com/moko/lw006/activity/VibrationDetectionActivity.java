@@ -15,13 +15,13 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.Lw008ActivityVibrationDetectionBinding;
+import com.moko.lw006.databinding.Lw006ActivityVibrationDetectionBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,15 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VibrationDetectionActivity extends BaseActivity {
-
-    private Lw008ActivityVibrationDetectionBinding mBind;
+    private Lw006ActivityVibrationDetectionBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityVibrationDetectionBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityVibrationDetectionBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         // 注册广播接收器
@@ -53,7 +52,7 @@ public class VibrationDetectionActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getShockDetectionEnable());
             orderTasks.add(OrderTaskAssembler.getShockReportInterval());
             orderTasks.add(OrderTaskAssembler.getShockReportTimeout());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -247,6 +246,6 @@ public class VibrationDetectionActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setShockDetectionEnable(mBind.cbVibrationDetection.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setShockReportInterval(interval));
         orderTasks.add(OrderTaskAssembler.setShockTimeout(timeout));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 }

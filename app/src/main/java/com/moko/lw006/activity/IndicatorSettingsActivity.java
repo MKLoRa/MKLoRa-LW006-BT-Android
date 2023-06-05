@@ -15,13 +15,13 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.databinding.Lw008ActivityIndicatorSettingsBinding;
+import com.moko.lw006.databinding.Lw006ActivityIndicatorSettingsBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,14 +33,14 @@ import java.util.List;
 
 public class IndicatorSettingsActivity extends BaseActivity {
 
-    private Lw008ActivityIndicatorSettingsBinding mBind;
+    private Lw006ActivityIndicatorSettingsBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityIndicatorSettingsBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityIndicatorSettingsBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
 
         EventBus.getDefault().register(this);
@@ -53,7 +53,7 @@ public class IndicatorSettingsActivity extends BaseActivity {
         mBind.cbLowPower.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getIndicatorStatus());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -206,6 +206,6 @@ public class IndicatorSettingsActivity extends BaseActivity {
                 | (mBind.cbFixFail.isChecked() ? 16 : 0);
         savedParamsError = false;
         showSyncingProgressDialog();
-        LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setIndicatorStatus(indicator));
+        LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setIndicatorStatus(indicator));
     }
 }

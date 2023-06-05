@@ -16,14 +16,14 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.databinding.Lw008ActivityManDownDetectionBinding;
+import com.moko.lw006.databinding.Lw006ActivityManDownDetectionBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,14 +35,14 @@ import java.util.List;
 
 public class ManDownDetectionActivity extends BaseActivity {
 
-    private Lw008ActivityManDownDetectionBinding mBind;
+    private Lw006ActivityManDownDetectionBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityManDownDetectionBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityManDownDetectionBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         // 注册广播接收器
@@ -55,7 +55,7 @@ public class ManDownDetectionActivity extends BaseActivity {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getManDownDetectionEnable());
             orderTasks.add(OrderTaskAssembler.getManDownDetectionTimeout());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -235,7 +235,7 @@ public class ManDownDetectionActivity extends BaseActivity {
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setManDownDetectionEnable(mBind.cbManDownDetection.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setManDownDetectionTimeout(timeout));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void onReset(View view) {
@@ -246,7 +246,7 @@ public class ManDownDetectionActivity extends BaseActivity {
         dialog.setConfirm("Cancel");
         dialog.setOnAlertCancelListener(() -> {
             showSyncingProgressDialog();
-            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setManDownIdleReset());
+            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setManDownIdleReset());
         });
         dialog.show(getSupportFragmentManager());
     }

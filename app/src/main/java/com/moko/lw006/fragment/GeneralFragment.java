@@ -9,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.moko.lw006.activity.DeviceInfoActivity;
-import com.moko.lw006.databinding.Lw008FragmentGeneralBinding;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
+import com.moko.lw006.databinding.Lw006FragmentGeneralBinding;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
 
 public class GeneralFragment extends Fragment {
     private static final String TAG = GeneralFragment.class.getSimpleName();
-    private Lw008FragmentGeneralBinding mBind;
+    private Lw006FragmentGeneralBinding mBind;
 
     private DeviceInfoActivity activity;
 
@@ -32,7 +32,7 @@ public class GeneralFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
-        mBind = Lw008FragmentGeneralBinding.inflate(inflater, container, false);
+        mBind = Lw006FragmentGeneralBinding.inflate(inflater, container, false);
         activity = (DeviceInfoActivity) getActivity();
         return mBind.getRoot();
     }
@@ -55,6 +55,6 @@ public class GeneralFragment extends Fragment {
     public void saveParams() {
         final String intervalStr = mBind.etHeartbeatInterval.getText().toString();
         final int interval = Integer.parseInt(intervalStr);
-        LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setHeartBeatInterval(interval));
+        LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setHeartBeatInterval(interval));
     }
 }

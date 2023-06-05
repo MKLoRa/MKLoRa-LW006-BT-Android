@@ -15,6 +15,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -23,15 +26,15 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.AppConstants;
-import com.moko.lw006.databinding.Lw008ActivitySystemInfoBinding;
+import com.moko.lw006.databinding.Lw006ActivitySystemInfoBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.service.DfuService;
 import com.moko.lw006.utils.FileUtils;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,8 +45,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
@@ -52,7 +53,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 public class SystemInfoActivity extends BaseActivity {
     public static final int REQUEST_CODE_SELECT_FIRMWARE = 0x10;
 
-    private Lw008ActivitySystemInfoBinding mBind;
+    private Lw006ActivitySystemInfoBinding mBind;
     private boolean mReceiverTag = false;
     private String mDeviceMac;
     private String mDeviceName;
@@ -60,7 +61,7 @@ public class SystemInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivitySystemInfoBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivitySystemInfoBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         // 注册广播接收器
@@ -79,7 +80,7 @@ public class SystemInfoActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getFirmwareVersion());
             orderTasks.add(OrderTaskAssembler.getHardwareVersion());
             orderTasks.add(OrderTaskAssembler.getManufacturer());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
     }

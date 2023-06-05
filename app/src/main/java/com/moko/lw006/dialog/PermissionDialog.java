@@ -41,7 +41,7 @@ public class PermissionDialog extends RationaleDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null != getDialog() && null != getDialog().getWindow())
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        View layoutView = inflater.inflate(R.layout.lw008_dialog_permission, container, false);
+        View layoutView = inflater.inflate(R.layout.lw006_dialog_permission, container, false);
         initViews(layoutView);
         return layoutView;
     }
@@ -66,7 +66,7 @@ public class PermissionDialog extends RationaleDialogFragment {
                 window.getAttributes().width = dip2px(requireContext(), 260);
                 window.getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
                 window.getAttributes().gravity = Gravity.CENTER;
-                window.setBackgroundDrawableResource(R.drawable.lw008_shape_radius_solid_ffffff);
+                window.setBackgroundDrawableResource(R.drawable.lw006_shape_radius_solid_ffffff);
             }
         }
     }

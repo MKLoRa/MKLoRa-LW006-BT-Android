@@ -16,14 +16,14 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.databinding.Lw008ActivityMotionModeBinding;
+import com.moko.lw006.databinding.Lw006ActivityMotionModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MotionModeActivity extends BaseActivity {
 
-    private Lw008ActivityMotionModeBinding mBind;
+    private Lw006ActivityMotionModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mValues;
@@ -46,7 +46,7 @@ public class MotionModeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityMotionModeBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityMotionModeBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         mValues = new ArrayList<>();
         mValues.add("WIFI");
@@ -74,7 +74,7 @@ public class MotionModeActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getMotionEndNumber());
             orderTasks.add(OrderTaskAssembler.getMotionEndInterval());
             orderTasks.add(OrderTaskAssembler.getMotionEndPosStrategy());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -357,7 +357,7 @@ public class MotionModeActivity extends BaseActivity {
                 | (mBind.cbNotifyOnEnd.isChecked() ? 16 : 0)
                 | (mBind.cbFixOnEnd.isChecked() ? 32 : 0);
         orderTasks.add(OrderTaskAssembler.setMotionModeEvent(motionMode));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void selectPosStrategyStart(View view) {

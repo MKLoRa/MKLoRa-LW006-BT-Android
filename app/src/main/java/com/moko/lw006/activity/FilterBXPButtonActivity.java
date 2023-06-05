@@ -9,13 +9,13 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.Lw008ActivityFilterBxpButtonBinding;
+import com.moko.lw006.databinding.Lw006ActivityFilterBxpButtonBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,13 +27,13 @@ import java.util.List;
 public class FilterBXPButtonActivity extends BaseActivity {
 
 
-    private Lw008ActivityFilterBxpButtonBinding mBind;
+    private Lw006ActivityFilterBxpButtonBinding mBind;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityFilterBxpButtonBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityFilterBxpButtonBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
@@ -41,7 +41,7 @@ public class FilterBXPButtonActivity extends BaseActivity {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterBXPButtonEnable());
             orderTasks.add(OrderTaskAssembler.getFilterBXPButtonRules());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -154,7 +154,7 @@ public class FilterBXPButtonActivity extends BaseActivity {
                 mBind.cbLongPress.isChecked() ? 1 : 0,
                 mBind.cbAbnormalInactivity.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setFilterBXPButtonEnable(mBind.cbEnable.isChecked() ? 1 : 0));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
 

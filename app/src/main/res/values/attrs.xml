@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="LW008WheelView">
+    <declare-styleable name="LW006WheelView">
         <attr name="unitHeight" format="dimension" />
         <attr name="itemNumber" format="integer" />
 

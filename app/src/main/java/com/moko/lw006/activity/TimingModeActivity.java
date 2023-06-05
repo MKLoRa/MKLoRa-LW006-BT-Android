@@ -10,6 +10,10 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
@@ -20,15 +24,15 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.R;
 import com.moko.lw006.adapter.TimePointAdapter;
-import com.moko.lw006.databinding.Lw008ActivityTimingModeBinding;
+import com.moko.lw006.databinding.Lw006ActivityTimingModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.entity.TimePoint;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,13 +41,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
 
-    private Lw008ActivityTimingModeBinding mBind;
+    private Lw006ActivityTimingModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mValues;
@@ -56,7 +56,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityTimingModeBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityTimingModeBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         mValues = new ArrayList<>();
         mValues.add("WIFI");
@@ -98,7 +98,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getTimePosStrategy());
             orderTasks.add(OrderTaskAssembler.getTimePosReportPoints());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -360,6 +360,6 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
             points.add((hour * 60 + min) / 15);
         }
         orderTasks.add(OrderTaskAssembler.setTimePosReportPoints(points));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 }

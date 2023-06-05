@@ -9,7 +9,7 @@ import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.Lw008ActivityAuxiliaryOperationBinding;
+import com.moko.lw006.databinding.Lw006ActivityAuxiliaryOperationBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -18,11 +18,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class AuxiliaryOperationActivity extends BaseActivity {
 
-    private Lw008ActivityAuxiliaryOperationBinding mBind;
+    private Lw006ActivityAuxiliaryOperationBinding mBind;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityAuxiliaryOperationBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityAuxiliaryOperationBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
     }

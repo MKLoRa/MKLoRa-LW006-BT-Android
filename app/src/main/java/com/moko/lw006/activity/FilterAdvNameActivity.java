@@ -16,13 +16,13 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008ActivityFilterAdvNameBinding;
+import com.moko.lw006.databinding.Lw006ActivityFilterAdvNameBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,7 +36,7 @@ public class FilterAdvNameActivity extends BaseActivity {
 
     private final String FILTER_ASCII = "[ -~]*";
 
-    private Lw008ActivityFilterAdvNameBinding mBind;
+    private Lw006ActivityFilterAdvNameBinding mBind;
 
     private boolean savedParamsError;
 
@@ -46,7 +46,7 @@ public class FilterAdvNameActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityFilterAdvNameBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityFilterAdvNameBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         filterAdvName = new ArrayList<>();
@@ -66,7 +66,7 @@ public class FilterAdvNameActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getFilterNamePrecise());
             orderTasks.add(OrderTaskAssembler.getFilterNameReverse());
             orderTasks.add(OrderTaskAssembler.getFilterNameRules());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -156,7 +156,7 @@ public class FilterAdvNameActivity extends BaseActivity {
                                             }
                                             for (int i = 0, l = filterAdvName.size(); i < l; i++) {
                                                 String advName = filterAdvName.get(i);
-                                                View v = LayoutInflater.from(FilterAdvNameActivity.this).inflate(R.layout.lw008_item_adv_name_filter, mBind.llDavName, false);
+                                                View v = LayoutInflater.from(FilterAdvNameActivity.this).inflate(R.layout.lw006_item_adv_name_filter, mBind.llDavName, false);
                                                 TextView title = v.findViewById(R.id.tv_adv_name_title);
                                                 EditText etAdvName = v.findViewById(R.id.et_adv_name);
                                                 etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20), filter});
@@ -194,7 +194,7 @@ public class FilterAdvNameActivity extends BaseActivity {
             ToastUtils.showToast(this, "You can set up to 10 filters!");
             return;
         }
-        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_adv_name_filter, mBind.llDavName, false);
+        View v = LayoutInflater.from(this).inflate(R.layout.lw006_item_adv_name_filter, mBind.llDavName, false);
         TextView title = v.findViewById(R.id.tv_adv_name_title);
         title.setText(String.format("ADV Name%d", count + 1));
         EditText etAdvName = v.findViewById(R.id.et_adv_name);
@@ -223,7 +223,7 @@ public class FilterAdvNameActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setFilterNamePrecise(mBind.cbPreciseMatch.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setFilterNameReverse(mBind.cbReverseFilter.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setFilterNameRules(filterAdvName));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     private boolean isValid() {

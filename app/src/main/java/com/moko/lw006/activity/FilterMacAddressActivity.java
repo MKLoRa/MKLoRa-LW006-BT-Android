@@ -15,13 +15,13 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008ActivityFilterMacAddressBinding;
+import com.moko.lw006.databinding.Lw006ActivityFilterMacAddressBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +34,7 @@ import java.util.List;
 public class FilterMacAddressActivity extends BaseActivity {
 
 
-    private Lw008ActivityFilterMacAddressBinding mBind;
+    private Lw006ActivityFilterMacAddressBinding mBind;
     private boolean savedParamsError;
 
     private ArrayList<String> filterMacAddress;
@@ -42,7 +42,7 @@ public class FilterMacAddressActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityFilterMacAddressBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityFilterMacAddressBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         filterMacAddress = new ArrayList<>();
@@ -52,7 +52,7 @@ public class FilterMacAddressActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getFilterMacPrecise());
             orderTasks.add(OrderTaskAssembler.getFilterMacReverse());
             orderTasks.add(OrderTaskAssembler.getFilterMacRules());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -144,7 +144,7 @@ public class FilterMacAddressActivity extends BaseActivity {
                                             }
                                             for (int i = 0, l = filterMacAddress.size(); i < l; i++) {
                                                 String macAddress = filterMacAddress.get(i);
-                                                View v = LayoutInflater.from(FilterMacAddressActivity.this).inflate(R.layout.lw008_item_mac_address_filter, mBind.llMacAddress, false);
+                                                View v = LayoutInflater.from(FilterMacAddressActivity.this).inflate(R.layout.lw006_item_mac_address_filter, mBind.llMacAddress, false);
                                                 TextView title = v.findViewById(R.id.tv_mac_address_title);
                                                 EditText etMacAddress = v.findViewById(R.id.et_mac_address);
                                                 title.setText(String.format("MAC %d", i + 1));
@@ -181,7 +181,7 @@ public class FilterMacAddressActivity extends BaseActivity {
             ToastUtils.showToast(this, "You can set up to 10 filters!");
             return;
         }
-        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_mac_address_filter, mBind.llMacAddress, false);
+        View v = LayoutInflater.from(this).inflate(R.layout.lw006_item_mac_address_filter, mBind.llMacAddress, false);
         TextView title = v.findViewById(R.id.tv_mac_address_title);
         title.setText(String.format("MAC %d", count + 1));
         mBind.llMacAddress.addView(v);
@@ -208,7 +208,7 @@ public class FilterMacAddressActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setFilterMacPrecise(mBind.cbPreciseMatch.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setFilterMacReverse(mBind.cbReverseFilter.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setFilterMacRules(filterMacAddress));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     private boolean isValid() {

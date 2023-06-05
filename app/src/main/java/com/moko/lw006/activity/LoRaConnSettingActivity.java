@@ -17,14 +17,14 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008ActivityConnSettingBinding;
+import com.moko.lw006.databinding.Lw006ActivityConnSettingBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,7 +37,7 @@ import java.util.List;
 public class LoRaConnSettingActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
 
-    private Lw008ActivityConnSettingBinding mBind;
+    private Lw006ActivityConnSettingBinding mBind;
 
     private boolean mReceiverTag = false;
     private ArrayList<String> mModeList;
@@ -60,7 +60,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityConnSettingBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityConnSettingBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         mModeList = new ArrayList<>();
         mModeList.add("ABP");
@@ -91,8 +91,8 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
-        if (!LoRaLW008MokoSupport.getInstance().isBluetoothOpen()) {
-            LoRaLW008MokoSupport.getInstance().enableBluetooth();
+        if (!LoRaLW006MokoSupport.getInstance().isBluetoothOpen()) {
+            LoRaLW006MokoSupport.getInstance().enableBluetooth();
         } else {
             showSyncingProgressDialog();
             mBind.etDevEui.postDelayed(() -> {
@@ -113,7 +113,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                 orderTasks.add(OrderTaskAssembler.getLoraAdrAckLimit());
                 orderTasks.add(OrderTaskAssembler.getLoraAdrAckDelay());
                 orderTasks.add(OrderTaskAssembler.getLoraUplinkStrategy());
-                LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+                LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }, 500);
         }
     }
@@ -186,7 +186,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                                             ToastUtils.showToast(LoRaConnSettingActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
                                             showSyncingProgressDialog();
-                                            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.restart());
+                                            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.restart());
                                         }
                                         break;
                                     case KEY_REBOOT:
@@ -766,7 +766,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         orderTasks.add(OrderTaskAssembler.setLoraAdrAckDelay(adrAckDelay));
         // 数据发送次数默认为1
         orderTasks.add(OrderTaskAssembler.setLoraUplinkStrategy(mBind.cbAdr.isChecked() ? 1 : 0, 1, mSelectedDr1, mSelectedDr2));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         showSyncingProgressDialog();
     }
 

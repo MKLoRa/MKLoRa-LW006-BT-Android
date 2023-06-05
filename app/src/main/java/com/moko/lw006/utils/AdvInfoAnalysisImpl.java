@@ -4,8 +4,8 @@ import android.os.ParcelUuid;
 import android.os.SystemClock;
 
 import com.moko.lw006.entity.AdvInfo;
-import com.moko.support.lw008.entity.DeviceInfo;
-import com.moko.support.lw008.service.DeviceInfoParseable;
+import com.moko.support.lw006.entity.DeviceInfo;
+import com.moko.support.lw006.service.DeviceInfoParseable;
 
 import java.util.HashMap;
 import java.util.Iterator;

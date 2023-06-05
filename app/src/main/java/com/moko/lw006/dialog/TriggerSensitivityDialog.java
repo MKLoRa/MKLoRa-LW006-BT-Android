@@ -3,9 +3,9 @@ package com.moko.lw006.dialog;
 import android.content.Context;
 import android.widget.SeekBar;
 
-import com.moko.lw006.databinding.Lw008DialogSensitivityBinding;
+import com.moko.lw006.databinding.Lw006DialogSensitivityBinding;
 
-public class TriggerSensitivityDialog extends BaseDialog<Lw008DialogSensitivityBinding> implements SeekBar.OnSeekBarChangeListener {
+public class TriggerSensitivityDialog extends BaseDialog<Lw006DialogSensitivityBinding> implements SeekBar.OnSeekBarChangeListener {
     private int sensitivity;
 
 
@@ -14,8 +14,8 @@ public class TriggerSensitivityDialog extends BaseDialog<Lw008DialogSensitivityB
     }
 
     @Override
-    protected Lw008DialogSensitivityBinding getViewBind() {
-        return Lw008DialogSensitivityBinding.inflate(getLayoutInflater());
+    protected Lw006DialogSensitivityBinding getViewBind() {
+        return Lw006DialogSensitivityBinding.inflate(getLayoutInflater());
     }
 
     @Override

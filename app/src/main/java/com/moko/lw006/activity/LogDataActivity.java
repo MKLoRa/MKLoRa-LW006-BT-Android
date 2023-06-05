@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -15,12 +17,12 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
 import com.moko.lw006.adapter.LogDataListAdapter;
-import com.moko.lw006.databinding.Lw008ActivityLogDataBinding;
+import com.moko.lw006.databinding.Lw006ActivityLogDataBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
 import com.moko.lw006.entity.LogData;
 import com.moko.lw006.utils.Utils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.entity.OrderCHAR;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.entity.OrderCHAR;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,12 +37,10 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.OnItemClickListener {
 
     public static String TAG = LogDataActivity.class.getSimpleName();
-    private Lw008ActivityLogDataBinding mBind;
+    private Lw006ActivityLogDataBinding mBind;
     private StringBuilder storeString;
     private ArrayList<LogData> LogDatas;
     private boolean isSync;
@@ -56,10 +56,10 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityLogDataBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityLogDataBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         mDeviceMac = getIntent().getStringExtra(AppConstants.EXTRA_KEY_DEVICE_MAC).replaceAll(":", "");
-        logDirPath = LoRaLW008MainActivity.PATH_LOGCAT + File.separator + mDeviceMac;
+        logDirPath = LoRaLW006MainActivity.PATH_LOGCAT + File.separator + mDeviceMac;
         LogDatas = new ArrayList<>();
         adapter = new LogDataListAdapter();
         adapter.openLoadAnimation();
@@ -154,13 +154,13 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
             storeString = new StringBuilder();
             mBind.tvSyncSwitch.setText("Stop");
             isSync = true;
-            animation = AnimationUtils.loadAnimation(this, R.anim.lw008_rotate_refresh);
+            animation = AnimationUtils.loadAnimation(this, R.anim.lw006_rotate_refresh);
             mBind.ivSync.startAnimation(animation);
-            LoRaLW008MokoSupport.getInstance().enableLogNotify();
+            LoRaLW006MokoSupport.getInstance().enableLogNotify();
             Calendar calendar = Calendar.getInstance();
             syncTime = Utils.calendar2strDate(calendar, "yyyy-MM-dd HH-mm-ss");
         } else {
-            LoRaLW008MokoSupport.getInstance().disableLogNotify();
+            LoRaLW006MokoSupport.getInstance().disableLogNotify();
             stopSync();
         }
     }
@@ -239,11 +239,11 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
 
     private void backHome() {
         if (isSync) {
-            LoRaLW008MokoSupport.getInstance().disableLogNotify();
+            LoRaLW006MokoSupport.getInstance().disableLogNotify();
             stopSync();
         } else {
             if (isDisconnected) {
-                Intent intent = new Intent(this, LoRaLW008MainActivity.class);
+                Intent intent = new Intent(this, LoRaLW006MainActivity.class);
                 intent.putExtra(AppConstants.EXTRA_KEY_FROM_ACTIVITY, TAG);
                 startActivity(intent);
                 return;
@@ -266,7 +266,7 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
             dialog.setCancelGone();
             dialog.setOnAlertConfirmListener(() -> {
                 if (isDisconnected) {
-                    Intent intent = new Intent(this, LoRaLW008MainActivity.class);
+                    Intent intent = new Intent(this, LoRaLW006MainActivity.class);
                     intent.putExtra(AppConstants.EXTRA_KEY_FROM_ACTIVITY, TAG);
                     startActivity(intent);
                     return;

@@ -10,15 +10,15 @@ import android.view.ViewGroup;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.DeviceInfoActivity;
-import com.moko.lw006.databinding.Lw008FragmentPosBinding;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
+import com.moko.lw006.databinding.Lw006FragmentPosBinding;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
 
 import java.util.ArrayList;
 
 public class PositionFragment extends Fragment {
     private static final String TAG = PositionFragment.class.getSimpleName();
-    private Lw008FragmentPosBinding mBind;
+    private Lw006FragmentPosBinding mBind;
     private boolean mOfflineLocationEnable;
     private DeviceInfoActivity activity;
 
@@ -35,14 +35,14 @@ public class PositionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
-        mBind = Lw008FragmentPosBinding.inflate(inflater, container, false);
+        mBind = Lw006FragmentPosBinding.inflate(inflater, container, false);
         activity = (DeviceInfoActivity) getActivity();
         return mBind.getRoot();
     }
 
     public void setOfflineLocationEnable(int enable) {
         mOfflineLocationEnable = enable == 1;
-        mBind.ivOfflineFix.setImageResource(mOfflineLocationEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+        mBind.ivOfflineFix.setImageResource(mOfflineLocationEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
     }
 
 
@@ -52,6 +52,6 @@ public class PositionFragment extends Fragment {
         ArrayList<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setOfflineLocationEnable(mOfflineLocationEnable ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.getOfflineLocationEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 }

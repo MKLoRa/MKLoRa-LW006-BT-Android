@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
@@ -12,13 +14,13 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008ActivityFilterRawDataSwitchBinding;
+import com.moko.lw006.databinding.Lw006ActivityFilterRawDataSwitchBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,12 +29,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-
 public class FilterRawDataSwitchActivity extends BaseActivity {
 
 
-    private Lw008ActivityFilterRawDataSwitchBinding mBind;
+    private Lw006ActivityFilterRawDataSwitchBinding mBind;
     private boolean savedParamsError;
 
     private boolean isBXPDeviceOpen;
@@ -42,14 +42,14 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityFilterRawDataSwitchBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityFilterRawDataSwitchBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
         mBind.tvFilterByIbeacon.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterRawData());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -121,9 +121,9 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
                                             mBind.tvFilterByUrl.setText(value[6] == 1 ? "ON" : "OFF");
                                             mBind.tvFilterByTlm.setText(value[7] == 1 ? "ON" : "OFF");
                                             mBind.tvFilterByBxpIbeacon.setText(value[8] == 1 ? "ON" : "OFF");
-                                            mBind.ivFilterByBxpDevice.setImageResource(value[9] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
-                                            mBind.ivFilterByBxpAcc.setImageResource(value[10] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
-                                            mBind.ivFilterByBxpTh.setImageResource(value[11] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+                                            mBind.ivFilterByBxpDevice.setImageResource(value[9] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                            mBind.ivFilterByBxpAcc.setImageResource(value[10] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                            mBind.ivFilterByBxpTh.setImageResource(value[11] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
                                             mBind.tvFilterByBxpButton.setText(value[12] == 1 ? "ON" : "OFF");
                                             mBind.tvFilterByBxpTag.setText(value[13] == 1 ? "ON" : "OFF");
                                             mBind.tvFilterByOther.setText(value[14] == 1 ? "ON" : "OFF");
@@ -223,7 +223,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setFilterBXPDeviceEnable(isBXPDeviceOpen ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.getFilterRawData());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void onFilterByBXPAcc(View view) {
@@ -235,7 +235,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setFilterBXPAccEnable(isBXPAccOpen ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.getFilterRawData());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void onFilterByBXPTH(View view) {
@@ -247,7 +247,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setFilterBXPTHEnable(isBXPTHOpen ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.getFilterRawData());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
 
@@ -280,7 +280,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
             mBind.tvFilterByIbeacon.postDelayed(() -> {
                 List<OrderTask> orderTasks = new ArrayList<>();
                 orderTasks.add(OrderTaskAssembler.getFilterRawData());
-                LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+                LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }, 1000);
         }
     }

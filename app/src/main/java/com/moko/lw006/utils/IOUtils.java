@@ -13,7 +13,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 
 import com.elvishew.xlog.XLog;
-import com.moko.lw006.activity.LoRaLW008MainActivity;
+import com.moko.lw006.activity.LoRaLW006MainActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,7 +47,7 @@ public class IOUtils {
         boolean exist = isSdCardExist();
         String sdpath = "";
         if (exist) {
-            sdpath = LoRaLW008MainActivity.PATH_LOGCAT;
+            sdpath = LoRaLW006MainActivity.PATH_LOGCAT;
         }
         return sdpath;
 
@@ -61,7 +61,7 @@ public class IOUtils {
      */
     public static String getDefaultFilePath(Context context) {
         String filepath = "";
-        File file = new File(LoRaLW008MainActivity.PATH_LOGCAT, CRASH_FILE);
+        File file = new File(LoRaLW006MainActivity.PATH_LOGCAT, CRASH_FILE);
         try {
             if (file.exists()) {
                 filepath = file.getAbsolutePath();
@@ -82,7 +82,7 @@ public class IOUtils {
      */
     public static String getFilePath(String fileName) {
         String filepath = "";
-        File file = new File(LoRaLW008MainActivity.PATH_LOGCAT, fileName);
+        File file = new File(LoRaLW006MainActivity.PATH_LOGCAT, fileName);
         try {
             if (file.exists()) {
                 filepath = file.getAbsolutePath();
@@ -223,7 +223,7 @@ public class IOUtils {
         values.put(MediaStore.DownloadColumns.DISPLAY_NAME, file.getName());
         values.put(MediaStore.DownloadColumns.TITLE, file.getName());
         values.put(MediaStore.DownloadColumns.MIME_TYPE, "*/*");
-        values.put(MediaStore.DownloadColumns.RELATIVE_PATH, "Download/LW008");
+        values.put(MediaStore.DownloadColumns.RELATIVE_PATH, "Download/LW006");
         Uri external = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
         Uri uri = null;
         ContentResolver cr = context.getContentResolver();

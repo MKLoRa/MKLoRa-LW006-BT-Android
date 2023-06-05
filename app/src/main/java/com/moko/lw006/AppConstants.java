@@ -14,7 +14,7 @@ public class AppConstants {
     public static final String SP_NAME = "sp_name_beacon";
 
     public static final String SP_KEY_DEVICE_ADDRESS = "sp_key_device_address";
-    public static final String SP_KEY_SAVED_PASSWORD_LW008 = "SP_KEY_SAVED_PASSWORD_LW008";
+    public static final String SP_KEY_SAVED_PASSWORD_LW006 = "SP_KEY_SAVED_PASSWORD_LW006";
     // extra_key
     // 设备列表\
     public static final String EXTRA_KEY_DEVICE_PARAM = "EXTRA_KEY_DEVICE_PARAM";

@@ -14,14 +14,14 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.Lw008ActivityDownlinkForPosBinding;
+import com.moko.lw006.databinding.Lw006ActivityDownlinkForPosBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,7 +32,7 @@ import java.util.List;
 
 public class DownlinkForPosActivity extends BaseActivity {
 
-    private Lw008ActivityDownlinkForPosBinding mBind;
+    private Lw006ActivityDownlinkForPosBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mValues;
@@ -41,7 +41,7 @@ public class DownlinkForPosActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityDownlinkForPosBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityDownlinkForPosBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         mValues = new ArrayList<>();
         mValues.add("WIFI");
@@ -61,7 +61,7 @@ public class DownlinkForPosActivity extends BaseActivity {
         mBind.tvDownlinkPosStrategy.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getDownLinkPosStrategy());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -210,7 +210,7 @@ public class DownlinkForPosActivity extends BaseActivity {
             mBind.tvDownlinkPosStrategy.setText(mValues.get(value));
             savedParamsError = false;
             showSyncingProgressDialog();
-            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDownLinkPosStrategy(mSelected));
+            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDownLinkPosStrategy(mSelected));
         });
         dialog.show(getSupportFragmentManager());
     }

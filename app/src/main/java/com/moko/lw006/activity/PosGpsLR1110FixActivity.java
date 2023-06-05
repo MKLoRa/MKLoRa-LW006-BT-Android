@@ -11,14 +11,14 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.databinding.Lw008ActivityPosGpsLr1110Binding;
+import com.moko.lw006.databinding.Lw006ActivityPosGpsLr1110Binding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,11 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PosGpsLR1110FixActivity extends BaseActivity {
-
-
-    private Lw008ActivityPosGpsLr1110Binding mBind;
+    private Lw006ActivityPosGpsLr1110Binding mBind;
     private boolean savedParamsError;
-
     private ArrayList<String> mValues;
     private int mSelected;
     private ArrayList<String> mGpsPosSystemValues;
@@ -43,7 +40,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityPosGpsLr1110Binding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityPosGpsLr1110Binding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         mValues = new ArrayList<>();
@@ -67,7 +64,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getGPSPosAuxiliaryLatLon());
             orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisStartNotifyEnable());
             orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisEndNotifyEnable());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -293,7 +290,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setGPSPosAuxiliaryLatLon(lat, lon));
         orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisStartNotifyEnable(mBind.cbEphemerisStartNotify.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisEndNotifyEnable(mBind.cbEphemerisEndNotify.isChecked() ? 1 : 0));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Override

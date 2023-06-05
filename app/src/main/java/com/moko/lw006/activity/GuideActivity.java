@@ -25,7 +25,7 @@ public class GuideActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_guide);
+        setContentView(R.layout.lw006_activity_guide);
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
@@ -75,7 +75,7 @@ public class GuideActivity extends BaseActivity {
 
     private void gotoMain() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(this, LoRaLW008MainActivity.class));
+            startActivity(new Intent(this, LoRaLW006MainActivity.class));
             finish();
         }, 1000);
     }

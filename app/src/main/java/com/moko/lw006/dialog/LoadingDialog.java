@@ -4,31 +4,31 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008DialogLoadingBinding;
-import com.moko.lw006.view.ProgressDrawable;
-
 import androidx.core.content.ContextCompat;
 
-public class LoadingDialog extends com.moko.lw006.dialog.MokoBaseDialog<Lw008DialogLoadingBinding> {
+import com.moko.lw006.R;
+import com.moko.lw006.databinding.Lw006DialogLoadingBinding;
+import com.moko.lw006.view.ProgressDrawable;
+
+public class LoadingDialog extends MokoBaseDialog<Lw006DialogLoadingBinding> {
     public static final String TAG = LoadingDialog.class.getSimpleName();
 
     @Override
-    protected Lw008DialogLoadingBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
-        return Lw008DialogLoadingBinding.inflate(inflater, container, false);
+    protected Lw006DialogLoadingBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
+        return Lw006DialogLoadingBinding.inflate(inflater, container, false);
     }
 
     @Override
     protected void onCreateView() {
         ProgressDrawable progressDrawable = new ProgressDrawable();
-        progressDrawable.setColor(ContextCompat.getColor(getContext(), R.color.lw008_text_black_4d4d4d));
+        progressDrawable.setColor(ContextCompat.getColor(getContext(), R.color.lw006_text_black_4d4d4d));
         mBind.ivLoading.setImageDrawable(progressDrawable);
         progressDrawable.start();
     }
 
     @Override
     public int getDialogStyle() {
-        return R.style.LW008CenterDialog;
+        return R.style.LW006CenterDialog;
     }
 
     @Override

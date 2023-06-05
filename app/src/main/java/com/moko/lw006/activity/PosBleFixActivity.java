@@ -17,14 +17,14 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008ActivityPosBleBinding;
+import com.moko.lw006.databinding.Lw006ActivityPosBleBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,7 +36,7 @@ import java.util.List;
 public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
 
-    private Lw008ActivityPosBleBinding mBind;
+    private Lw006ActivityPosBleBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mRelationshipValues;
@@ -49,7 +49,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityPosBleBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityPosBleBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
 
@@ -84,7 +84,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
             orderTasks.add(OrderTaskAssembler.getFilterRSSI());
             orderTasks.add(OrderTaskAssembler.getFilterBleScanPhy());
             orderTasks.add(OrderTaskAssembler.getFilterRelationship());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -248,7 +248,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         orderTasks.add(OrderTaskAssembler.setFilterRSSI(mBind.sbRssiFilter.getProgress() - 127));
         orderTasks.add(OrderTaskAssembler.setFilterBleScanPhy(mScanningTypeSelected));
         orderTasks.add(OrderTaskAssembler.setFilterRelationship(mRelationshipSelected));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
 

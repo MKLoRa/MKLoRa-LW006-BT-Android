@@ -7,13 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008DialogAlertBinding;
-
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
-public class AlertMessageDialog extends com.moko.lw006.dialog.MokoBaseDialog<Lw008DialogAlertBinding> {
+import com.moko.lw006.R;
+import com.moko.lw006.databinding.Lw006DialogAlertBinding;
+
+public class AlertMessageDialog extends MokoBaseDialog<Lw006DialogAlertBinding> {
     public static final String TAG = AlertMessageDialog.class.getSimpleName();
     private String cancel;
     private String confirm;
@@ -27,8 +27,8 @@ public class AlertMessageDialog extends com.moko.lw006.dialog.MokoBaseDialog<Lw0
     private int messageTextColorId = -1;
 
     @Override
-    protected Lw008DialogAlertBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
-        return Lw008DialogAlertBinding.inflate(inflater, container, false);
+    protected Lw006DialogAlertBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
+        return Lw006DialogAlertBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class AlertMessageDialog extends com.moko.lw006.dialog.MokoBaseDialog<Lw0
 
     @Override
     public int getDialogStyle() {
-        return R.style.LW008CenterDialog;
+        return R.style.LW006CenterDialog;
     }
 
     @Override

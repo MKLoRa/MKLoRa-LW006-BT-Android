@@ -1,7 +1,7 @@
 <paths>
     <external-path
         name="log"
-        path="LW008/" />
+        path="LW006/" />
     <external-path
         name="*"
         path="." />

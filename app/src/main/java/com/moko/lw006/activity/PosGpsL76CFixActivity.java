@@ -11,13 +11,13 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.databinding.Lw008ActivityPosGpsL76cBinding;
+import com.moko.lw006.databinding.Lw006ActivityPosGpsL76cBinding;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,17 +28,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PosGpsL76CFixActivity extends BaseActivity {
-
-
-    private Lw008ActivityPosGpsL76cBinding mBind;
-
+    private Lw006ActivityPosGpsL76cBinding mBind;
     private boolean savedParamsError;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityPosGpsL76cBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityPosGpsL76cBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
@@ -47,7 +43,7 @@ public class PosGpsL76CFixActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getGPSPosTimeoutL76());
             orderTasks.add(OrderTaskAssembler.getGPSPDOPLimitL76());
             orderTasks.add(OrderTaskAssembler.getGPSExtremeModeL76());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -184,7 +180,7 @@ public class PosGpsL76CFixActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setGPSPosTimeoutL76C(posTimeout));
         orderTasks.add(OrderTaskAssembler.setGPSPDOPLimitL76C(pdopLimit));
         orderTasks.add(OrderTaskAssembler.setGPSExtremeModeL76C(mBind.cbExtremeMode.isChecked() ? 1 : 0));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Override

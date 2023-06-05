@@ -1,4 +1,4 @@
-# LW008 Android SDK Guide（English）
+# LW006 Android SDK Guide（English）
 
 ## Intro
 
@@ -18,16 +18,16 @@ the relationships between them.
 
 ### 1.Scanning stage
 
-**`com.moko.support.LW008.MokoBleScanner`**
+**`com.moko.support.LW006.MokoBleScanner`**
 
 Scanning processing class, support to open scan, close scan and get the raw data of the scanned
 device.
 
-**`com.moko.support.lw008.callback.MokoScanDeviceCallback`**
+**`com.moko.support.LW006.callback.MokoScanDeviceCallback`**
 
 Scanning callback interface,this interface can be used to obtain the scan status and device data.
 
-**`com.moko.support.lw008.service.DeviceInfoParseable`**
+**`com.moko.support.LW006.service.DeviceInfoParseable`**
 
 Parsed data interface,this interface can parsed the device broadcast frame, get the specific data.
 the implementation can refer to `BeaconInfoParseableImpl` in the project,the `DeviceInfo` will be
@@ -35,7 +35,7 @@ parsed to `BeaconInfo`.
 
 ### 2.Connection stage
 
-**`com.moko.support.lw008.LoRaLW008MokoSupport`**
+**`com.moko.support.LW006.LoRaLW006MokoSupport`**
 
 BLE operation core class, extends from `Mokoblelib`.It can connect the device, disconnect the
 device, send the device connection status, turn on Bluetooth, turn off Bluetooth, judge whether
@@ -44,10 +44,10 @@ data update, turn on and off characteristic notification.
 
 ### 3.Communication stage
 
-**`com.moko.support.lw008.OrderTaskAssembler`**
+**`com.moko.support.LW006.OrderTaskAssembler`**
 
 We assemble read data and write data to `OrderTask`, send the task to the device
-through `LoRaLW008MokoSupport `, and receive the resopnse.
+through `LoRaLW006MokoSupport `, and receive the resopnse.
 
 **`com.moko.ble.lib.event.ConnectStatusEvent`**
 
@@ -91,16 +91,16 @@ include ':app', ':mokosupport'
 
 **Initialize**
 
-First of all, you should initialize the LoRaLW008MokoSupport.We recommend putting it in Application.
+First of all, you should initialize the LoRaLW006MokoSupport.We recommend putting it in Application.
 
 ```
-LoRaLW008MokoSupport.getInstance().init(getApplicationContext());
+LoRaLW006MokoSupport.getInstance().init(getApplicationContext());
 ```
 
 **Scan devices**
 
 Before operating the Bluetooth scanning device, we need to apply for permission, which we have added
-in LoRaLW008MokoSupport `AndroidManifest.xml`
+in LoRaLW006MokoSupport `AndroidManifest.xml`
 
 ```
 ...
@@ -172,7 +172,7 @@ Connect to the device in order to do more operations(change parameter, OTA),the 
 required is the MAC address.
 
 ```
-LoRaLW008MokoSupport.getInstance().connDevice(beaconXInfo.mac);
+LoRaLW006MokoSupport.getInstance().connDevice(beaconXInfo.mac);
 ```
 
 You can get the connection status through `ConnectStatusEvent`,remember to register `EventBus`
@@ -195,7 +195,7 @@ public void onConnectStatusEvent(ConnectStatusEvent event) {
 You will find that when connect to device password may need, so ,we need set password first.
 
 ```
-LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setPassword(password));
+LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setPassword(password));
 
 ```
 
@@ -251,7 +251,7 @@ For example, if you want to get the lora region, please refer to the code exampl
 
 ```
 // read lora region
-LoRaLW008MokoSupport.getInstance().sendOrder(derTaskAssembler.getLoraRegion());
+LoRaLW006MokoSupport.getInstance().sendOrder(derTaskAssembler.getLoraRegion());
 ...
 // get result
 @Subscribe(threadMode = ThreadMode.MAIN)
@@ -298,7 +298,7 @@ orderTasks.add(OrderTaskAssembler.getSoftwareVersion());
 orderTasks.add(OrderTaskAssembler.getFirmwareVersion());
 orderTasks.add(OrderTaskAssembler.getHardwareVersion());
 orderTasks.add(OrderTaskAssembler.getManufacturer());
-LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
 
 ```
 
@@ -348,7 +348,7 @@ ActivityCompat.requestPermissions(this,
 } 
 ```
 
-2.`EventBus` is used in the SDK and can be modified in `LoRaLW008MokoSupport` if you want to use
+2.`EventBus` is used in the SDK and can be modified in `LoRaLW006MokoSupport` if you want to use
 other communication methods.
 
 ```

@@ -15,14 +15,14 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008ActivityFilterOtherBinding;
+import com.moko.lw006.databinding.Lw006ActivityFilterOtherBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class FilterOtherActivity extends BaseActivity {
 
-    private Lw008ActivityFilterOtherBinding mBind;
+    private Lw006ActivityFilterOtherBinding mBind;
     private boolean savedParamsError;
 
 
@@ -46,7 +46,7 @@ public class FilterOtherActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivityFilterOtherBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityFilterOtherBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
 
@@ -57,7 +57,7 @@ public class FilterOtherActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getFilterOtherEnable());
             orderTasks.add(OrderTaskAssembler.getFilterOtherRelationship());
             orderTasks.add(OrderTaskAssembler.getFilterOtherRules());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -160,7 +160,7 @@ public class FilterOtherActivity extends BaseActivity {
                                             }
                                             for (int i = 0, l = filterOther.size(); i < l; i++) {
                                                 String other = filterOther.get(i);
-                                                View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_other_filter, mBind.llFilterCondition, false);
+                                                View v = LayoutInflater.from(this).inflate(R.layout.lw006_item_other_filter, mBind.llFilterCondition, false);
                                                 TextView tvCondition = v.findViewById(R.id.tv_condition);
                                                 EditText etDataType = v.findViewById(R.id.et_data_type);
                                                 EditText etMin = v.findViewById(R.id.et_min);
@@ -300,7 +300,7 @@ public class FilterOtherActivity extends BaseActivity {
         }
         orderTasks.add(OrderTaskAssembler.setFilterOtherRelationship(relationship));
         orderTasks.add(OrderTaskAssembler.setFilterOtherEnable(mBind.cbOther.isChecked() ? 1 : 0));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void onAdd(View view) {
@@ -311,7 +311,7 @@ public class FilterOtherActivity extends BaseActivity {
             ToastUtils.showToast(this, "You can set up to 3 filters!");
             return;
         }
-        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_other_filter, mBind.llFilterCondition, false);
+        View v = LayoutInflater.from(this).inflate(R.layout.lw006_item_other_filter, mBind.llFilterCondition, false);
         TextView tvCondition = v.findViewById(R.id.tv_condition);
         if (count == 0) {
             tvCondition.setText("Condition A");

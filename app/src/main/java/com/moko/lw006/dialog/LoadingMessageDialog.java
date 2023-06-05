@@ -6,28 +6,28 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.moko.lw006.R;
-import com.moko.lw006.databinding.Lw008DialogLoadingMessageBinding;
-import com.moko.lw006.view.ProgressDrawable;
-
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
-public class LoadingMessageDialog extends com.moko.lw006.dialog.MokoBaseDialog<Lw008DialogLoadingMessageBinding> {
+import com.moko.lw006.R;
+import com.moko.lw006.databinding.Lw006DialogLoadingMessageBinding;
+import com.moko.lw006.view.ProgressDrawable;
+
+public class LoadingMessageDialog extends MokoBaseDialog<Lw006DialogLoadingMessageBinding> {
     //    private static final int DIALOG_DISMISS_DELAY_TIME = 15000;
     public static final String TAG = LoadingMessageDialog.class.getSimpleName();
     private String message;
     private int messageId = -1;
 
     @Override
-    protected Lw008DialogLoadingMessageBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
-        return Lw008DialogLoadingMessageBinding.inflate(inflater, container, false);
+    protected Lw006DialogLoadingMessageBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
+        return Lw006DialogLoadingMessageBinding.inflate(inflater, container, false);
     }
 
     @Override
     protected void onCreateView() {
         ProgressDrawable progressDrawable = new ProgressDrawable();
-        progressDrawable.setColor(ContextCompat.getColor(getContext(), R.color.lw008_text_black_4d4d4d));
+        progressDrawable.setColor(ContextCompat.getColor(getContext(), R.color.lw006_text_black_4d4d4d));
         mBind.ivLoading.setImageDrawable(progressDrawable);
         progressDrawable.start();
         if (messageId > 0) {
@@ -57,7 +57,7 @@ public class LoadingMessageDialog extends com.moko.lw006.dialog.MokoBaseDialog<L
 
     @Override
     public int getDialogStyle() {
-        return R.style.LW008CenterDialog;
+        return R.style.LW006CenterDialog;
     }
 
     @Override

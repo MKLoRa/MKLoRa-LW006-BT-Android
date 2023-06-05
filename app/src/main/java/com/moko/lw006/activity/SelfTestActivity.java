@@ -10,13 +10,13 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.databinding.Lw008ActivitySelftestBinding;
+import com.moko.lw006.databinding.Lw006ActivitySelftestBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
-import com.moko.support.lw008.LoRaLW008MokoSupport;
-import com.moko.support.lw008.OrderTaskAssembler;
-import com.moko.support.lw008.entity.OrderCHAR;
-import com.moko.support.lw008.entity.ParamsKeyEnum;
+import com.moko.support.lw006.LoRaLW006MokoSupport;
+import com.moko.support.lw006.OrderTaskAssembler;
+import com.moko.support.lw006.entity.OrderCHAR;
+import com.moko.support.lw006.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,13 +27,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SelfTestActivity extends BaseActivity {
-
-    private Lw008ActivitySelftestBinding mBind;
+    private Lw006ActivitySelftestBinding mBind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw008ActivitySelftestBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivitySelftestBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
@@ -42,7 +41,7 @@ public class SelfTestActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
             orderTasks.add(OrderTaskAssembler.getPCBAStatus());
             orderTasks.add(OrderTaskAssembler.getBatteryInfo());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -165,7 +164,7 @@ public class SelfTestActivity extends BaseActivity {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.setBatteryReset());
             orderTasks.add(OrderTaskAssembler.getBatteryInfo());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         });
         dialog.show(getSupportFragmentManager());
     }
