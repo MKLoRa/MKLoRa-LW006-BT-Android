@@ -54,8 +54,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private PositionFragment posFragment;
     private GeneralFragment generalFragment;
     private DeviceFragment deviceFragment;
-    private ArrayList<String> mUploadMode;
-    private ArrayList<String> mRegions;
+    private final String[] mUploadMode = {"ABP", "OTAA"};
+    private final String[] mRegions = {"AS923-1", "AU915", "CN470", "CN779", "EU433", "EU868", "KR920", "IN865", "US915", "RU864", "AS923-2",
+            "AS923-3", "AS923-4", "AS923_1_JP_CH24_CH38_LBT", "AS923_1_JP_CH24_CH38_DC", "AS923_1_JP_CH37_CH61_LBT_DC"};
     private int mSelectedRegion;
     private int mSelectUploadMode;
     private boolean mReceiverTag = false;
@@ -77,20 +78,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         mBind.tvTitle.setText(R.string.title_lora);
         mBind.rgOptions.setOnCheckedChangeListener(this);
         EventBus.getDefault().register(this);
-        mUploadMode = new ArrayList<>();
-        mUploadMode.add("ABP");
-        mUploadMode.add("OTAA");
-        mRegions = new ArrayList<>();
-        mRegions.add("AS923");
-        mRegions.add("AU915");
-        mRegions.add("CN470");
-        mRegions.add("CN779");
-        mRegions.add("EU433");
-        mRegions.add("EU868");
-        mRegions.add("KR920");
-        mRegions.add("IN865");
-        mRegions.add("US915");
-        mRegions.add("RU864");
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -195,110 +182,106 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_TIME_UTC:
-                                        if (result == 1)
-                                            ToastUtils.showToast(DeviceInfoActivity.this, "Time sync completed!");
-                                        break;
-                                    case KEY_OFFLINE_LOCATION_ENABLE:
-                                    case KEY_HEARTBEAT_INTERVAL:
-                                    case KEY_TIME_ZONE:
-                                    case KEY_SHUTDOWN_PAYLOAD_ENABLE:
-                                    case KEY_LOW_POWER_PAYLOAD_ENABLE:
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_TIME_UTC:
+                                    if (result == 1)
+                                        ToastUtils.showToast(DeviceInfoActivity.this, "Time sync completed!");
+                                    break;
+                                case KEY_OFFLINE_LOCATION_ENABLE:
+                                case KEY_HEARTBEAT_INTERVAL:
+                                case KEY_TIME_ZONE:
+                                case KEY_SHUTDOWN_PAYLOAD_ENABLE:
+                                case KEY_LOW_POWER_PAYLOAD_ENABLE:
 //                                    case KEY_LOW_POWER_PERCENT:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(DeviceInfoActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(DeviceInfoActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_LORA_REGION:
-                                        if (length > 0) {
-                                            final int region = value[4] & 0xFF;
-                                            mSelectedRegion = region;
-                                        }
-                                        break;
-                                    case KEY_LORA_MODE:
-                                        if (length > 0) {
-                                            final int mode = value[4];
-                                            mSelectUploadMode = mode;
-                                            String loraInfo = String.format("%s/%s/ClassA",
-                                                    mUploadMode.get(mSelectUploadMode - 1),
-                                                    mRegions.get(mSelectedRegion));
-                                            loraFragment.setLoRaInfo(loraInfo);
-                                        }
-                                        break;
-                                    case KEY_LORA_NETWORK_STATUS:
-                                        if (length > 0) {
-                                            int networkStatus = value[4] & 0xFF;
-                                            loraFragment.setLoraStatus(networkStatus);
-                                        }
-                                        break;
-                                    case KEY_OFFLINE_LOCATION_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            posFragment.setOfflineLocationEnable(enable);
-                                        }
-                                        break;
-                                    case KEY_HEARTBEAT_INTERVAL:
-                                        if (length > 0) {
-                                            byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            generalFragment.setHeartbeatInterval(MokoUtils.toInt(intervalBytes));
-                                        }
-                                        break;
-                                    case KEY_TIME_ZONE:
-                                        if (length > 0) {
-                                            int timeZone = value[4];
-                                            deviceFragment.setTimeZone(timeZone);
-                                        }
-                                        break;
-                                    case KEY_SHUTDOWN_PAYLOAD_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            deviceFragment.setShutdownPayload(enable);
-                                        }
-                                        break;
-                                    case KEY_LOW_POWER_PAYLOAD_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            deviceFragment.setLowPowerPayload(enable);
-                                        }
-                                        break;
+                        }
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_LORA_REGION:
+                                    if (length > 0) {
+                                        mSelectedRegion = value[4] & 0xFF;
+                                    }
+                                    break;
+                                case KEY_LORA_MODE:
+                                    if (length > 0) {
+                                        mSelectUploadMode = value[4];
+                                        String loraInfo = String.format("%s/%s/ClassA",
+                                                mUploadMode[mSelectUploadMode - 1],
+                                                mRegions[mSelectedRegion]);
+                                        loraFragment.setLoRaInfo(loraInfo);
+                                    }
+                                    break;
+                                case KEY_LORA_NETWORK_STATUS:
+                                    if (length > 0) {
+                                        int networkStatus = value[4] & 0xFF;
+                                        loraFragment.setLoraStatus(networkStatus);
+                                    }
+                                    break;
+                                case KEY_OFFLINE_LOCATION_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        posFragment.setOfflineLocationEnable(enable);
+                                    }
+                                    break;
+                                case KEY_HEARTBEAT_INTERVAL:
+                                    if (length > 0) {
+                                        byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                        generalFragment.setHeartbeatInterval(MokoUtils.toInt(intervalBytes));
+                                    }
+                                    break;
+                                case KEY_TIME_ZONE:
+                                    if (length > 0) {
+                                        int timeZone = value[4];
+                                        deviceFragment.setTimeZone(timeZone);
+                                    }
+                                    break;
+                                case KEY_SHUTDOWN_PAYLOAD_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        deviceFragment.setShutdownPayload(enable);
+                                    }
+                                    break;
+                                case KEY_LOW_POWER_PAYLOAD_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        deviceFragment.setLowPowerPayload(enable);
+                                    }
+                                    break;
 //                                    case KEY_LOW_POWER_PERCENT:
 //                                        if (length > 0) {
 //                                            int lowPower = value[4] & 0xFF;
 //                                            deviceFragment.setLowPower(lowPower);
 //                                        }
 //                                        break;
-                                }
                             }
-
                         }
-                        break;
+
+                    }
                 }
             }
         });
@@ -629,10 +612,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     public void onGPSFix(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent;
-        if (mDeviceType == 0x10)
+        if (mDeviceType == 0x01)
             intent = new Intent(this, PosGpsL76CFixActivity.class);
         else
             intent = new Intent(this, PosGpsLR1110FixActivity.class);

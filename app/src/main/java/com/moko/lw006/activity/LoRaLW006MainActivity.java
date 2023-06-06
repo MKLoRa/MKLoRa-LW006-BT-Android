@@ -416,9 +416,7 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
             } else {
                 ToastUtils.showToast(LoRaLW006MainActivity.this, "Connection Failed");
             }
-            if (animation == null) {
-                startScan();
-            }
+            if (animation == null) startScan();
         }
         if (MokoConstants.ACTION_DISCOVER_SUCCESS.equals(action)) {
             dismissLoadingProgressDialog();
@@ -443,6 +441,7 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
     public void onOrderTaskResponseEvent(OrderTaskResponseEvent event) {
         final String action = event.getAction();
         if (MokoConstants.ACTION_ORDER_TIMEOUT.equals(action)) {
+            dismissLoadingMessageDialog();
         }
         if (MokoConstants.ACTION_ORDER_FINISH.equals(action)) {
         }
@@ -457,8 +456,7 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
                     int header = value[0] & 0xFF;// 0xED
                     int flag = value[1] & 0xFF;// read or write
                     int cmd = value[2] & 0xFF;
-                    if (header != 0xED)
-                        return;
+                    if (header != 0xED) return;
                     int length = value[3] & 0xFF;
                     if (flag == 0x01 && cmd == 0x01 && length == 0x01) {
                         int result = value[4] & 0xFF;
@@ -481,15 +479,12 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppConstants.REQUEST_CODE_DEVICE_INFO) {
             if (resultCode == RESULT_OK) {
-                if (animation == null) {
-                    startScan();
-                }
+                if (animation == null) startScan();
             }
         }
     }

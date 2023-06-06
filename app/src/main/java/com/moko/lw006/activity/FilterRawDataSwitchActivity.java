@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,11 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterRawDataSwitchActivity extends BaseActivity {
-
-
     private Lw006ActivityFilterRawDataSwitchBinding mBind;
     private boolean savedParamsError;
-
     private boolean isBXPDeviceOpen;
     private boolean isBXPAccOpen;
     private boolean isBXPTHOpen;
@@ -79,64 +75,60 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_BXP_ACC:
+                                case KEY_FILTER_BXP_TH:
+                                case KEY_FILTER_BXP_DEVICE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterRawDataSwitchActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_BXP_ACC:
-                                    case KEY_FILTER_BXP_TH:
-                                    case KEY_FILTER_BXP_DEVICE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterRawDataSwitchActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_RAW_DATA:
-                                        if (length == 11) {
-                                            dismissSyncProgressDialog();
-                                            mBind.tvFilterByIbeacon.setText(value[4] == 1 ? "ON" : "OFF");
-                                            mBind.tvFilterByUid.setText(value[5] == 1 ? "ON" : "OFF");
-                                            mBind.tvFilterByUrl.setText(value[6] == 1 ? "ON" : "OFF");
-                                            mBind.tvFilterByTlm.setText(value[7] == 1 ? "ON" : "OFF");
-                                            mBind.tvFilterByBxpIbeacon.setText(value[8] == 1 ? "ON" : "OFF");
-                                            mBind.ivFilterByBxpDevice.setImageResource(value[9] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
-                                            mBind.ivFilterByBxpAcc.setImageResource(value[10] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
-                                            mBind.ivFilterByBxpTh.setImageResource(value[11] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
-                                            mBind.tvFilterByBxpButton.setText(value[12] == 1 ? "ON" : "OFF");
-                                            mBind.tvFilterByBxpTag.setText(value[13] == 1 ? "ON" : "OFF");
-                                            mBind.tvFilterByOther.setText(value[14] == 1 ? "ON" : "OFF");
-                                            isBXPDeviceOpen = value[9] == 1;
-                                            isBXPAccOpen = value[10] == 1;
-                                            isBXPTHOpen = value[11] == 1;
-                                        }
-                                        break;
-
+                        }
+                        if (flag == 0x00) {
+                            // read
+                            if (configKeyEnum == ParamsKeyEnum.KEY_FILTER_RAW_DATA) {
+                                if (length == 12) {
+                                    dismissSyncProgressDialog();
+                                    mBind.tvFilterByIbeacon.setText(value[4] == 1 ? "ON" : "OFF");
+                                    mBind.tvFilterByUid.setText(value[5] == 1 ? "ON" : "OFF");
+                                    mBind.tvFilterByUrl.setText(value[6] == 1 ? "ON" : "OFF");
+                                    mBind.tvFilterByTlm.setText(value[7] == 1 ? "ON" : "OFF");
+                                    mBind.tvFilterByBxpIbeacon.setText(value[8] == 1 ? "ON" : "OFF");
+                                    mBind.ivFilterByBxpDevice.setImageResource(value[9] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                    mBind.ivFilterByBxpAcc.setImageResource(value[10] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                    mBind.ivFilterByBxpTh.setImageResource(value[11] == 1 ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                    mBind.tvFilterByBxpButton.setText(value[12] == 1 ? "ON" : "OFF");
+                                    mBind.tvFilterByBxpTag.setText(value[13] == 1 ? "ON" : "OFF");
+                                    mBind.tvFilterByMkPir.setText(value[14] == 1 ? "ON" : "OFF");
+                                    mBind.tvFilterByOther.setText(value[15] == 1 ? "ON" : "OFF");
+                                    isBXPDeviceOpen = value[9] == 1;
+                                    isBXPAccOpen = value[10] == 1;
+                                    isBXPTHOpen = value[11] == 1;
                                 }
                             }
                         }
-                        break;
+                    }
                 }
             }
         });
@@ -259,10 +251,13 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     }
 
     public void onFilterByBXPTag(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterBXPTagIdActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
+    }
+
+    public void onFilterByMkPir(View view) {
+
     }
 
     public void onFilterByOther(View view) {

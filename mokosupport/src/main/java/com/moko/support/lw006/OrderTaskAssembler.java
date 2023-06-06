@@ -274,6 +274,12 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask getWifiPosMechanism(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_WIFI_POS_MECHANISM);
+        return task;
+    }
+
     public static OrderTask getWifiPosTimeout() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_WIFI_POS_TIMEOUT);
@@ -1018,6 +1024,12 @@ public class OrderTaskAssembler {
     }
 
     public static OrderTask setWifiPosDataType(@IntRange(from = 0, to = 1) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setWifiPosDataType(type);
+        return task;
+    }
+
+    public static OrderTask setWifiPosMechanism(@IntRange(from = 0, to = 1) int type) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setWifiPosDataType(type);
         return task;

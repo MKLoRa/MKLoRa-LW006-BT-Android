@@ -3,6 +3,7 @@ package com.moko.lw006.utils;
 import android.os.ParcelUuid;
 import android.os.SystemClock;
 
+import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.entity.AdvInfo;
 import com.moko.support.lw006.entity.DeviceInfo;
@@ -34,7 +35,7 @@ public class AdvInfoAnalysisImpl implements DeviceInfoParseable<AdvInfo> {
         int txPower = bytes[8];
         int powerPercent = bytes[9] & 0xff;
         int batteryVoltage = MokoUtils.toInt(Arrays.copyOfRange(bytes, 10, 12));
-        boolean verifyEnable = ((bytes[12] & 0xff) >> 6 & 0x01) == 1;
+        boolean verifyEnable = ((bytes[12] & 0xff) >> 7 & 0x01) == 1;
         AdvInfo advInfo;
         if (advInfoHashMap.containsKey(deviceInfo.mac)) {
             advInfo = advInfoHashMap.get(deviceInfo.mac);

@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -32,8 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FilterMacAddressActivity extends BaseActivity {
-
-
     private Lw006ActivityFilterMacAddressBinding mBind;
     private boolean savedParamsError;
 
@@ -82,81 +79,79 @@ public class FilterMacAddressActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_MAC_PRECISE:
-                                    case KEY_FILTER_MAC_REVERSE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_FILTER_MAC_RULES:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterMacAddressActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_MAC_PRECISE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbPreciseMatch.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_MAC_REVERSE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbReverseFilter.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_MAC_RULES:
-                                        if (length > 0) {
-                                            filterMacAddress.clear();
-                                            byte[] macBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            for (int i = 0, l = macBytes.length; i < l; ) {
-                                                int macLength = macBytes[i] & 0xFF;
-                                                i++;
-                                                filterMacAddress.add(MokoUtils.bytesToHexString(Arrays.copyOfRange(macBytes, i, i + macLength)));
-                                                i += macLength;
-                                            }
-                                            for (int i = 0, l = filterMacAddress.size(); i < l; i++) {
-                                                String macAddress = filterMacAddress.get(i);
-                                                View v = LayoutInflater.from(FilterMacAddressActivity.this).inflate(R.layout.lw006_item_mac_address_filter, mBind.llMacAddress, false);
-                                                TextView title = v.findViewById(R.id.tv_mac_address_title);
-                                                EditText etMacAddress = v.findViewById(R.id.et_mac_address);
-                                                title.setText(String.format("MAC %d", i + 1));
-                                                etMacAddress.setText(macAddress);
-                                                mBind.llMacAddress.addView(v);
-                                            }
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_MAC_PRECISE:
+                                case KEY_FILTER_MAC_REVERSE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_FILTER_MAC_RULES:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterMacAddressActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_MAC_PRECISE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbPreciseMatch.setChecked(enable == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_MAC_REVERSE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbReverseFilter.setChecked(enable == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_MAC_RULES:
+                                    if (length > 0) {
+                                        filterMacAddress.clear();
+                                        byte[] macBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                        for (int i = 0, l = macBytes.length; i < l; ) {
+                                            int macLength = macBytes[i] & 0xFF;
+                                            i++;
+                                            filterMacAddress.add(MokoUtils.bytesToHexString(Arrays.copyOfRange(macBytes, i, i + macLength)));
+                                            i += macLength;
+                                        }
+                                        for (int i = 0, l = filterMacAddress.size(); i < l; i++) {
+                                            String macAddress = filterMacAddress.get(i);
+                                            View v = LayoutInflater.from(FilterMacAddressActivity.this).inflate(R.layout.lw006_item_mac_address_filter, mBind.llMacAddress, false);
+                                            TextView title = v.findViewById(R.id.tv_mac_address_title);
+                                            EditText etMacAddress = v.findViewById(R.id.et_mac_address);
+                                            title.setText(String.format("MAC %d", i + 1));
+                                            etMacAddress.setText(macAddress);
+                                            mBind.llMacAddress.addView(v);
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -232,7 +227,6 @@ public class FilterMacAddressActivity extends BaseActivity {
         return true;
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -245,14 +239,12 @@ public class FilterMacAddressActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();

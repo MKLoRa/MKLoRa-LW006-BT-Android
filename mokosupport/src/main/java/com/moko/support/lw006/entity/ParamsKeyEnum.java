@@ -87,35 +87,37 @@ public enum ParamsKeyEnum implements Serializable {
 
     //// 定位参数
     // WIFI定位数据格式
-    KEY_WIFI_POS_DATA_TYPE(0x50),
+    KEY_WIFI_POS_DATA_TYPE(0x7D),
+    //wifi定位机制
+    KEY_WIFI_POS_MECHANISM(0x7E),
     // WIFI定位超时时间
-    KEY_WIFI_POS_TIMEOUT(0x51),
+    KEY_WIFI_POS_TIMEOUT(0x7F),
     // WIFI定位成功BSSID数量
-    KEY_WIFI_POS_BSSID_NUMBER(0x52),
+    KEY_WIFI_POS_BSSID_NUMBER(0x80),
     // 蓝牙定位超时时间
-    KEY_BLE_POS_TIMEOUT(0x53),
+    KEY_BLE_POS_TIMEOUT(0x82),
     // 蓝牙定位成功MAC数量
-    KEY_BLE_POS_MAC_NUMBER(0x54),
-    // RSSI过滤规则
-    KEY_FILTER_RSSI(0x55),
+    KEY_BLE_POS_MAC_NUMBER(0x83),
     // 蓝牙扫描PHY选择
-    KEY_FILTER_BLE_SCAN_PHY(0x56),
+    KEY_FILTER_BLE_SCAN_PHY(0x50),
+    // RSSI过滤规则
+    KEY_FILTER_RSSI(0x51),
     // 广播内容过滤逻辑
-    KEY_FILTER_RELATIONSHIP(0x57),
+    KEY_FILTER_RELATIONSHIP(0x52),
     // 精准过滤MAC开关
-    KEY_FILTER_MAC_PRECISE(0x58),
+    KEY_FILTER_MAC_PRECISE(0x53),
     // 反向过滤MAC开关
-    KEY_FILTER_MAC_REVERSE(0x59),
+    KEY_FILTER_MAC_REVERSE(0x54),
     // MAC过滤规则
-    KEY_FILTER_MAC_RULES(0x5A),
+    KEY_FILTER_MAC_RULES(0x55),
     // 精准过滤ADV Name开关
-    KEY_FILTER_NAME_PRECISE(0x5B),
+    KEY_FILTER_NAME_PRECISE(0x56),
     // 反向过滤ADV Name开关
-    KEY_FILTER_NAME_REVERSE(0x5C),
+    KEY_FILTER_NAME_REVERSE(0x57),
     // NAME过滤规则
-    KEY_FILTER_NAME_RULES(0x5D),
+    KEY_FILTER_NAME_RULES(0x58),
     // 过滤设备类型开关
-    KEY_FILTER_RAW_DATA(0x5E),
+    KEY_FILTER_RAW_DATA(0x59),
     // iBeacon类型过滤开关
     KEY_FILTER_IBEACON_ENABLE(0x5F),
     // iBeacon类型Major范围
@@ -137,11 +139,11 @@ public enum ParamsKeyEnum implements Serializable {
     // 精准过滤BXP-Tag开关
     KEY_FILTER_BXP_TAG_PRECISE(0x68),
     // 反向过滤BXP-Tag开关
-    KEY_FILTER_BXP_TAG_REVERSE(0x69),
+    KEY_FILTER_BXP_TAG_REVERSE(0x690),
     // BXP-Tag过滤规则
-    KEY_FILTER_BXP_TAG_RULES(0x6A),
+    KEY_FILTER_BXP_TAG_RULES(0x6A0),
     // eddystone-UID类型过滤开关
-    KEY_FILTER_EDDYSTONE_UID_ENABLE(0x6B),
+    KEY_FILTER_EDDYSTONE_UID_ENABLE(0x6B0),
     // eddystone-UID类型Namespace
     KEY_FILTER_EDDYSTONE_UID_NAMESPACE(0x6C),
     // eddystone-UID类型Instance
@@ -155,9 +157,9 @@ public enum ParamsKeyEnum implements Serializable {
     // eddystone- TLM类型TLMVersion
     KEY_FILTER_EDDYSTONE_TLM_VERSION(0x71),
     // BeaconX Pro-ACC设备过滤开关
-    KEY_FILTER_BXP_ACC(0x72),
+    KEY_FILTER_BXP_ACC(0x6A),
     // BeaconX Pro-T&H设备过滤开关
-    KEY_FILTER_BXP_TH(0x73),
+    KEY_FILTER_BXP_TH(0x6B),
     // Unknown设备过滤开关
     KEY_FILTER_OTHER_ENABLE(0x74),
     // 3组unknown过滤规则逻辑
@@ -177,23 +179,23 @@ public enum ParamsKeyEnum implements Serializable {
     // GPS定位数据格式（LR1110版本）
     KEY_GPS_POS_DATA_TYPE(0x7C),
     // GPS定位星座（LR1110版本）
-    KEY_GPS_POS_SYSTEM(0x7D),
+    KEY_GPS_POS_SYSTEM(0x500),
     // 定位方式选择（LR1110版本）
     KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE(0x7E),
     // 辅助定位经纬度（LR1110版本）
-    KEY_GPS_POS_AUXILIARY_LAT_LON(0x7F),
+    KEY_GPS_POS_AUXILIARY_LAT_LON(0x510),
     // 星历开始更新事件开关
-    KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE(0x80),
+    KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE(0x520),
     // 星历更新结束事件开关
-    KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE(0x81),
+    KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE(0x810),
     // BXP-Device类型过滤开关
-    KEY_FILTER_BXP_DEVICE(0x82),
+    KEY_FILTER_BXP_DEVICE(0x69),
     // BXP-Button类型过滤开关
-    KEY_FILTER_BXP_BUTTON_ENABLE(0x83),
+    KEY_FILTER_BXP_BUTTON_ENABLE(0x1000),
     // BXP-Button类型过滤规则
     KEY_FILTER_BXP_BUTTON_RULES(0x84),
     // 蓝牙定位机制选择
-    KEY_BLE_POS_MECHANISM(0x85),
+    KEY_BLE_POS_MECHANISM(0x81),
 
     //// LoRaWAN参数
     // LoRaWAN网络状态

@@ -59,31 +59,31 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_pos_ble"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/lw006_white_ffffff"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:padding="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/tvPosTimeout"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
                     android:text="Positioning Timeout"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/et_pos_timeout"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/et_pos_timeout" />
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <EditText
                     android:id="@+id/et_pos_timeout"
-                    android:layout_width="0dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:gravity="center"
                     android:hint="1~10"
                     android:inputType="number"
@@ -91,110 +91,127 @@
                     android:textColor="@color/lw006_black_333333"
                     android:textColorHint="@color/lw006_grey_ebebeb"
                     android:textSize="15sp"
-                    app:layout_constraintHorizontal_bias="0.9"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.2" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tvPosTimeout"
+                    app:layout_constraintRight_toLeftOf="@+id/tvTimeoutUnit"
+                    app:layout_constraintTop_toTopOf="@+id/tvPosTimeout" />
 
                 <TextView
+                    android:id="@+id/tvTimeoutUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:text="s"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/et_pos_timeout"
-                    app:layout_constraintLeft_toRightOf="@id/et_pos_timeout"
-                    app:layout_constraintTop_toTopOf="@id/et_pos_timeout" />
+                    app:layout_constraintBottom_toBottomOf="@id/tvPosTimeout"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvPosTimeout" />
 
                 <View
+                    android:id="@+id/line1"
                     style="@style/lw006_divider_line"
                     android:layout_width="0dp"
-                    android:layout_marginTop="10dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_pos_timeout" />
+                    app:layout_constraintTop_toBottomOf="@id/tvPosTimeout" />
 
 
                 <TextView
+                    android:id="@+id/tvNumMac"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
                     android:text="Number Of MAC"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/et_mac_number"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/et_mac_number" />
+                    app:layout_constraintTop_toBottomOf="@+id/line1" />
 
                 <EditText
                     android:id="@+id/et_mac_number"
-                    android:layout_width="0dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:hint="1~5"
                     android:inputType="number"
                     android:maxLength="1"
-                    android:text=""
                     android:textColor="@color/lw006_black_333333"
                     android:textColorHint="@color/lw006_grey_ebebeb"
                     android:textSize="15sp"
-                    app:layout_constraintHorizontal_bias="0.9"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvNumMac"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_pos_timeout"
-                    app:layout_constraintWidth_percent="0.2" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/lw006_black_333333"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/et_mac_number"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/et_mac_number" />
+                    app:layout_constraintTop_toTopOf="@+id/tvNumMac" />
 
                 <View
+                    android:id="@+id/line2"
                     style="@style/lw006_divider_line"
                     android:layout_width="0dp"
-                    android:layout_marginTop="10dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_mac_number" />
+                    app:layout_constraintTop_toBottomOf="@id/tvNumMac" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/tvFixMechanism"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
                     android:text="Bluetooth Fix Mechanism"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_ble_fix_mechanism"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/tv_ble_fix_mechanism"
-                    app:layout_constraintTop_toTopOf="@id/tv_ble_fix_mechanism" />
+                    app:layout_constraintTop_toBottomOf="@+id/line2" />
 
                 <TextView
                     android:id="@+id/tv_ble_fix_mechanism"
+                    android:layout_width="110dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/lw006_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="onBleFixMechanism"
+                    android:text="Time Priority"
+                    android:textColor="@color/lw006_white_ffffff"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvFixMechanism"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvFixMechanism" />
+
+                <View
+                    android:id="@+id/line3"
+                    style="@style/lw006_divider_line"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvFixMechanism" />
+
+                <TextView
+                    android:id="@+id/tvScanType"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:text="Scanning Type/PHY"
+                    android:textColor="@color/lw006_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/line3" />
+
+                <TextView
+                    android:id="@+id/tv_scanning_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
                     android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                     android:clickable="true"
                     android:gravity="center"
                     android:minWidth="150dp"
-                    android:onClick="onBleFixMechanism"
-                    android:padding="10dp"
-                    android:text="Time Priority"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:onClick="onScanningType"
+                    android:text="1M PHY(BLE 4.x)"
                     android:textColor="@color/lw006_white_ffffff"
                     android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvScanType"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_mac_number" />
+                    app:layout_constraintTop_toTopOf="@+id/tvScanType" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -276,43 +293,6 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/sb_rssi_filter" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View style="@style/lw006_divider_line" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Scanning Type/PHY"
-                        android:textColor="@color/lw006_black_333333"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_scanning_type"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toLeftOf="@id/tv_scanning_type"
-                        app:layout_constraintTop_toTopOf="@id/tv_scanning_type" />
-
-                    <TextView
-                        android:id="@+id/tv_scanning_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/lw006_shape_radius_blue_btn_bg"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:minWidth="150dp"
-                        android:onClick="onScanningType"
-                        android:padding="10dp"
-                        android:text="1M PHY(BLE 4.x)"
-                        android:textColor="@color/lw006_white_ffffff"
-                        android:textSize="15sp"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View style="@style/lw006_divider_line" />

@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,8 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
-
-
     private Lw006ActivityPosBleBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -81,8 +78,8 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
             orderTasks.add(OrderTaskAssembler.getBlePosTimeout());
             orderTasks.add(OrderTaskAssembler.getBlePosNumber());
             orderTasks.add(OrderTaskAssembler.getBlePosMechanism());
-            orderTasks.add(OrderTaskAssembler.getFilterRSSI());
             orderTasks.add(OrderTaskAssembler.getFilterBleScanPhy());
+            orderTasks.add(OrderTaskAssembler.getFilterRSSI());
             orderTasks.add(OrderTaskAssembler.getFilterRelationship());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);

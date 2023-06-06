@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -33,13 +32,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FilterAdvNameActivity extends BaseActivity {
-
     private final String FILTER_ASCII = "[ -~]*";
-
     private Lw006ActivityFilterAdvNameBinding mBind;
-
     private boolean savedParamsError;
-
     private ArrayList<String> filterAdvName;
     private InputFilter filter;
 
@@ -50,15 +45,11 @@ public class FilterAdvNameActivity extends BaseActivity {
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         filterAdvName = new ArrayList<>();
-        filter = new InputFilter() {
-            @Override
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                if (!(source + "").matches(FILTER_ASCII)) {
-                    return "";
-                }
-
-                return null;
+        filter = (source, start, end, dest, dstart, dend) -> {
+            if (!(source + "").matches(FILTER_ASCII)) {
+                return "";
             }
+            return null;
         };
         showSyncingProgressDialog();
         mBind.cbPreciseMatch.postDelayed(() -> {
@@ -96,80 +87,78 @@ public class FilterAdvNameActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_NAME_PRECISE:
-                                    case KEY_FILTER_NAME_REVERSE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_FILTER_NAME_RULES:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterAdvNameActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_NAME_PRECISE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbPreciseMatch.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_NAME_REVERSE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbReverseFilter.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_NAME_RULES:
-                                        if (length > 0) {
-                                            filterAdvName.clear();
-                                            byte[] nameBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            for (int i = 0, l = nameBytes.length; i < l; ) {
-                                                int nameLength = nameBytes[i] & 0xFF;
-                                                i++;
-                                                filterAdvName.add(new String(Arrays.copyOfRange(nameBytes, i, i + nameLength)));
-                                                i += nameLength;
-                                            }
-                                            for (int i = 0, l = filterAdvName.size(); i < l; i++) {
-                                                String advName = filterAdvName.get(i);
-                                                View v = LayoutInflater.from(FilterAdvNameActivity.this).inflate(R.layout.lw006_item_adv_name_filter, mBind.llDavName, false);
-                                                TextView title = v.findViewById(R.id.tv_adv_name_title);
-                                                EditText etAdvName = v.findViewById(R.id.et_adv_name);
-                                                etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20), filter});
-                                                title.setText(String.format("ADV Name%d", i + 1));
-                                                etAdvName.setText(advName);
-                                                mBind.llDavName.addView(v);
-                                            }
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_NAME_PRECISE:
+                                case KEY_FILTER_NAME_REVERSE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_FILTER_NAME_RULES:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterAdvNameActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_NAME_PRECISE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbPreciseMatch.setChecked(enable == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_NAME_REVERSE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbReverseFilter.setChecked(enable == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_NAME_RULES:
+                                    if (length > 0) {
+                                        filterAdvName.clear();
+                                        byte[] nameBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                        for (int i = 0, l = nameBytes.length; i < l; ) {
+                                            int nameLength = nameBytes[i] & 0xFF;
+                                            i++;
+                                            filterAdvName.add(new String(Arrays.copyOfRange(nameBytes, i, i + nameLength)));
+                                            i += nameLength;
+                                        }
+                                        for (int i = 0, l = filterAdvName.size(); i < l; i++) {
+                                            String advName = filterAdvName.get(i);
+                                            View v = LayoutInflater.from(FilterAdvNameActivity.this).inflate(R.layout.lw006_item_adv_name_filter, mBind.llDavName, false);
+                                            TextView title = v.findViewById(R.id.tv_adv_name_title);
+                                            EditText etAdvName = v.findViewById(R.id.et_adv_name);
+                                            etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20), filter});
+                                            title.setText(String.format("ADV Name%d", i + 1));
+                                            etAdvName.setText(advName);
+                                            mBind.llDavName.addView(v);
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -216,7 +205,6 @@ public class FilterAdvNameActivity extends BaseActivity {
         }
     }
 
-
     private void saveParams() {
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
@@ -228,8 +216,8 @@ public class FilterAdvNameActivity extends BaseActivity {
 
     private boolean isValid() {
         final int c = mBind.llDavName.getChildCount();
+        filterAdvName.clear();
         if (c > 0) {
-            filterAdvName.clear();
             for (int i = 0; i < c; i++) {
                 View v = mBind.llDavName.getChildAt(i);
                 EditText etAdvName = v.findViewById(R.id.et_adv_name);
@@ -243,8 +231,6 @@ public class FilterAdvNameActivity extends BaseActivity {
                 }
                 filterAdvName.add(advName);
             }
-        } else {
-            filterAdvName.clear();
         }
         return true;
     }
@@ -262,14 +248,12 @@ public class FilterAdvNameActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();

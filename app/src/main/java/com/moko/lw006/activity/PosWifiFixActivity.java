@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,12 +31,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PosWifiFixActivity extends BaseActivity {
-
     private Lw006ActivityPosWifiBinding mBind;
     private ArrayList<String> mValues;
     private int mSelected;
     private boolean mReceiverTag = false;
-    private boolean savedParamsError;
+    private final ArrayList<String> posMechanism = new ArrayList<>(2);
+    private int posMechanismIndex;
+    private int posTimeoutFlag;
+    private int numBssidFlag;
+    private int wifiDataTypeFlag;
+    private int wifiFixMechanismFlag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class PosWifiFixActivity extends BaseActivity {
         mValues = new ArrayList<>();
         mValues.add("DAS");
         mValues.add("Customer");
+        posMechanism.add("Time Priority");
+        posMechanism.add("RSSI Priority");
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -59,8 +65,19 @@ public class PosWifiFixActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getWifiPosTimeout());
             orderTasks.add(OrderTaskAssembler.getWifiPosBSSIDNumber());
             orderTasks.add(OrderTaskAssembler.getWifiPosDataType());
+            orderTasks.add(OrderTaskAssembler.getWifiPosMechanism());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
+        mBind.tvWifiFixMechanism.setOnClickListener(v -> {
+            if (isWindowLocked()) return;
+            BottomDialog dialog = new BottomDialog();
+            dialog.setDatas(posMechanism, posMechanismIndex);
+            dialog.setListener(value -> {
+                posMechanismIndex = value;
+                mBind.tvWifiFixMechanism.setText(posMechanism.get(value));
+            });
+            dialog.show(getSupportFragmentManager());
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
@@ -89,67 +106,72 @@ public class PosWifiFixActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_WIFI_POS_TIMEOUT:
-                                    case KEY_WIFI_POS_BSSID_NUMBER:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_WIFI_POS_DATA_TYPE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            savedParamsError = false;
-                                            ToastUtils.showToast(PosWifiFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_WIFI_POS_TIMEOUT:
-                                        if (length > 0) {
-                                            int number = value[4] & 0xFF;
-                                            mBind.etPosTimeout.setText(String.valueOf(number));
-                                        }
-                                        break;
-                                    case KEY_WIFI_POS_BSSID_NUMBER:
-                                        if (length > 0) {
-                                            int number = value[4] & 0xFF;
-                                            mBind.etBssidNumber.setText(String.valueOf(number));
-                                        }
-                                        break;
-                                    case KEY_WIFI_POS_DATA_TYPE:
-                                        if (length > 0) {
-                                            mSelected = value[4] & 0xFF;
-                                            mBind.tvWifiDataType.setText(mValues.get(mSelected));
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED) return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) return;
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_WIFI_POS_TIMEOUT:
+                                    posTimeoutFlag = result;
+                                    break;
+
+                                case KEY_WIFI_POS_BSSID_NUMBER:
+                                    numBssidFlag = result;
+                                    break;
+
+                                case KEY_WIFI_POS_DATA_TYPE:
+                                    wifiDataTypeFlag = result;
+                                    break;
+
+                                case KEY_WIFI_POS_MECHANISM:
+                                    wifiFixMechanismFlag = result;
+                                    if (posTimeoutFlag == 1 && numBssidFlag == 1 && wifiDataTypeFlag == 1 && wifiFixMechanismFlag == 1) {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    } else {
+                                        ToastUtils.showToast(PosWifiFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_WIFI_POS_TIMEOUT:
+                                    if (length > 0) {
+                                        int number = value[4] & 0xFF;
+                                        mBind.etPosTimeout.setText(String.valueOf(number));
+                                    }
+                                    break;
+                                case KEY_WIFI_POS_BSSID_NUMBER:
+                                    if (length > 0) {
+                                        int number = value[4] & 0xFF;
+                                        mBind.etBssidNumber.setText(String.valueOf(number));
+                                    }
+                                    break;
+                                case KEY_WIFI_POS_DATA_TYPE:
+                                    if (length > 0) {
+                                        mSelected = value[4] & 0xFF;
+                                        mBind.tvWifiDataType.setText(mValues.get(mSelected));
+                                    }
+                                    break;
+
+                                case KEY_WIFI_POS_MECHANISM:
+                                    if (length == 1) {
+                                        posMechanismIndex = value[4] & 0xff;
+                                        mBind.tvWifiFixMechanism.setText(posMechanism.get(posMechanismIndex));
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -168,10 +190,13 @@ public class PosWifiFixActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
+            wifiFixMechanismFlag = 0;
+            wifiDataTypeFlag = 0;
+            numBssidFlag = 0;
+            posTimeoutFlag = 0;
             saveParams();
         } else {
             ToastUtils.showToast(this, "Para error!");
@@ -183,18 +208,13 @@ public class PosWifiFixActivity extends BaseActivity {
         if (TextUtils.isEmpty(posTimeoutStr))
             return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
-        if (posTimeout < 1 || posTimeout > 4) {
+        if (posTimeout < 1 || posTimeout > 10) {
             return false;
         }
         final String numberStr = mBind.etBssidNumber.getText().toString();
-        if (TextUtils.isEmpty(numberStr))
-            return false;
+        if (TextUtils.isEmpty(numberStr)) return false;
         final int number = Integer.parseInt(numberStr);
-        if (number < 1 || number > 5) {
-            return false;
-        }
-        return true;
-
+        return number >= 1 && number <= 5;
     }
 
 
@@ -207,24 +227,21 @@ public class PosWifiFixActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setWifiPosTimeout(posTimeout));
         orderTasks.add(OrderTaskAssembler.setWifiPosBSSIDNumber(number));
         orderTasks.add(OrderTaskAssembler.setWifiPosDataType(mSelected));
+        orderTasks.add(OrderTaskAssembler.setWifiPosMechanism(posMechanismIndex));
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent != null) {
                 String action = intent.getAction();
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
-                    switch (blueState) {
-                        case BluetoothAdapter.STATE_TURNING_OFF:
-                            dismissSyncProgressDialog();
-                            finish();
-                            break;
+                    if (blueState == BluetoothAdapter.STATE_TURNING_OFF) {
+                        dismissSyncProgressDialog();
+                        finish();
                     }
                 }
             }

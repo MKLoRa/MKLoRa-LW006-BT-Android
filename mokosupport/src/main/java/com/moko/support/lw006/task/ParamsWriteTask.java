@@ -443,6 +443,16 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
+    public void setWifiPosMechanism(@IntRange(from = 0, to = 1) int type) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_WIFI_POS_MECHANISM.getParamsKey(),
+                (byte) 0x01,
+                (byte) type
+        };
+    }
+
     public void setWifiPosTimeout(@IntRange(from = 1, to = 4) int timeout) {
         data = new byte[]{
                 (byte) 0xED,
