@@ -54,6 +54,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getLoraNetworkCheckInterval());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
+        mBind.layoutMsgTypeSetting.setOnClickListener(v-> startActivity(new Intent(this,MessageTypeSettingsActivity.class)));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)

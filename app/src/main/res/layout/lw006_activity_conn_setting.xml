@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/lw006_grey_f2f2f2"
     android:orientation="vertical">
 
@@ -14,7 +15,6 @@
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:clickable="true"
             android:drawableLeft="@drawable/lw006_ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
@@ -38,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:clickable="true"
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -398,6 +397,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
+                tools:visibility="visible"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -413,6 +413,7 @@
                         android:padding="10dp"
                         android:paddingTop="6dp"
                         android:paddingBottom="6dp"
+                        tools:visibility="visible"
                         android:visibility="gone">
 
                         <TextView
@@ -476,6 +477,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="10dp"
+                        tools:visibility="visible"
                         android:visibility="gone">
 
                         <CheckBox
@@ -510,6 +512,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        tools:visibility="visible"
                         android:visibility="gone">
 
                         <TextView
@@ -590,6 +593,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        tools:visibility="visible"
                         android:visibility="gone">
 
                         <View
@@ -650,6 +654,7 @@
                     android:background="@color/lw006_white_ffffff"
                     android:orientation="horizontal"
                     android:padding="10dp"
+                    tools:visibility="visible"
                     android:visibility="gone">
 
                     <TextView

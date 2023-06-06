@@ -1,5 +1,7 @@
 package com.moko.support.lw006;
 
+import androidx.annotation.IntRange;
+
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.support.lw006.entity.ParamsKeyEnum;
 import com.moko.support.lw006.task.GetFirmwareRevisionTask;
@@ -13,8 +15,6 @@ import com.moko.support.lw006.task.ParamsWriteTask;
 import com.moko.support.lw006.task.SetPasswordTask;
 
 import java.util.ArrayList;
-
-import androidx.annotation.IntRange;
 
 public class OrderTaskAssembler {
     ///////////////////////////////////////////////////////////////////////////
@@ -780,6 +780,42 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask getDeviceInfoPayload() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_DEVICE_INFO_PAYLOAD);
+        return task;
+    }
+
+    public static OrderTask getHeartbeatPayload() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_HEARTBEAT_PAYLOAD);
+        return task;
+    }
+
+    public static OrderTask getLowPowerPayload() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_LOW_POWER_PAYLOAD);
+        return task;
+    }
+
+    public static OrderTask getEventPayload() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_EVENT_PAYLOAD);
+        return task;
+    }
+
+    public static OrderTask getGPSLimitPayload() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_GPS_LIMIT_PAYLOAD);
+        return task;
+    }
+
+    public static OrderTask getPositioningPayload() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_POSITIONING_PAYLOAD);
+        return task;
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // WRITE
@@ -1531,4 +1567,42 @@ public class OrderTaskAssembler {
         task.clearStorageData();
         return task;
     }
+
+    public static OrderTask setDeviceInfoPayload(@IntRange(from = 0, to = 1) int flag, @IntRange(from = 1, to = 4) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setPayloadInfo(flag, times, ParamsKeyEnum.KEY_DEVICE_INFO_PAYLOAD.getParamsKey());
+        return task;
+    }
+
+    public static OrderTask setHeartbeatPayload(@IntRange(from = 0, to = 1) int flag, @IntRange(from = 1, to = 4) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setPayloadInfo(flag, times, ParamsKeyEnum.KEY_HEARTBEAT_PAYLOAD.getParamsKey());
+        return task;
+    }
+
+    public static OrderTask setLowPowerPayload(@IntRange(from = 0, to = 1) int flag, @IntRange(from = 1, to = 4) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setPayloadInfo(flag, times, ParamsKeyEnum.KEY_LOW_POWER_PAYLOAD.getParamsKey());
+        return task;
+    }
+
+    public static OrderTask setEventPayload(@IntRange(from = 0, to = 1) int flag, @IntRange(from = 1, to = 4) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setPayloadInfo(flag, times, ParamsKeyEnum.KEY_EVENT_PAYLOAD.getParamsKey());
+        return task;
+    }
+
+    public static OrderTask setGPSLimitPayload(@IntRange(from = 0, to = 1) int flag, @IntRange(from = 1, to = 4) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setPayloadInfo(flag, times, ParamsKeyEnum.KEY_GPS_LIMIT_PAYLOAD.getParamsKey());
+        return task;
+    }
+
+    public static OrderTask setPositioningPayload(@IntRange(from = 0, to = 1) int flag, @IntRange(from = 1, to = 4) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setPayloadInfo(flag, times, ParamsKeyEnum.KEY_POSITIONING_PAYLOAD.getParamsKey());
+        return task;
+    }
+
+
 }

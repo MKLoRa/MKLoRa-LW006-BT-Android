@@ -82,7 +82,6 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:clickable="true"
             android:gravity="center_vertical"
             android:onClick="onLoRaAppSetting"
             android:text="@string/application_setting"

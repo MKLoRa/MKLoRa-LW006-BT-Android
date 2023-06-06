@@ -219,13 +219,26 @@ public enum ParamsKeyEnum implements Serializable {
     // DUTYCYCLE
     KEY_LORA_DUTYCYCLE(0x9D),
     // 同步间隔
-    KEY_LORA_TIME_SYNC_INTERVAL(0x9E),
+    KEY_LORA_TIME_SYNC_INTERVAL(0x9F),
     // 网络检查间隔
-    KEY_LORA_NETWORK_CHECK_INTERVAL(0x9F),
-    KEY_LORA_ADR_ACK_LIMIT(0xA0),
-    KEY_LORA_ADR_ACK_DELAY(0xA1),
+    KEY_LORA_NETWORK_CHECK_INTERVAL(0xA0),
+    KEY_LORA_ADR_ACK_LIMIT(0xD0),
+    KEY_LORA_ADR_ACK_DELAY(0xD1),
     // 数据的最大传输次数
-    KEY_LORA_MAX_RETRANSMISSION_TIMES(0xA2),
+    KEY_LORA_MAX_RETRANSMISSION_TIMES(0xD2),
+
+    //设备信息包上行配置
+    KEY_DEVICE_INFO_PAYLOAD(0xA1),
+    //心跳数据包上行配置
+    KEY_HEARTBEAT_PAYLOAD(0xA2),
+    //低电状态数据包上行配置
+    KEY_LOW_POWER_PAYLOAD(0xA3),
+    //事件信息包上行配置
+    KEY_EVENT_PAYLOAD(0xA4),
+    //GPS极限定位数据包上行配置
+    KEY_GPS_LIMIT_PAYLOAD(0xA5),
+    //定位数据包上行配置
+    KEY_POSITIONING_PAYLOAD(0xA6),
 
     //// 辅助功能参数
     // 下行请求定位策略

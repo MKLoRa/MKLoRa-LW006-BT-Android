@@ -2,6 +2,8 @@ package com.moko.support.lw006.task;
 
 import android.text.TextUtils;
 
+import androidx.annotation.IntRange;
+
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
@@ -11,8 +13,6 @@ import com.moko.support.lw006.entity.ParamsKeyEnum;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
-
-import androidx.annotation.IntRange;
 
 public class ParamsWriteTask extends OrderTask {
     public byte[] data;
@@ -26,6 +26,22 @@ public class ParamsWriteTask extends OrderTask {
         return data;
     }
 
+    /**
+     * 上行配置参数
+     *
+     * @param flag  0 1
+     * @param times 1-4
+     */
+    public void setPayloadInfo(@IntRange(from = 0, to = 1) int flag, @IntRange(from = 1, to = 4) int times, int key) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) key,
+                (byte) 0x02,
+                (byte) flag,
+                (byte) times
+        };
+    }
 
     public void close() {
         data = new byte[]{
@@ -1559,7 +1575,6 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) enable
         };
     }
-
 
 
     public void setBatteryReset() {
