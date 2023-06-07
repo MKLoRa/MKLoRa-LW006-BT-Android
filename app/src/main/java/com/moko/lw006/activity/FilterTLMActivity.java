@@ -27,12 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterTLMActivity extends BaseActivity {
-
-
     private Lw006ActivityFilterTlmBinding mBind;
-
     private boolean savedParamsError;
-
     private ArrayList<String> mValues;
     private int mSelected;
     private boolean mTLMEnable;
@@ -50,8 +46,8 @@ public class FilterTLMActivity extends BaseActivity {
         showSyncingProgressDialog();
         mBind.tvTlmVersion.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmVersion());
             orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmEnable());
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmVersion());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
@@ -83,55 +79,53 @@ public class FilterTLMActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_EDDYSTONE_TLM_VERSION:
-                                    case KEY_FILTER_EDDYSTONE_TLM_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterTLMActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_EDDYSTONE_TLM_VERSION:
-                                        if (length > 0) {
-                                            mSelected = value[4] & 0xFF;
-                                            mBind.tvTlmVersion.setText(mValues.get(mSelected));
-                                        }
-                                        break;
-                                    case KEY_FILTER_EDDYSTONE_TLM_ENABLE:
-                                        if (length > 0) {
-                                            mTLMEnable = value[4] == 1;
-                                            mBind.ivTlmEnable.setImageResource(mTLMEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_EDDYSTONE_TLM_VERSION:
+                                case KEY_FILTER_EDDYSTONE_TLM_ENABLE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterTLMActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_EDDYSTONE_TLM_VERSION:
+                                    if (length > 0) {
+                                        mSelected = value[4] & 0xFF;
+                                        mBind.tvTlmVersion.setText(mValues.get(mSelected));
+                                    }
+                                    break;
+                                case KEY_FILTER_EDDYSTONE_TLM_ENABLE:
+                                    if (length > 0) {
+                                        mTLMEnable = value[4] == 1;
+                                        mBind.ivTlmEnable.setImageResource(mTLMEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });

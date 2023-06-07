@@ -274,7 +274,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask getWifiPosMechanism(){
+    public static OrderTask getWifiPosMechanism() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_WIFI_POS_MECHANISM);
         return task;
@@ -433,6 +433,48 @@ public class OrderTaskAssembler {
     public static OrderTask getFilterBXPTagRules() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_FILTER_BXP_TAG_RULES);
+        return task;
+    }
+
+    public static OrderTask getMkPirEnable() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_MK_PIR_ENABLE);
+        return task;
+    }
+
+    public static OrderTask getMkPirSensorDetectionStatus() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_MK_PIR_DETECTION_STATUS);
+        return task;
+    }
+
+    public static OrderTask getMkPirSensorSensitivity() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_MK_PIR_SENSOR_SENSITIVITY);
+        return task;
+    }
+
+    public static OrderTask getMkPirDoorStatus() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_MK_PIR_DOOR_STATUS);
+        return task;
+    }
+
+    public static OrderTask getMkPirDelayResStatus() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_MK_PIR_DELAY_RES_STATUS);
+        return task;
+    }
+
+    public static OrderTask getMkPirMajor() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_MK_PIR_MAJOR);
+        return task;
+    }
+
+    public static OrderTask getMkPirMinor() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_MK_PIR_MINOR);
         return task;
     }
 
@@ -1125,19 +1167,17 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setFilterIBeaconMajorRange(@IntRange(from = 0, to = 1) int enable,
-                                                       @IntRange(from = 0, to = 65535) int min,
+    public static OrderTask setFilterIBeaconMajorRange(@IntRange(from = 0, to = 65535) int min,
                                                        @IntRange(from = 0, to = 65535) int max) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterIBeaconMajorRange(enable, min, max);
+        task.setFilterIBeaconMajorRange(min, max);
         return task;
     }
 
-    public static OrderTask setFilterIBeaconMinorRange(@IntRange(from = 0, to = 1) int enable,
-                                                       @IntRange(from = 0, to = 65535) int min,
+    public static OrderTask setFilterIBeaconMinorRange(@IntRange(from = 0, to = 65535) int min,
                                                        @IntRange(from = 0, to = 65535) int max) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterIBeaconMinorRange(enable, min, max);
+        task.setFilterIBeaconMinorRange(min, max);
         return task;
     }
 
@@ -1153,19 +1193,17 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setFilterMKIBeaconMajorRange(@IntRange(from = 0, to = 1) int enable,
-                                                         @IntRange(from = 0, to = 65535) int min,
+    public static OrderTask setFilterMKIBeaconMajorRange(@IntRange(from = 0, to = 65535) int min,
                                                          @IntRange(from = 0, to = 65535) int max) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterBXPIBeaconMajorRange(enable, min, max);
+        task.setFilterBXPIBeaconMajorRange(min, max);
         return task;
     }
 
-    public static OrderTask setFilterMKIBeaconMinorRange(@IntRange(from = 0, to = 1) int enable,
-                                                         @IntRange(from = 0, to = 65535) int min,
+    public static OrderTask setFilterMKIBeaconMinorRange(@IntRange(from = 0, to = 65535) int min,
                                                          @IntRange(from = 0, to = 65535) int max) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterBXPIBeaconMinorRange(enable, min, max);
+        task.setFilterBXPIBeaconMinorRange(min, max);
         return task;
     }
 
@@ -1196,6 +1234,50 @@ public class OrderTaskAssembler {
     public static OrderTask setFilterBXPTagRules(ArrayList<String> filterBXPTagRules) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setFilterBXPTagRules(filterBXPTagRules);
+        return task;
+    }
+
+    public static OrderTask setFilterMkPirEnable(@IntRange(from = 0, to = 1) int enable) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterMkPirEnable(enable);
+        return task;
+    }
+
+    public static OrderTask setFilterMkPirSensorDetectionStatus(@IntRange(from = 0, to = 2) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterMkPirSensorDetectionStatus(type);
+        return task;
+    }
+
+    public static OrderTask setFilterMkPirSensorSensitivity(@IntRange(from = 0, to = 3) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterMkPirSensorSensitivity(type);
+        return task;
+    }
+
+    public static OrderTask setFilterMkPirDoorStatus(@IntRange(from = 0, to = 2) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterMkPirDoorStatus(type);
+        return task;
+    }
+
+    public static OrderTask setFilterMkPirDelayResStatus(@IntRange(from = 0, to = 3) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterMkPirDelayResStatus(type);
+        return task;
+    }
+
+    public static OrderTask setFilterMkPirMajorRange(@IntRange(from = 0, to = 65535) int min,
+                                                     @IntRange(from = 0, to = 65535) int max) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterMkPirMajorRange(min, max);
+        return task;
+    }
+
+    public static OrderTask setFilterMkPirMinorRange(@IntRange(from = 0, to = 65535) int min,
+                                                     @IntRange(from = 0, to = 65535) int max) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterMkPirMinorRange(min, max);
         return task;
     }
 

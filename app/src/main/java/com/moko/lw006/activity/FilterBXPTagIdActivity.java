@@ -32,11 +32,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FilterBXPTagIdActivity extends BaseActivity {
-
     private Lw006ActivityFilterBxpTagIdBinding mBind;
-
     private boolean savedParamsError;
-
     private ArrayList<String> filterTagId;
 
     @Override
@@ -83,88 +80,86 @@ public class FilterBXPTagIdActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_BXP_TAG_ENABLE:
-                                    case KEY_FILTER_BXP_TAG_PRECISE:
-                                    case KEY_FILTER_BXP_TAG_REVERSE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_FILTER_BXP_TAG_RULES:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterBXPTagIdActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_BXP_TAG_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbEnable.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_BXP_TAG_PRECISE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbPreciseMatch.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_BXP_TAG_REVERSE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbReverseFilter.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_BXP_TAG_RULES:
-                                        if (length > 0) {
-                                            filterTagId.clear();
-                                            byte[] tagIdBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            for (int i = 0, l = tagIdBytes.length; i < l; ) {
-                                                int idLength = tagIdBytes[i] & 0xFF;
-                                                i++;
-                                                filterTagId.add(MokoUtils.bytesToHexString(Arrays.copyOfRange(tagIdBytes, i, i + idLength)));
-                                                i += idLength;
-                                            }
-                                            for (int i = 0, l = filterTagId.size(); i < l; i++) {
-                                                String macAddress = filterTagId.get(i);
-                                                View v = LayoutInflater.from(FilterBXPTagIdActivity.this).inflate(R.layout.lw006_item_tag_id_filter, mBind.llTagId, false);
-                                                TextView title = v.findViewById(R.id.tv_tag_id_title);
-                                                EditText etMacAddress = v.findViewById(R.id.et_tag_id);
-                                                title.setText(String.format("Tag ID %d", i + 1));
-                                                etMacAddress.setText(macAddress);
-                                                mBind.llTagId.addView(v);
-                                            }
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_BXP_TAG_ENABLE:
+                                case KEY_FILTER_BXP_TAG_PRECISE:
+                                case KEY_FILTER_BXP_TAG_REVERSE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_FILTER_BXP_TAG_RULES:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterBXPTagIdActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_BXP_TAG_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbEnable.setChecked(enable == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_BXP_TAG_PRECISE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbPreciseMatch.setChecked(enable == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_BXP_TAG_REVERSE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbReverseFilter.setChecked(enable == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_BXP_TAG_RULES:
+                                    if (length > 0) {
+                                        filterTagId.clear();
+                                        byte[] tagIdBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                        for (int i = 0, l = tagIdBytes.length; i < l; ) {
+                                            int idLength = tagIdBytes[i] & 0xFF;
+                                            i++;
+                                            filterTagId.add(MokoUtils.bytesToHexString(Arrays.copyOfRange(tagIdBytes, i, i + idLength)));
+                                            i += idLength;
+                                        }
+                                        for (int i = 0, l = filterTagId.size(); i < l; i++) {
+                                            String macAddress = filterTagId.get(i);
+                                            View v = LayoutInflater.from(FilterBXPTagIdActivity.this).inflate(R.layout.lw006_item_tag_id_filter, mBind.llTagId, false);
+                                            TextView title = v.findViewById(R.id.tv_tag_id_title);
+                                            EditText etMacAddress = v.findViewById(R.id.et_tag_id);
+                                            title.setText(String.format("Tag ID %d", i + 1));
+                                            etMacAddress.setText(macAddress);
+                                            mBind.llTagId.addView(v);
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });

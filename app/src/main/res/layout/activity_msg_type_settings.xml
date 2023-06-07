@@ -85,10 +85,9 @@
                         android:id="@+id/tvDeviceInfoPayloadType"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
+                        android:minWidth="105dp"
                         android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                         android:gravity="center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
                         android:textColor="@color/lw006_white_ffffff"
                         android:textSize="15sp"
                         tools:text="Unconfirmed" />
@@ -163,8 +162,7 @@
                         android:layout_height="35dp"
                         android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                         android:gravity="center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
+                        android:minWidth="105dp"
                         android:textColor="@color/lw006_white_ffffff"
                         android:textSize="15sp"
                         tools:text="Unconfirmed" />
@@ -238,8 +236,7 @@
                         android:layout_height="35dp"
                         android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                         android:gravity="center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
+                        android:minWidth="105dp"
                         android:textColor="@color/lw006_white_ffffff"
                         android:textSize="15sp"
                         tools:text="Unconfirmed" />
@@ -314,8 +311,7 @@
                         android:layout_height="35dp"
                         android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                         android:gravity="center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
+                        android:minWidth="105dp"
                         android:textColor="@color/lw006_white_ffffff"
                         android:textSize="15sp"
                         tools:text="Unconfirmed" />
@@ -389,8 +385,7 @@
                         android:layout_height="35dp"
                         android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                         android:gravity="center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
+                        android:minWidth="105dp"
                         android:textColor="@color/lw006_white_ffffff"
                         android:textSize="15sp"
                         tools:text="Unconfirmed" />
@@ -464,8 +459,7 @@
                         android:layout_height="35dp"
                         android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                         android:gravity="center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
+                        android:minWidth="105dp"
                         android:textColor="@color/lw006_white_ffffff"
                         android:textSize="15sp"
                         tools:text="Unconfirmed" />

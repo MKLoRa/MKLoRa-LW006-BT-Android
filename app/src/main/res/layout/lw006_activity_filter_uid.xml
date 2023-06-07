@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lw006_grey_f2f2f2"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -14,7 +15,6 @@
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:clickable="true"
             android:drawableLeft="@drawable/lw006_ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
@@ -25,11 +25,10 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Filter by Raw Data"
+            android:text="Eddystone-UID Filter"
             android:textColor="@color/lw006_white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -39,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:clickable="true"
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -47,120 +45,112 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/lw006_grey_f2f2f2"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/lw006_white_ffffff"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
+        <CheckBox
+            android:id="@+id/cb_uid"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:button="@null"
+            android:checked="false"
+            android:drawableRight="@drawable/lw006_selector_cb_btn"
+            android:text="Eddystone-UID"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <View
+            style="@style/lw006_divider_line"
+            android:layout_width="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cb_uid" />
+
+        <TextView
+            android:id="@+id/uid_namespace_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@color/lw006_white_ffffff"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:text="Namespace ID"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cb_uid" />
 
-            <CheckBox
-                android:id="@+id/cb_uid"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:button="@null"
-                android:checked="false"
-                android:drawableRight="@drawable/lw006_selector_cb_btn"
-                android:text="Eddystone-UID"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/et_uid_namespace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="12dp"
+            android:digits="0123456789abcdefABCDEF"
+            android:hint="0~10 Bytes"
+            android:maxLength="20"
+            android:textColor="@color/lw006_black_333333"
+            android:textColorHint="@color/lw006_grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/uid_namespace_id" />
 
-            <View
-                style="@style/lw006_divider_line"
-                android:layout_width="0dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cb_uid" />
+        <View
+            style="@style/lw006_divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_uid_namespace" />
 
-            <TextView
-                android:id="@+id/uid_namespace_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="10dp"
-                android:text="Namespace ID"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cb_uid" />
+        <TextView
+            android:id="@+id/uid_instance_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="20dp"
+            android:text="Instance ID"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_uid_namespace" />
 
-            <EditText
-                android:id="@+id/et_uid_namespace"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="12dp"
-                android:digits="0123456789abcdefABCDEF"
-                android:hint="0~10 Bytes"
-                android:maxLength="20"
-                android:textColor="@color/lw006_black_333333"
-                android:textColorHint="@color/lw006_grey_ebebeb"
-                android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/uid_namespace_id" />
+        <EditText
+            android:id="@+id/et_uid_instance_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="12dp"
+            android:digits="0123456789abcdefABCDEF"
+            android:hint="0~6 Bytes"
+            android:maxLength="12"
+            android:textColor="@color/lw006_black_333333"
+            android:textColorHint="@color/lw006_grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/uid_instance_id" />
 
-            <View
-                style="@style/lw006_divider_line"
-                android:layout_width="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_uid_namespace" />
-
-            <TextView
-                android:id="@+id/uid_instance_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="20dp"
-                android:text="Instance ID"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_uid_namespace" />
-
-            <EditText
-                android:id="@+id/et_uid_instance_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="12dp"
-                android:digits="0123456789abcdefABCDEF"
-                android:hint="0~6 Bytes"
-                android:maxLength="12"
-                android:textColor="@color/lw006_black_333333"
-                android:textColorHint="@color/lw006_grey_ebebeb"
-                android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/uid_instance_id" />
-
-            <View
-                style="@style/lw006_divider_line"
-                android:layout_width="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_uid_instance_id" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        <View
+            style="@style/lw006_divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_uid_instance_id" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -28,8 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FilterUIDActivity extends BaseActivity {
-
-
     private Lw006ActivityFilterUidBinding mBind;
     private boolean savedParamsError;
 
@@ -49,7 +46,6 @@ public class FilterUIDActivity extends BaseActivity {
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
-
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 400)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
@@ -77,66 +73,64 @@ public class FilterUIDActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_EDDYSTONE_UID_NAMESPACE:
-                                    case KEY_FILTER_EDDYSTONE_UID_INSTANCE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_FILTER_EDDYSTONE_UID_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterUIDActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_EDDYSTONE_UID_NAMESPACE:
-                                        if (length > 0) {
-                                            String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
-                                            mBind.etUidNamespace.setText(String.valueOf(uuid));
-                                        }
-                                        break;
-                                    case KEY_FILTER_EDDYSTONE_UID_INSTANCE:
-                                        if (length > 0) {
-                                            String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
-                                            mBind.etUidInstanceId.setText(String.valueOf(uuid));
-                                        }
-                                        break;
-                                    case KEY_FILTER_EDDYSTONE_UID_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbUid.setChecked(enable == 1);
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_EDDYSTONE_UID_NAMESPACE:
+                                case KEY_FILTER_EDDYSTONE_UID_INSTANCE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_FILTER_EDDYSTONE_UID_ENABLE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterUIDActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_EDDYSTONE_UID_NAMESPACE:
+                                    if (length > 0) {
+                                        String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
+                                        mBind.etUidNamespace.setText(String.valueOf(uuid));
+                                    }
+                                    break;
+                                case KEY_FILTER_EDDYSTONE_UID_INSTANCE:
+                                    if (length > 0) {
+                                        String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
+                                        mBind.etUidInstanceId.setText(String.valueOf(uuid));
+                                    }
+                                    break;
+                                case KEY_FILTER_EDDYSTONE_UID_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbUid.setChecked(enable == 1);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -154,27 +148,25 @@ public class FilterUIDActivity extends BaseActivity {
     }
 
     private boolean isValid() {
-        final String namespace = mBind.etUidNamespace.getText().toString();
-        final String instanceId = mBind.etUidInstanceId.getText().toString();
-        if (!TextUtils.isEmpty(namespace)) {
+        if (!TextUtils.isEmpty(mBind.etUidNamespace.getText())) {
+            final String namespace = mBind.etUidNamespace.getText().toString();
             int length = namespace.length();
             if (length % 2 != 0) {
                 return false;
             }
         }
-        if (!TextUtils.isEmpty(instanceId)) {
+        if (!TextUtils.isEmpty(mBind.etUidInstanceId.getText())) {
+            final String instanceId = mBind.etUidInstanceId.getText().toString();
             int length = instanceId.length();
-            if (length % 2 != 0) {
-                return false;
-            }
+            return length % 2 == 0;
         }
         return true;
     }
 
 
     private void saveParams() {
-        final String namespace = mBind.etUidNamespace.getText().toString();
-        final String instanceId = mBind.etUidInstanceId.getText().toString();
+        final String namespace = !TextUtils.isEmpty(mBind.etUidNamespace.getText()) ? mBind.etUidNamespace.getText().toString() : null;
+        final String instanceId = !TextUtils.isEmpty(mBind.etUidInstanceId.getText()) ? mBind.etUidInstanceId.getText().toString() : null;
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setFilterEddystoneUIDNamespace(namespace));

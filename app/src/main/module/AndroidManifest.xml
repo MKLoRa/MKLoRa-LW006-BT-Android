@@ -188,6 +188,10 @@
         <activity android:name=".activity.MessageTypeSettingsActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.FilterMkPirActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
 
         <service android:name="com.moko.lw006.service.DfuService" />
     </application>

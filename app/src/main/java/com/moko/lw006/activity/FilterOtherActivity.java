@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -33,13 +32,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FilterOtherActivity extends BaseActivity {
-
     private Lw006ActivityFilterOtherBinding mBind;
     private boolean savedParamsError;
-
-
     private ArrayList<String> filterOther;
-
     private ArrayList<String> mValues;
     private int mSelected;
 
@@ -88,116 +83,114 @@ public class FilterOtherActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_OTHER_RELATIONSHIP:
-                                    case KEY_FILTER_OTHER_RULES:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_FILTER_OTHER_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterOtherActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_OTHER_RELATIONSHIP:
-                                        if (length > 0) {
-                                            int relationship = value[4] & 0xFF;
-                                            if (relationship < 1) {
-                                                mValues = new ArrayList<>();
-                                                mValues.add("A");
-                                                mSelected = 0;
-                                            } else if (relationship < 3) {
-                                                mValues = new ArrayList<>();
-                                                mValues.add("A & B");
-                                                mValues.add("A | B");
-                                                mSelected = relationship - 1;
-                                            } else if (relationship < 6) {
-                                                mValues = new ArrayList<>();
-                                                mValues.add("A & B & C");
-                                                mValues.add("(A & B) | C");
-                                                mValues.add("A | B | C");
-                                                mSelected = relationship - 3;
-                                            }
-                                            mBind.tvOtherRelationship.setText(mValues.get(mSelected));
-                                        }
-                                        break;
-                                    case KEY_FILTER_OTHER_RULES:
-                                        if (length > 0) {
-                                            filterOther.clear();
-                                            byte[] otherBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            for (int i = 0, l = otherBytes.length; i < l; ) {
-                                                int otherLength = otherBytes[i] & 0xFF;
-                                                i++;
-                                                filterOther.add(MokoUtils.bytesToHexString(Arrays.copyOfRange(otherBytes, i, i + otherLength)));
-                                                i += otherLength;
-                                            }
-                                            for (int i = 0, l = filterOther.size(); i < l; i++) {
-                                                String other = filterOther.get(i);
-                                                View v = LayoutInflater.from(this).inflate(R.layout.lw006_item_other_filter, mBind.llFilterCondition, false);
-                                                TextView tvCondition = v.findViewById(R.id.tv_condition);
-                                                EditText etDataType = v.findViewById(R.id.et_data_type);
-                                                EditText etMin = v.findViewById(R.id.et_min);
-                                                EditText etMax = v.findViewById(R.id.et_max);
-                                                EditText etRawData = v.findViewById(R.id.et_raw_data);
-                                                if (i == 0) {
-                                                    tvCondition.setText("Condition A");
-                                                } else if (i == 1) {
-                                                    tvCondition.setText("Condition B");
-                                                } else {
-                                                    tvCondition.setText("Condition C");
-                                                }
-                                                String dataTypeStr = other.substring(0, 2);
-                                                if ("00".equals(dataTypeStr))
-                                                    etDataType.setText("");
-                                                else
-                                                    etDataType.setText(dataTypeStr);
-                                                etMin.setText(String.valueOf(Integer.parseInt(other.substring(2, 4), 16)));
-                                                etMax.setText(String.valueOf(Integer.parseInt(other.substring(4, 6), 16)));
-                                                etRawData.setText(other.substring(6));
-                                                mBind.llFilterCondition.addView(v);
-                                            }
-                                            if (filterOther.size() > 0)
-                                                mBind.clOtherRelationship.setVisibility(View.VISIBLE);
-                                        }
-                                        break;
-
-                                    case KEY_FILTER_OTHER_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbOther.setChecked(enable == 1);
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_OTHER_RELATIONSHIP:
+                                case KEY_FILTER_OTHER_RULES:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_FILTER_OTHER_ENABLE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterOtherActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_OTHER_RELATIONSHIP:
+                                    if (length > 0) {
+                                        int relationship = value[4] & 0xFF;
+                                        if (relationship < 1) {
+                                            mValues = new ArrayList<>();
+                                            mValues.add("A");
+                                            mSelected = 0;
+                                        } else if (relationship < 3) {
+                                            mValues = new ArrayList<>();
+                                            mValues.add("A & B");
+                                            mValues.add("A | B");
+                                            mSelected = relationship - 1;
+                                        } else if (relationship < 6) {
+                                            mValues = new ArrayList<>();
+                                            mValues.add("A & B & C");
+                                            mValues.add("(A & B) | C");
+                                            mValues.add("A | B | C");
+                                            mSelected = relationship - 3;
+                                        }
+                                        mBind.tvOtherRelationship.setText(mValues.get(mSelected));
+                                    }
+                                    break;
+                                case KEY_FILTER_OTHER_RULES:
+                                    if (length > 0) {
+                                        filterOther.clear();
+                                        byte[] otherBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                        for (int i = 0, l = otherBytes.length; i < l; ) {
+                                            int otherLength = otherBytes[i] & 0xFF;
+                                            i++;
+                                            filterOther.add(MokoUtils.bytesToHexString(Arrays.copyOfRange(otherBytes, i, i + otherLength)));
+                                            i += otherLength;
+                                        }
+                                        for (int i = 0, l = filterOther.size(); i < l; i++) {
+                                            String other = filterOther.get(i);
+                                            View v = LayoutInflater.from(this).inflate(R.layout.lw006_item_other_filter, mBind.llFilterCondition, false);
+                                            TextView tvCondition = v.findViewById(R.id.tv_condition);
+                                            EditText etDataType = v.findViewById(R.id.et_data_type);
+                                            EditText etMin = v.findViewById(R.id.et_min);
+                                            EditText etMax = v.findViewById(R.id.et_max);
+                                            EditText etRawData = v.findViewById(R.id.et_raw_data);
+                                            if (i == 0) {
+                                                tvCondition.setText("Condition A");
+                                            } else if (i == 1) {
+                                                tvCondition.setText("Condition B");
+                                            } else {
+                                                tvCondition.setText("Condition C");
+                                            }
+                                            String dataTypeStr = other.substring(0, 2);
+                                            if ("00".equals(dataTypeStr))
+                                                etDataType.setText("");
+                                            else
+                                                etDataType.setText(dataTypeStr);
+                                            etMin.setText(String.valueOf(Integer.parseInt(other.substring(2, 4), 16)));
+                                            etMax.setText(String.valueOf(Integer.parseInt(other.substring(4, 6), 16)));
+                                            etRawData.setText(other.substring(6));
+                                            mBind.llFilterCondition.addView(v);
+                                        }
+                                        if (filterOther.size() > 0)
+                                            mBind.clOtherRelationship.setVisibility(View.VISIBLE);
+                                    }
+                                    break;
+
+                                case KEY_FILTER_OTHER_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbOther.setChecked(enable == 1);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });

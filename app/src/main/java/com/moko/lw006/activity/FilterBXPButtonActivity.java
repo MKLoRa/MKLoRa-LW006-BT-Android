@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.view.View;
 
@@ -25,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterBXPButtonActivity extends BaseActivity {
-
-
     private Lw006ActivityFilterBxpButtonBinding mBind;
     private boolean savedParamsError;
 
@@ -72,61 +69,59 @@ public class FilterBXPButtonActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_BXP_BUTTON_RULES:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_FILTER_BXP_BUTTON_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(FilterBXPButtonActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_FILTER_BXP_BUTTON_RULES:
-                                        if (length > 0) {
-                                            mBind.cbSinglePress.setChecked(value[4] == 1);
-                                            mBind.cbDoublePress.setChecked(value[5] == 1);
-                                            mBind.cbLongPress.setChecked(value[6] == 1);
-                                            mBind.cbAbnormalInactivity.setChecked(value[7] == 1);
-                                        }
-                                        break;
-                                    case KEY_FILTER_BXP_BUTTON_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbEnable.setChecked(enable == 1);
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_BXP_BUTTON_RULES:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_FILTER_BXP_BUTTON_ENABLE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(FilterBXPButtonActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_FILTER_BXP_BUTTON_RULES:
+                                    if (length > 0) {
+                                        mBind.cbSinglePress.setChecked(value[4] == 1);
+                                        mBind.cbDoublePress.setChecked(value[5] == 1);
+                                        mBind.cbLongPress.setChecked(value[6] == 1);
+                                        mBind.cbAbnormalInactivity.setChecked(value[7] == 1);
+                                    }
+                                    break;
+                                case KEY_FILTER_BXP_BUTTON_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbEnable.setChecked(enable == 1);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });

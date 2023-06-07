@@ -119,63 +119,85 @@ public enum ParamsKeyEnum implements Serializable {
     // 过滤设备类型开关
     KEY_FILTER_RAW_DATA(0x59),
     // iBeacon类型过滤开关
-    KEY_FILTER_IBEACON_ENABLE(0x5F),
+    KEY_FILTER_IBEACON_ENABLE(0x5A),
     // iBeacon类型Major范围
-    KEY_FILTER_IBEACON_MAJOR_RANGE(0x60),
+    KEY_FILTER_IBEACON_MAJOR_RANGE(0x5B),
     // iBeacon类型Minor范围
-    KEY_FILTER_IBEACON_MINOR_RANGE(0x61),
+    KEY_FILTER_IBEACON_MINOR_RANGE(0x5C),
     // iBeacon类型UUID
-    KEY_FILTER_IBEACON_UUID(0x62),
+    KEY_FILTER_IBEACON_UUID(0x5D),
     // BXP-iBeacon类型过滤开关
-    KEY_FILTER_BXP_IBEACON_ENABLE(0x63),
+    KEY_FILTER_BXP_IBEACON_ENABLE(0x65),
     // BXP-iBeacon类型Major范围
-    KEY_FILTER_BXP_IBEACON_MAJOR_RANGE(0x64),
+    KEY_FILTER_BXP_IBEACON_MAJOR_RANGE(0x66),
     // BXP-iBeacon类型Minor范围
-    KEY_FILTER_BXP_IBEACON_MINOR_RANGE(0x65),
+    KEY_FILTER_BXP_IBEACON_MINOR_RANGE(0x67),
     // BXP-iBeacon类型UUID
-    KEY_FILTER_BXP_IBEACON_UUID(0x66),
+    KEY_FILTER_BXP_IBEACON_UUID(0x68),
     // BXP-Tag开关类型过滤开关
-    KEY_FILTER_BXP_TAG_ENABLE(0x67),
+    KEY_FILTER_BXP_TAG_ENABLE(0x6E),
     // 精准过滤BXP-Tag开关
-    KEY_FILTER_BXP_TAG_PRECISE(0x68),
+    KEY_FILTER_BXP_TAG_PRECISE(0x6F),
     // 反向过滤BXP-Tag开关
-    KEY_FILTER_BXP_TAG_REVERSE(0x690),
+    KEY_FILTER_BXP_TAG_REVERSE(0x70),
     // BXP-Tag过滤规则
-    KEY_FILTER_BXP_TAG_RULES(0x6A0),
+    KEY_FILTER_BXP_TAG_RULES(0x71),
+    //MK-PIR 设备过滤开关
+    KEY_FILTER_MK_PIR_ENABLE(0x72),
+    //MK-PIR 设备过滤
+    //sensor_detection_status
+    KEY_FILTER_MK_PIR_DETECTION_STATUS(0x73),
+    //MK-PIR 设备过滤
+    //sensor_sensitivity
+    KEY_FILTER_MK_PIR_SENSOR_SENSITIVITY(0x74),
+    //MK-PIR 设备过滤
+    //door_status
+    KEY_FILTER_MK_PIR_DOOR_STATUS(0x75),
+    //MK-PIR 设备过滤
+    //delay_response_status
+    KEY_FILTER_MK_PIR_DELAY_RES_STATUS(0x76),
+    //MK-PIR 设备
+    //Major 过滤范围
+    KEY_FILTER_MK_PIR_MAJOR(0x77),
+    //MK-PIR 设备
+    //Minor 过滤范围
+    KEY_FILTER_MK_PIR_MINOR(0x77),
+
+
     // eddystone-UID类型过滤开关
-    KEY_FILTER_EDDYSTONE_UID_ENABLE(0x6B0),
+    KEY_FILTER_EDDYSTONE_UID_ENABLE(0x5E),
     // eddystone-UID类型Namespace
-    KEY_FILTER_EDDYSTONE_UID_NAMESPACE(0x6C),
+    KEY_FILTER_EDDYSTONE_UID_NAMESPACE(0x5F),
     // eddystone-UID类型Instance
-    KEY_FILTER_EDDYSTONE_UID_INSTANCE(0x6D),
+    KEY_FILTER_EDDYSTONE_UID_INSTANCE(0x60),
     // eddystone-URL类型过滤开关
-    KEY_FILTER_EDDYSTONE_URL_ENABLE(0x6E),
+    KEY_FILTER_EDDYSTONE_URL_ENABLE(0x61),
     // eddystone-URL类型URL
-    KEY_FILTER_EDDYSTONE_URL(0x6F),
+    KEY_FILTER_EDDYSTONE_URL(0x62),
     // eddystone-TLM类型过滤开关
-    KEY_FILTER_EDDYSTONE_TLM_ENABLE(0x70),
+    KEY_FILTER_EDDYSTONE_TLM_ENABLE(0x63),
     // eddystone- TLM类型TLMVersion
-    KEY_FILTER_EDDYSTONE_TLM_VERSION(0x71),
+    KEY_FILTER_EDDYSTONE_TLM_VERSION(0x64),
     // BeaconX Pro-ACC设备过滤开关
     KEY_FILTER_BXP_ACC(0x6A),
     // BeaconX Pro-T&H设备过滤开关
     KEY_FILTER_BXP_TH(0x6B),
     // Unknown设备过滤开关
-    KEY_FILTER_OTHER_ENABLE(0x74),
+    KEY_FILTER_OTHER_ENABLE(0x79),
     // 3组unknown过滤规则逻辑
-    KEY_FILTER_OTHER_RELATIONSHIP(0x75),
+    KEY_FILTER_OTHER_RELATIONSHIP(0x7A),
     // unknown类型过滤规则
-    KEY_FILTER_OTHER_RULES(0x76),
+    KEY_FILTER_OTHER_RULES(0x7B),
     // GPS定位超时时间（L76版本）
     KEY_GPS_POS_TIMEOUT_L76C(0x77),
     // GPS位置精度因子PDOP（L76版本）
     KEY_GPS_PDOP_LIMIT_L76C(0x78),
     // GPS极限上传模式（L76版本）
-    KEY_GPS_EXTREME_MODE_L76C(0x79),
+    KEY_GPS_EXTREME_MODE_L76C(0x790),
     // GPS定位超时时间（LR1110版本）
-    KEY_GPS_POS_TIMEOUT(0x7A),
+    KEY_GPS_POS_TIMEOUT(0x7A0),
     // GPS搜星数量（LR1110版本）
-    KEY_GPS_POS_SATELLITE_THRESHOLD(0x7B),
+    KEY_GPS_POS_SATELLITE_THRESHOLD(0x7B0),
     // GPS定位数据格式（LR1110版本）
     KEY_GPS_POS_DATA_TYPE(0x7C),
     // GPS定位星座（LR1110版本）
@@ -191,9 +213,9 @@ public enum ParamsKeyEnum implements Serializable {
     // BXP-Device类型过滤开关
     KEY_FILTER_BXP_DEVICE(0x69),
     // BXP-Button类型过滤开关
-    KEY_FILTER_BXP_BUTTON_ENABLE(0x1000),
+    KEY_FILTER_BXP_BUTTON_ENABLE(0x6C),
     // BXP-Button类型过滤规则
-    KEY_FILTER_BXP_BUTTON_RULES(0x84),
+    KEY_FILTER_BXP_BUTTON_RULES(0x6D),
     // 蓝牙定位机制选择
     KEY_BLE_POS_MECHANISM(0x81),
 
