@@ -33,7 +33,6 @@ import java.util.List;
 public class FilterMacAddressActivity extends BaseActivity {
     private Lw006ActivityFilterMacAddressBinding mBind;
     private boolean savedParamsError;
-
     private ArrayList<String> filterMacAddress;
 
     @Override
@@ -158,8 +157,7 @@ public class FilterMacAddressActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -169,8 +167,7 @@ public class FilterMacAddressActivity extends BaseActivity {
     }
 
     public void onAdd(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         int count = mBind.llMacAddress.getChildCount();
         if (count > 9) {
             ToastUtils.showToast(this, "You can set up to 10 filters!");
@@ -183,8 +180,7 @@ public class FilterMacAddressActivity extends BaseActivity {
     }
 
     public void onDel(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         final int c = mBind.llMacAddress.getChildCount();
         if (c == 0) {
             ToastUtils.showToast(this, "There are currently no filters to delete");
@@ -195,7 +191,6 @@ public class FilterMacAddressActivity extends BaseActivity {
             mBind.llMacAddress.removeViewAt(count - 1);
         }
     }
-
 
     private void saveParams() {
         savedParamsError = false;

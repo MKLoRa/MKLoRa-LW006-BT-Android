@@ -156,8 +156,7 @@ public class FilterBXPIBeaconActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -207,7 +206,6 @@ public class FilterBXPIBeaconActivity extends BaseActivity {
             return !TextUtils.isEmpty(mBind.etIbeaconMinorMin.getText()) || TextUtils.isEmpty(mBind.etIbeaconMinorMax.getText());
     }
 
-
     private void saveParams() {
         final String uuid = mBind.etIbeaconUuid.getText().toString();
         savedParamsError = false;
@@ -237,7 +235,6 @@ public class FilterBXPIBeaconActivity extends BaseActivity {
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -250,14 +247,12 @@ public class FilterBXPIBeaconActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();

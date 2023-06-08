@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -36,7 +35,6 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
     private ArrayList<String> mGpsPosSystemValues;
     private int mGpsPosSystemSelected;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +48,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         mGpsPosSystemValues.add("GPS");
         mGpsPosSystemValues.add("Beidou");
         mGpsPosSystemValues.add("GPS&Beidou");
-        mBind.cbAutonomousAiding.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mBind.clAutonomousParams.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-        });
+        mBind.cbAutonomousAiding.setOnCheckedChangeListener((buttonView, isChecked) -> mBind.clAutonomousParams.setVisibility(isChecked ? View.VISIBLE : View.GONE));
         showSyncingProgressDialog();
         mBind.etPosTimeout.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
@@ -62,8 +58,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getGPSPosSystem());
             orderTasks.add(OrderTaskAssembler.getGPSPosAutoEnable());
             orderTasks.add(OrderTaskAssembler.getGPSPosAuxiliaryLatLon());
-            orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisStartNotifyEnable());
-            orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisEndNotifyEnable());
+            orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisNotifyEnable());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
@@ -94,115 +89,104 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_GPS_POS_TIMEOUT:
-                                    case KEY_GPS_POS_SATELLITE_THRESHOLD:
-                                    case KEY_GPS_POS_SYSTEM:
-                                    case KEY_GPS_POS_DATA_TYPE:
-                                    case KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE:
-                                    case KEY_GPS_POS_AUXILIARY_LAT_LON:
-                                    case KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(PosGpsLR1110FixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_GPS_POS_TIMEOUT:
-                                        if (length > 0) {
-                                            int timeout = value[4] & 0xFF;
-                                            mBind.etPosTimeout.setText(String.valueOf(timeout));
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_SATELLITE_THRESHOLD:
-                                        if (length > 0) {
-                                            int threshold = value[4] & 0xFF;
-                                            mBind.etSatelliteThreshold.setText(String.valueOf(threshold));
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_DATA_TYPE:
-                                        if (length > 0) {
-                                            mSelected = value[4] & 0xFF;
-                                            mBind.tvGpsDataType.setText(mValues.get(mSelected));
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_SYSTEM:
-                                        if (length > 0) {
-                                            mGpsPosSystemSelected = value[4] & 0xFF;
-                                            mBind.tvGpsPosSystem.setText(mGpsPosSystemValues.get(mGpsPosSystemSelected));
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbAutonomousAiding.setChecked(enable == 0);
-                                            mBind.clAutonomousParams.setVisibility(enable == 0 ? View.VISIBLE : View.GONE);
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_AUXILIARY_LAT_LON:
-                                        if (length == 8) {
-                                            byte[] latBytes = Arrays.copyOfRange(value, 4, 8);
-                                            int lat = MokoUtils.toIntSigned(latBytes);
-                                            byte[] lonBytes = Arrays.copyOfRange(value, 8, 12);
-                                            int lon = MokoUtils.toIntSigned(lonBytes);
-                                            mBind.etAutonomousLat.setText(String.valueOf(lat));
-                                            mBind.etAutonomousLon.setText(String.valueOf(lon));
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbEphemerisStartNotify.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbEphemerisEndNotify.setChecked(enable == 1);
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED) return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_GPS_POS_TIMEOUT:
+                                case KEY_GPS_POS_SATELLITE_THRESHOLD:
+                                case KEY_GPS_POS_SYSTEM:
+                                case KEY_GPS_POS_DATA_TYPE:
+                                case KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE:
+                                case KEY_GPS_POS_AUXILIARY_LAT_LON:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_GPS_POS_EPHEMERIS_NOTIFY_ENABLE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_GPS_POS_TIMEOUT:
+                                    if (length > 0) {
+                                        int timeout = value[4] & 0xFF;
+                                        mBind.etPosTimeout.setText(String.valueOf(timeout));
+                                    }
+                                    break;
+                                case KEY_GPS_POS_SATELLITE_THRESHOLD:
+                                    if (length > 0) {
+                                        int threshold = value[4] & 0xFF;
+                                        mBind.etSatelliteThreshold.setText(String.valueOf(threshold));
+                                    }
+                                    break;
+                                case KEY_GPS_POS_DATA_TYPE:
+                                    if (length > 0) {
+                                        mSelected = value[4] & 0xFF;
+                                        mBind.tvGpsDataType.setText(mValues.get(mSelected));
+                                    }
+                                    break;
+                                case KEY_GPS_POS_SYSTEM:
+                                    if (length > 0) {
+                                        mGpsPosSystemSelected = value[4] & 0xFF;
+                                        mBind.tvGpsPosSystem.setText(mGpsPosSystemValues.get(mGpsPosSystemSelected));
+                                    }
+                                    break;
+                                case KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbAutonomousAiding.setChecked(enable == 0);
+                                        mBind.clAutonomousParams.setVisibility(enable == 0 ? View.VISIBLE : View.GONE);
+                                    }
+                                    break;
+                                case KEY_GPS_POS_AUXILIARY_LAT_LON:
+                                    if (length == 8) {
+                                        byte[] latBytes = Arrays.copyOfRange(value, 4, 8);
+                                        int lat = MokoUtils.toIntSigned(latBytes);
+                                        byte[] lonBytes = Arrays.copyOfRange(value, 8, 12);
+                                        int lon = MokoUtils.toIntSigned(lonBytes);
+                                        mBind.etAutonomousLat.setText(String.valueOf(lat));
+                                        mBind.etAutonomousLon.setText(String.valueOf(lon));
+                                    }
+                                    break;
+                                case KEY_GPS_POS_EPHEMERIS_NOTIFY_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbEphemerisStartNotify.setChecked((enable & 0x01) == 1);
+                                        mBind.cbEphemerisEndNotify.setChecked((enable >> 1 & 0x01) == 1);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
     }
 
-
     public void onGPSDataType(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
@@ -225,8 +209,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -236,40 +219,30 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
     }
 
     private boolean isValid() {
+        if (TextUtils.isEmpty(mBind.etPosTimeout.getText())) return false;
         final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
-        if (TextUtils.isEmpty(posTimeoutStr))
-            return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
         if (posTimeout < 1 || posTimeout > 5) {
             return false;
         }
+        if (TextUtils.isEmpty(mBind.etSatelliteThreshold.getText())) return false;
         final String thresholdStr = mBind.etSatelliteThreshold.getText().toString();
-        if (TextUtils.isEmpty(thresholdStr))
-            return false;
         final int threshold = Integer.parseInt(thresholdStr);
         if (threshold < 4 || threshold > 10) {
             return false;
         }
-        if (!mBind.cbAutonomousAiding.isChecked())
-            return true;
+        if (!mBind.cbAutonomousAiding.isChecked()) return true;
+        if (TextUtils.isEmpty(mBind.etAutonomousLat.getText())) return false;
         final String latStr = mBind.etAutonomousLat.getText().toString();
-        if (TextUtils.isEmpty(latStr))
-            return false;
         final int lat = Integer.parseInt(latStr);
         if (lat < -9000000 || lat > 9000000) {
             return false;
         }
+        if (TextUtils.isEmpty(mBind.etAutonomousLon.getText())) return false;
         final String lonStr = mBind.etAutonomousLon.getText().toString();
-        if (TextUtils.isEmpty(lonStr))
-            return false;
         final int lon = Integer.parseInt(lonStr);
-        if (lon < -18000000 || lon > 18000000) {
-            return false;
-        }
-        return true;
-
+        return lon >= -18000000 && lon <= 18000000;
     }
-
 
     private void saveParams() {
         final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
@@ -288,8 +261,8 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setGPSPosSystem(mGpsPosSystemSelected));
         orderTasks.add(OrderTaskAssembler.setGPSPosAutonmousAidingEnable(mBind.cbAutonomousAiding.isChecked() ? 0 : 1));
         orderTasks.add(OrderTaskAssembler.setGPSPosAuxiliaryLatLon(lat, lon));
-        orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisStartNotifyEnable(mBind.cbEphemerisStartNotify.isChecked() ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisEndNotifyEnable(mBind.cbEphemerisEndNotify.isChecked() ? 1 : 0));
+        int type = (mBind.cbEphemerisStartNotify.isChecked() ? 1 : 0) | (mBind.cbEphemerisEndNotify.isChecked() ? 2 : 0);
+        orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisNotifyEnable(type));
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -305,14 +278,12 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();

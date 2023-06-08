@@ -48,7 +48,6 @@ public class FilterIBeaconActivity extends BaseActivity {
         }, 500);
     }
 
-
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 400)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
         final String action = event.getAction();

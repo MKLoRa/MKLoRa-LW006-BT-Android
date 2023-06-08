@@ -205,6 +205,11 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask getStandbyPosStrategy(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_STANDBY_MODE_POS_STRATEGY);
+        return task;
+    }
 
     public static OrderTask getTimePosReportPoints() {
         ParamsReadTask task = new ParamsReadTask();
@@ -267,6 +272,17 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask getMotionStationaryPosStrategy(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_MOTION_MODE_STATIONARY_POS_STRATEGY);
+        return task;
+    }
+
+    public static OrderTask getMotionStationaryReportInterval(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_MOTION_MODE_STATIONARY_REPORT_INTERVAL);
+        return task;
+    }
 
     public static OrderTask getWifiPosDataType() {
         ParamsReadTask task = new ParamsReadTask();
@@ -628,15 +644,9 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask getGPSPosEphemerisStartNotifyEnable() {
+    public static OrderTask getGPSPosEphemerisNotifyEnable() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE);
-        return task;
-    }
-
-    public static OrderTask getGPSPosEphemerisEndNotifyEnable() {
-        ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE);
+        task.setData(ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_NOTIFY_ENABLE);
         return task;
     }
 
@@ -916,7 +926,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setHeartBeatInterval(@IntRange(from = 300, to = 86400) int interval) {
+    public static OrderTask setHeartBeatInterval(@IntRange(from = 1, to = 14400) int interval) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setHeartBeatInterval(interval);
         return task;
@@ -992,7 +1002,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setPeriodicReportInterval(@IntRange(from = 30, to = 86400) int interval) {
+    public static OrderTask setPeriodicReportInterval(@IntRange(from = 1, to = 14400) int interval) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setPeriodicReportInterval(interval);
         return task;
@@ -1001,6 +1011,12 @@ public class OrderTaskAssembler {
     public static OrderTask setTimePosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setTimePosStrategy(strategy);
+        return task;
+    }
+
+    public static OrderTask setStandbyPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setStandbyPosStrategy(strategy);
         return task;
     }
 
@@ -1062,6 +1078,18 @@ public class OrderTaskAssembler {
     public static OrderTask setMotionEndPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setMotionEndPosStrategy(strategy);
+        return task;
+    }
+
+    public static OrderTask setMotionStationaryPosStrategy(@IntRange(from = 0, to = 6) int strategy){
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setMotionStationaryPosStrategy(strategy);
+        return task;
+    }
+
+    public static OrderTask setMotionStationaryReportInterval(@IntRange(from = 1,to = 14400) int interval){
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setMotionStationaryReportInterval(interval);
         return task;
     }
 
@@ -1435,15 +1463,9 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setGPSPosEphemerisStartNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
+    public static OrderTask setGPSPosEphemerisNotifyEnable(int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setGPSPosEphemerisStartNotifyEnable(enable);
-        return task;
-    }
-
-    public static OrderTask setGPSPosEphemerisEndNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
-        ParamsWriteTask task = new ParamsWriteTask();
-        task.setGPSPosEphemerisEndNotifyEnable(enable);
+        task.setGPSPosEphemerisNotifyEnable(enable);
         return task;
     }
 

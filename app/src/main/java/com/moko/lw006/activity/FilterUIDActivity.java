@@ -137,8 +137,7 @@ public class FilterUIDActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -163,7 +162,6 @@ public class FilterUIDActivity extends BaseActivity {
         return true;
     }
 
-
     private void saveParams() {
         final String namespace = !TextUtils.isEmpty(mBind.etUidNamespace.getText()) ? mBind.etUidNamespace.getText().toString() : null;
         final String instanceId = !TextUtils.isEmpty(mBind.etUidInstanceId.getText()) ? mBind.etUidInstanceId.getText().toString() : null;
@@ -174,7 +172,6 @@ public class FilterUIDActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setFilterEddystoneUIDEnable(mBind.cbUid.isChecked() ? 1 : 0));
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
-
 
     @Override
     protected void onDestroy() {
@@ -188,14 +185,12 @@ public class FilterUIDActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();

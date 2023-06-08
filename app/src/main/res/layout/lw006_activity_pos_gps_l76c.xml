@@ -47,139 +47,143 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_pos_ble"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/lw006_white_ffffff"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_pos_ble"
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Positioning Timeout"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/et_position_timeout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_position_timeout" />
+
+        <EditText
+            android:id="@+id/et_position_timeout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="60~600"
+            android:inputType="number"
+            android:maxLength="5"
+            android:text=""
+            android:textColor="@color/lw006_black_333333"
+            android:textColorHint="@color/lw006_grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="0.81"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.27" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="s"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/et_position_timeout"
+            app:layout_constraintLeft_toRightOf="@id/et_position_timeout"
+            app:layout_constraintTop_toTopOf="@id/et_position_timeout" />
+
+        <View
+            style="@style/lw006_divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_position_timeout" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PDOP"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/et_pdop_limit"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_pdop_limit" />
+
+        <EditText
+            android:id="@+id/et_pdop_limit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:hint="25~100"
+            android:inputType="number"
+            android:maxLength="3"
+            android:text=""
+            android:textColor="@color/lw006_black_333333"
+            android:textColorHint="@color/lw006_grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="0.81"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_position_timeout"
+            app:layout_constraintWidth_percent="0.27" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="x0.1"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/et_pdop_limit"
+            app:layout_constraintLeft_toRightOf="@id/et_pdop_limit"
+            app:layout_constraintTop_toTopOf="@id/et_pdop_limit" />
+
+        <View
+            style="@style/lw006_divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_pdop_limit" />
+
+        <CheckBox
+            android:id="@+id/cb_extreme_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:button="@null"
+            android:drawableRight="@drawable/lw006_selector_cb_btn"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="Extreme Mode"
+            android:textColor="@color/lw006_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_pdop_limit" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@color/lw006_white_ffffff"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:padding="10dp">
+            android:layout_marginTop="10dp"
+            android:lineSpacingMultiplier="1.2"
+            android:text="*In this mode, the byte length of the GPS location packet is forced to be in 11 bytes"
+            android:textColor="@color/lw006_grey_666666"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/cb_extreme_mode" />
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Positioning Timeout"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_position_timeout"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_position_timeout" />
-
-            <EditText
-                android:id="@+id/et_position_timeout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="60~600"
-                android:inputType="number"
-                android:maxLength="5"
-                android:text=""
-                android:textColor="@color/lw006_black_333333"
-                android:textColorHint="@color/lw006_grey_ebebeb"
-                android:textSize="15sp"
-                app:layout_constraintHorizontal_bias="0.81"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.27" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="s"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_position_timeout"
-                app:layout_constraintLeft_toRightOf="@id/et_position_timeout"
-                app:layout_constraintTop_toTopOf="@id/et_position_timeout" />
-
-            <View
-                style="@style/lw006_divider_line"
-                android:layout_width="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_position_timeout" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PDOP"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_pdop_limit"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_pdop_limit" />
-
-            <EditText
-                android:id="@+id/et_pdop_limit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:hint="25~100"
-                android:inputType="number"
-                android:maxLength="3"
-                android:text=""
-                android:textColor="@color/lw006_black_333333"
-                android:textColorHint="@color/lw006_grey_ebebeb"
-                android:textSize="15sp"
-                app:layout_constraintHorizontal_bias="0.81"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_position_timeout"
-                app:layout_constraintWidth_percent="0.27" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="x0.1"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_pdop_limit"
-                app:layout_constraintLeft_toRightOf="@id/et_pdop_limit"
-                app:layout_constraintTop_toTopOf="@id/et_pdop_limit" />
-
-            <View
-                style="@style/lw006_divider_line"
-                android:layout_width="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_pdop_limit" />
-
-            <CheckBox
-                android:id="@+id/cb_extreme_mode"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:button="@null"
-                android:drawableRight="@drawable/lw006_selector_cb_btn"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                android:text="Extreme Mode"
-                android:textColor="@color/lw006_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_pdop_limit" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

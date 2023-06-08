@@ -128,17 +128,15 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setHeartBeatInterval(@IntRange(from = 300, to = 86400) int interval) {
-        byte[] intervalBytes = MokoUtils.toByteArray(interval, 4);
+    public void setHeartBeatInterval(@IntRange(from = 1, to = 14400) int interval) {
+        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_HEARTBEAT_INTERVAL.getParamsKey(),
-                (byte) 0x04,
+                (byte) 0x02,
                 intervalBytes[0],
                 intervalBytes[1],
-                intervalBytes[2],
-                intervalBytes[3],
         };
         response.responseValue = data;
     }
@@ -274,18 +272,15 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-
-    public void setPeriodicReportInterval(@IntRange(from = 30, to = 86400) int interval) {
-        byte[] intervalBytes = MokoUtils.toByteArray(interval, 4);
+    public void setPeriodicReportInterval(@IntRange(from = 1, to = 14400) int interval) {
+        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_PERIODIC_MODE_REPORT_INTERVAL.getParamsKey(),
-                (byte) 0x04,
+                (byte) 0x02,
                 intervalBytes[0],
                 intervalBytes[1],
-                intervalBytes[2],
-                intervalBytes[3],
         };
         response.responseValue = data;
     }
@@ -296,6 +291,17 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_TIME_MODE_POS_STRATEGY.getParamsKey(),
+                (byte) 0x01,
+                (byte) strategy
+        };
+        response.responseValue = data;
+    }
+
+    public void setStandbyPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_STANDBY_MODE_POS_STRATEGY.getParamsKey(),
                 (byte) 0x01,
                 (byte) strategy
         };
@@ -430,6 +436,28 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) strategy
         };
         response.responseValue = data;
+    }
+
+    public void setMotionStationaryPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MOTION_MODE_STATIONARY_POS_STRATEGY.getParamsKey(),
+                (byte) 0x01,
+                (byte) strategy
+        };
+    }
+
+    public void setMotionStationaryReportInterval(@IntRange(from = 1, to = 14400) int interval) {
+        byte[] bytes = MokoUtils.toByteArray(interval, 2);
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MOTION_MODE_STATIONARY_REPORT_INTERVAL.getParamsKey(),
+                (byte) 0x02,
+                bytes[0],
+                bytes[1]
+        };
     }
 
     public void setWifiPosDataType(@IntRange(from = 0, to = 1) int type) {
@@ -1251,22 +1279,11 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setGPSPosEphemerisStartNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setGPSPosEphemerisNotifyEnable(int enable) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setGPSPosEphemerisEndNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_NOTIFY_ENABLE.getParamsKey(),
                 (byte) 0x01,
                 (byte) enable
         };

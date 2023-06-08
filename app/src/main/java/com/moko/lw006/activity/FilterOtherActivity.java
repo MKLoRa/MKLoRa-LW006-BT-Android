@@ -56,7 +56,6 @@ public class FilterOtherActivity extends BaseActivity {
         }, 500);
     }
 
-
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 400)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
         final String action = event.getAction();
@@ -297,8 +296,7 @@ public class FilterOtherActivity extends BaseActivity {
     }
 
     public void onAdd(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         int count = mBind.llFilterCondition.getChildCount();
         if (count > 2) {
             ToastUtils.showToast(this, "You can set up to 3 filters!");
@@ -335,8 +333,7 @@ public class FilterOtherActivity extends BaseActivity {
     }
 
     public void onDel(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         final int c = mBind.llFilterCondition.getChildCount();
         if (c == 0) {
             ToastUtils.showToast(this, "There are currently no filters to delete");
@@ -375,14 +372,12 @@ public class FilterOtherActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();
@@ -399,8 +394,7 @@ public class FilterOtherActivity extends BaseActivity {
     }
 
     public void onOtherRelationship(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {

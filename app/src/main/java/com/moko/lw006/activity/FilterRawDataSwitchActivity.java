@@ -147,14 +147,12 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();
@@ -171,44 +169,38 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     }
 
     public void onFilterByIBeacon(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterIBeaconActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
     public void onFilterByUid(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterUIDActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
     public void onFilterByUrl(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterUrlActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
     public void onFilterByTlm(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterTLMActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
 
     public void onFilterByBXPiBeacon(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterBXPIBeaconActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
     public void onFilterByBXPDevice(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         showSyncingProgressDialog();
         isBXPDeviceOpen = !isBXPDeviceOpen;
         savedParamsError = false;
@@ -219,8 +211,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     }
 
     public void onFilterByBXPAcc(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         showSyncingProgressDialog();
         isBXPAccOpen = !isBXPAccOpen;
         savedParamsError = false;
@@ -231,8 +222,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     }
 
     public void onFilterByBXPTH(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         showSyncingProgressDialog();
         isBXPTHOpen = !isBXPTHOpen;
         savedParamsError = false;
@@ -242,10 +232,8 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-
     public void onFilterByBXPButton(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterBXPButtonActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
@@ -261,8 +249,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     }
 
     public void onFilterByOther(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent i = new Intent(this, FilterOtherActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
@@ -279,5 +266,4 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
             }, 1000);
         }
     }
-
 }

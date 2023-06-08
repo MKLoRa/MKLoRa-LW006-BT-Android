@@ -42,14 +42,10 @@ public class GeneralFragment extends Fragment {
     }
 
     public boolean isValid() {
+        if (TextUtils.isEmpty(mBind.etHeartbeatInterval.getText())) return false;
         final String intervalStr = mBind.etHeartbeatInterval.getText().toString();
-        if (TextUtils.isEmpty(intervalStr))
-            return false;
         final int interval = Integer.parseInt(intervalStr);
-        if (interval < 300 || interval > 86400) {
-            return false;
-        }
-        return true;
+        return interval >= 1 && interval <= 14400;
     }
 
     public void saveParams() {

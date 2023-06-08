@@ -12,7 +12,7 @@ import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.Lw006ActivityDeviceModeBinding;
+import com.moko.lw006.databinding.ActivityStandbyModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
@@ -27,37 +27,50 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-public class DeviceModeActivity extends BaseActivity {
-    private Lw006ActivityDeviceModeBinding mBind;
+/**
+ * @author: jun.liu
+ * @date: 2023/6/7 19:54
+ * @des:
+ */
+public class StandbyModeActivity extends BaseActivity {
+    private ActivityStandbyModeBinding mBind;
     private boolean mReceiverTag = false;
-    private boolean savedParamsError;
-    private ArrayList<String> mValues;
     private int mSelected;
+    private final ArrayList<String> mValues = new ArrayList<>(8);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw006ActivityDeviceModeBinding.inflate(getLayoutInflater());
+        mBind = ActivityStandbyModeBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
-        mValues = new ArrayList<>();
-        mValues.add("Standby Mode");
-        mValues.add("Timing Mode");
-        mValues.add("Periodic Mode");
-        mValues.add("Motion Mode");
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
+        mValues.add("WIFI");
+        mValues.add("BLE");
+        mValues.add("GPS");
+        mValues.add("WIFI+GPS");
+        mValues.add("BLE+GPS");
+        mValues.add("WIFI+BLE");
+        mValues.add("WIFI+BLE+GPS");
         showSyncingProgressDialog();
-        mBind.tvDeviceMode.postDelayed(() -> LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getDeviceMode()), 500);
-        mBind.tvStandbyMode.setOnClickListener(v->{
-
+        mBind.tvTitle.postDelayed(() -> LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getStandbyPosStrategy()), 500);
+        mBind.tvStandbyPosStrategy.setOnClickListener(v -> {
+            if (isWindowLocked()) return;
+            BottomDialog dialog = new BottomDialog();
+            dialog.setDatas(mValues, mSelected);
+            dialog.setListener(value -> {
+                mSelected = value;
+                mBind.tvStandbyPosStrategy.setText(mValues.get(value));
+            });
+            dialog.show(getSupportFragmentManager());
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
+    @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
         final String action = event.getAction();
         runOnUiThread(() -> {
@@ -67,7 +80,7 @@ public class DeviceModeActivity extends BaseActivity {
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
+    @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
     public void onOrderTaskResponseEvent(OrderTaskResponseEvent event) {
         final String action = event.getAction();
         if (!MokoConstants.ACTION_CURRENT_DATA.equals(action))
@@ -81,7 +94,6 @@ public class DeviceModeActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -96,24 +108,21 @@ public class DeviceModeActivity extends BaseActivity {
                         int length = value[3] & 0xFF;
                         if (flag == 0x01) {
                             // write
-                            int result = value[4] & 0xFF;
-                            if (configKeyEnum == ParamsKeyEnum.KEY_DEVICE_MODE) {
-                                if (result != 1) {
-                                    savedParamsError = true;
-                                }
-                                if (savedParamsError) {
-                                    ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
-                                } else {
+                            if (configKeyEnum == ParamsKeyEnum.KEY_STANDBY_MODE_POS_STRATEGY) {
+                                int result = value[4] & 0xFF;
+                                if (result == 1) {
                                     ToastUtils.showToast(this, "Save Successfully！");
+                                } else {
+                                    ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                 }
                             }
                         }
                         if (flag == 0x00) {
                             // read
-                            if (configKeyEnum == ParamsKeyEnum.KEY_DEVICE_MODE) {
+                            if (configKeyEnum == ParamsKeyEnum.KEY_STANDBY_MODE_POS_STRATEGY) {
                                 if (length > 0) {
-                                    mSelected = value[4] & 0xff;
-                                    mBind.tvDeviceMode.setText(mValues.get(mSelected));
+                                    mSelected = value[4] & 0xFF;
+                                    mBind.tvStandbyPosStrategy.setText(mValues.get(mSelected));
                                 }
                             }
                         }
@@ -121,6 +130,12 @@ public class DeviceModeActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public void onSave(View view) {
+        if (isWindowLocked()) return;
+        showSyncingProgressDialog();
+        LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setStandbyPosStrategy(mSelected));
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -176,34 +191,5 @@ public class DeviceModeActivity extends BaseActivity {
     private void backHome() {
         setResult(RESULT_OK);
         finish();
-    }
-
-    public void selectDeviceMode(View view) {
-        if (isWindowLocked()) return;
-        BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mValues, mSelected);
-        dialog.setListener(value -> {
-            mSelected = value;
-            mBind.tvDeviceMode.setText(mValues.get(value));
-            savedParamsError = false;
-            showSyncingProgressDialog();
-            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDeviceMode(value + 1));
-        });
-        dialog.show(getSupportFragmentManager());
-    }
-
-    public void onTimingMode(View view) {
-        if (isWindowLocked()) return;
-        startActivity(new Intent(this, TimingModeActivity.class));
-    }
-
-    public void onPeriodicMode(View view) {
-        if (isWindowLocked()) return;
-        startActivity(new Intent(this, PeriodicModeActivity.class));
-    }
-
-    public void onMotionMode(View view) {
-        if (isWindowLocked()) return;
-        startActivity(new Intent(this, MotionModeActivity.class));
     }
 }

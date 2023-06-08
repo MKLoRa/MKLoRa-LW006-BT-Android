@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,7 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
-
     private Lw006ActivityTimingModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -102,7 +100,6 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
         }, 500);
     }
 
-
     OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
         @Override
         public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
@@ -155,94 +152,88 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_TIME_MODE_POS_STRATEGY:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_TIME_MODE_REPORT_TIME_POINT:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(TimingModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_TIME_MODE_POS_STRATEGY:
-                                        if (length > 0) {
-                                            int strategy = value[4] & 0xFF;
-                                            mSelected = strategy;
-                                            mBind.tvTimingPosStrategy.setText(mValues.get(mSelected));
-                                        }
-                                        break;
-                                    case KEY_TIME_MODE_REPORT_TIME_POINT:
-                                        if (length > 0) {
-                                            for (int i = 0; i < length; i++) {
-                                                int point = value[4 + i] & 0xFF;
-                                                int min = point * 15;
-                                                int hour = min / 60;
-                                                min = min % 60;
-                                                TimePoint timePoint = new TimePoint();
-                                                timePoint.name = String.format("Time Point %d", i + 1);
-                                                if (hour == 24) {
-                                                    timePoint.hour = String.format("%02d", 0);
-                                                } else {
-                                                    timePoint.hour = String.format("%02d", hour);
-                                                }
-                                                timePoint.min = String.format("%02d", min);
-                                                mTimePoints.add(timePoint);
-                                                mAdapter.replaceData(mTimePoints);
-                                            }
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_TIME_MODE_POS_STRATEGY:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_TIME_MODE_REPORT_TIME_POINT:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(TimingModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_TIME_MODE_POS_STRATEGY:
+                                    if (length > 0) {
+                                        mSelected = value[4] & 0xFF;
+                                        mBind.tvTimingPosStrategy.setText(mValues.get(mSelected));
+                                    }
+                                    break;
+                                case KEY_TIME_MODE_REPORT_TIME_POINT:
+                                    if (length > 0) {
+                                        for (int i = 0; i < length; i++) {
+                                            int point = value[4 + i] & 0xFF;
+                                            int min = point * 15;
+                                            int hour = min / 60;
+                                            min = min % 60;
+                                            TimePoint timePoint = new TimePoint();
+                                            timePoint.name = String.format("Time Point %d", i + 1);
+                                            if (hour == 24) {
+                                                timePoint.hour = String.format("%02d", 0);
+                                            } else {
+                                                timePoint.hour = String.format("%02d", hour);
+                                            }
+                                            timePoint.min = String.format("%02d", min);
+                                            mTimePoints.add(timePoint);
+                                            mAdapter.replaceData(mTimePoints);
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
     }
 
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent != null) {
                 String action = intent.getAction();
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
-                    switch (blueState) {
-                        case BluetoothAdapter.STATE_TURNING_OFF:
-                            dismissSyncProgressDialog();
-                            finish();
-                            break;
+                    if (blueState == BluetoothAdapter.STATE_TURNING_OFF) {
+                        dismissSyncProgressDialog();
+                        finish();
                     }
                 }
             }
@@ -266,14 +257,12 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();
@@ -291,8 +280,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         TimePoint timePoint = (TimePoint) adapter.getItem(position);
         if (view.getId() == R.id.tv_point_hour) {
             int select = Integer.parseInt(timePoint.hour);
@@ -317,8 +305,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
     }
 
     public void selectPosStrategy(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
@@ -329,8 +316,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
     }
 
     public void onTimePointAdd(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         int size = mTimePoints.size();
         if (size >= 10) {
             ToastUtils.showToast(this, "You can set up to 10 time points!");

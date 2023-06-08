@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,7 +33,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PeriodicModeActivity extends BaseActivity {
-
     private Lw006ActivityPeriodicModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -95,81 +93,75 @@ public class PeriodicModeActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_PERIODIC_MODE_POS_STRATEGY:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_PERIODIC_MODE_REPORT_INTERVAL:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(PeriodicModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_PERIODIC_MODE_POS_STRATEGY:
-                                        if (length > 0) {
-                                            int strategy = value[4] & 0xFF;
-                                            mSelected = strategy;
-                                            mBind.tvPeriodicPosStrategy.setText(mValues.get(mSelected));
-                                        }
-                                        break;
-                                    case KEY_PERIODIC_MODE_REPORT_INTERVAL:
-                                        if (length > 0) {
-                                            byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            int interval = MokoUtils.toInt(intervalBytes);
-                                            mBind.etReportInterval.setText(String.valueOf(interval));
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_PERIODIC_MODE_POS_STRATEGY:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_PERIODIC_MODE_REPORT_INTERVAL:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(PeriodicModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_PERIODIC_MODE_POS_STRATEGY:
+                                    if (length > 0) {
+                                        mSelected = value[4] & 0xFF;
+                                        mBind.tvPeriodicPosStrategy.setText(mValues.get(mSelected));
+                                    }
+                                    break;
+                                case KEY_PERIODIC_MODE_REPORT_INTERVAL:
+                                    if (length > 0) {
+                                        byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                        int interval = MokoUtils.toInt(intervalBytes);
+                                        mBind.etReportInterval.setText(String.valueOf(interval));
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
     }
 
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent != null) {
                 String action = intent.getAction();
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
-                    switch (blueState) {
-                        case BluetoothAdapter.STATE_TURNING_OFF:
-                            dismissSyncProgressDialog();
-                            finish();
-                            break;
+                    if (blueState == BluetoothAdapter.STATE_TURNING_OFF) {
+                        dismissSyncProgressDialog();
+                        finish();
                     }
                 }
             }
@@ -193,14 +185,12 @@ public class PeriodicModeActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();
@@ -217,8 +207,7 @@ public class PeriodicModeActivity extends BaseActivity {
     }
 
     public void selectPosStrategy(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
@@ -229,13 +218,13 @@ public class PeriodicModeActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        final String intervalStr = mBind.etReportInterval.getText().toString();
-        if (TextUtils.isEmpty(intervalStr)) {
+        if (TextUtils.isEmpty(mBind.etReportInterval.getText())) {
             ToastUtils.showToast(this, "Para error!");
             return;
         }
+        final String intervalStr = mBind.etReportInterval.getText().toString();
         final int interval = Integer.parseInt(intervalStr);
-        if (interval < 30 || interval > 86400) {
+        if (interval < 1 || interval > 14400) {
             ToastUtils.showToast(this, "Para error!");
             return;
         }

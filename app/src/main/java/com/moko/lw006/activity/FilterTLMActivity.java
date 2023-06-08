@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.view.View;
 
@@ -51,7 +50,6 @@ public class FilterTLMActivity extends BaseActivity {
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
-
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 400)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
@@ -143,14 +141,12 @@ public class FilterTLMActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();
@@ -166,10 +162,8 @@ public class FilterTLMActivity extends BaseActivity {
         finish();
     }
 
-
     public void onTLMVersion(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
@@ -185,8 +179,7 @@ public class FilterTLMActivity extends BaseActivity {
     }
 
     public void onTLMEnable(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         mTLMEnable = !mTLMEnable;
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();

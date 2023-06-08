@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -73,75 +72,72 @@ public class PosGpsL76CFixActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_GPS_POS_TIMEOUT_L76C:
-                                    case KEY_GPS_PDOP_LIMIT_L76C:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_GPS_EXTREME_MODE_L76C:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(PosGpsL76CFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_GPS_POS_TIMEOUT_L76C:
-                                        if (length > 0) {
-                                            byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            int timeout = MokoUtils.toInt(timeoutBytes);
-                                            mBind.etPositionTimeout.setText(String.valueOf(timeout));
-                                        }
-                                        break;
-                                    case KEY_GPS_PDOP_LIMIT_L76C:
-                                        if (length > 0) {
-                                            int limit = value[4] & 0xFF;
-                                            mBind.etPdopLimit.setText(String.valueOf(limit));
-                                        }
-                                        break;
-                                    case KEY_GPS_EXTREME_MODE_L76C:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mBind.cbExtremeMode.setChecked(enable == 1);
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED)
+                            return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_GPS_POS_TIMEOUT_L76C:
+                                case KEY_GPS_PDOP_LIMIT_L76C:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_GPS_EXTREME_MODE_L76C:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(PosGpsL76CFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_GPS_POS_TIMEOUT_L76C:
+                                    if (length > 0) {
+                                        byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                        int timeout = MokoUtils.toInt(timeoutBytes);
+                                        mBind.etPositionTimeout.setText(String.valueOf(timeout));
+                                    }
+                                    break;
+                                case KEY_GPS_PDOP_LIMIT_L76C:
+                                    if (length > 0) {
+                                        int limit = value[4] & 0xFF;
+                                        mBind.etPdopLimit.setText(String.valueOf(limit));
+                                    }
+                                    break;
+                                case KEY_GPS_EXTREME_MODE_L76C:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mBind.cbExtremeMode.setChecked(enable == 1);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -152,23 +148,16 @@ public class PosGpsL76CFixActivity extends BaseActivity {
 
     private boolean isValid() {
         final String posTimeoutStr = mBind.etPositionTimeout.getText().toString();
-        if (TextUtils.isEmpty(posTimeoutStr))
-            return false;
+        if (TextUtils.isEmpty(posTimeoutStr)) return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
         if (posTimeout < 60 || posTimeout > 600) {
             return false;
         }
         final String pdopLimitStr = mBind.etPdopLimit.getText().toString();
-        if (TextUtils.isEmpty(pdopLimitStr))
-            return false;
+        if (TextUtils.isEmpty(pdopLimitStr)) return false;
         final int pdopLimit = Integer.parseInt(pdopLimitStr);
-        if (pdopLimit < 25 || pdopLimit > 100) {
-            return false;
-        }
-        return true;
-
+        return pdopLimit >= 25 && pdopLimit <= 100;
     }
-
 
     private void saveParams() {
         final String posTimeoutStr = mBind.etPositionTimeout.getText().toString();
@@ -195,14 +184,12 @@ public class PosGpsL76CFixActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();

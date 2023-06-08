@@ -77,7 +77,7 @@
             android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_auxiliary_interval">
+            app:layout_constraintTop_toBottomOf="@id/cl_axis_settings">
 
             <TextView
                 android:id="@+id/tv_ble_settings"
@@ -106,7 +106,7 @@
             android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_ble_settings">
+            app:layout_constraintTop_toBottomOf="@id/cl_auxiliary_interval">
 
             <TextView
                 android:id="@+id/tv_axis_settings"
@@ -136,7 +136,7 @@
             android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_axis_settings">
+            app:layout_constraintTop_toBottomOf="@id/cl_ble_settings">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -154,13 +154,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:hint="300~86400"
+                android:hint="1~14400"
                 android:inputType="number"
                 android:maxLength="5"
                 android:text=""
                 android:textColor="@color/lw006_black_333333"
                 android:textColorHint="@color/lw006_grey_ebebeb"
                 android:textSize="15sp"
+                android:layout_marginRight="5dp"
                 app:layout_constraintHorizontal_bias="0.9"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -170,7 +171,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="s"
+                android:text="Mins"
                 android:textColor="@color/lw006_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"

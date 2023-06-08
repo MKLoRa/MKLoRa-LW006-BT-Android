@@ -14,11 +14,11 @@ public enum ParamsKeyEnum implements Serializable {
     // 时区
     KEY_TIME_ZONE(0x14),
     // 工作模式选择
-    KEY_DEVICE_MODE(0x15),
+    KEY_DEVICE_MODE(0x1B),
     // 指示灯开关
     KEY_INDICATOR_STATUS(0x16),
     // 设备心跳间隔
-    KEY_HEARTBEAT_INTERVAL(0x17),
+    KEY_HEARTBEAT_INTERVAL(0x20),
     // 厂家信息
     KEY_MANUFACTURER(0x18),
     // 关机信息上报
@@ -26,7 +26,7 @@ public enum ParamsKeyEnum implements Serializable {
     // 离线定位功能开关
     KEY_OFFLINE_LOCATION_ENABLE(0x1A),
     // 低电触发心跳开关
-    KEY_LOW_POWER_PAYLOAD_ENABLE(0x1B),
+    KEY_LOW_POWER_PAYLOAD_ENABLE(0x1B0),
     // 低电百分比
 //    KEY_LOW_POWER_PERCENT(0x1C),
     // 芯片温度
@@ -36,7 +36,7 @@ public enum ParamsKeyEnum implements Serializable {
     // 读取当前需求版本
     KEY_DEMAND_VERSION(0x1F),
     // 电池电量
-    KEY_BATTERY_POWER(0x20),
+    KEY_BATTERY_POWER(0x200),
     // 芯片MAC
     KEY_CHIP_MAC(0x21),
     // 产测状态
@@ -62,6 +62,8 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_PERIODIC_MODE_POS_STRATEGY(0x40),
     // 定期模式上报间隔
     KEY_PERIODIC_MODE_REPORT_INTERVAL(0x41),
+    //待机模式定位策略
+    KEY_STANDBY_MODE_POS_STRATEGY(0x3F),
     // 定时模式定位策略
     KEY_TIME_MODE_POS_STRATEGY(0x42),
     // 定时模式时间点
@@ -84,6 +86,10 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_MOTION_MODE_END_REPORT_INTERVAL(0x4B),
     // 运动结束定位策略
     KEY_MOTION_MODE_END_POS_STRATEGY(0x4C),
+    //运动静止状态定位策略
+    KEY_MOTION_MODE_STATIONARY_POS_STRATEGY(0x4D),
+    //运动禁止状态上报间隔
+    KEY_MOTION_MODE_STATIONARY_REPORT_INTERVAL(0x4E),
 
     //// 定位参数
     // WIFI定位数据格式
@@ -189,27 +195,25 @@ public enum ParamsKeyEnum implements Serializable {
     // unknown类型过滤规则
     KEY_FILTER_OTHER_RULES(0x7B),
     // GPS定位超时时间（L76版本）
-    KEY_GPS_POS_TIMEOUT_L76C(0x77),
+    KEY_GPS_POS_TIMEOUT_L76C(0x86),
     // GPS位置精度因子PDOP（L76版本）
-    KEY_GPS_PDOP_LIMIT_L76C(0x78),
+    KEY_GPS_PDOP_LIMIT_L76C(0x87),
     // GPS极限上传模式（L76版本）
-    KEY_GPS_EXTREME_MODE_L76C(0x790),
+    KEY_GPS_EXTREME_MODE_L76C(0x85),
     // GPS定位超时时间（LR1110版本）
-    KEY_GPS_POS_TIMEOUT(0x7A0),
+    KEY_GPS_POS_TIMEOUT(0x89),
     // GPS搜星数量（LR1110版本）
-    KEY_GPS_POS_SATELLITE_THRESHOLD(0x7B0),
+    KEY_GPS_POS_SATELLITE_THRESHOLD(0x8A),
     // GPS定位数据格式（LR1110版本）
-    KEY_GPS_POS_DATA_TYPE(0x7C),
+    KEY_GPS_POS_DATA_TYPE(0x88),
     // GPS定位星座（LR1110版本）
-    KEY_GPS_POS_SYSTEM(0x500),
+    KEY_GPS_POS_SYSTEM(0x8B),
     // 定位方式选择（LR1110版本）
-    KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE(0x7E),
+    KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE(0x8C),
     // 辅助定位经纬度（LR1110版本）
-    KEY_GPS_POS_AUXILIARY_LAT_LON(0x510),
+    KEY_GPS_POS_AUXILIARY_LAT_LON(0x8D),
     // 星历开始更新事件开关
-    KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE(0x520),
-    // 星历更新结束事件开关
-    KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE(0x810),
+    KEY_GPS_POS_EPHEMERIS_NOTIFY_ENABLE(0x8E),
     // BXP-Device类型过滤开关
     KEY_FILTER_BXP_DEVICE(0x69),
     // BXP-Button类型过滤开关
