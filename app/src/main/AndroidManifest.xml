@@ -183,6 +183,11 @@
         <activity android:name=".activity.StandbyModeActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.AlarmFunctionActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AlertAlarmSettingActivity"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.moko.lw006.fileprovider"

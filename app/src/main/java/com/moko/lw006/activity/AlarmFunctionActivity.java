@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.moko.ble.lib.MokoConstants;
@@ -13,7 +14,7 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.Lw006ActivityDownlinkForPosBinding;
+import com.moko.lw006.databinding.Lw006ActivityAlarmFunctionBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
@@ -29,38 +30,49 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DownlinkForPosActivity extends BaseActivity {
-    private Lw006ActivityDownlinkForPosBinding mBind;
-    private boolean mReceiverTag = false;
-    private boolean savedParamsError;
-    private ArrayList<String> mValues;
+/**
+ * @author: jun.liu
+ * @date: 2023/6/8 10:43
+ * @des:
+ */
+public class AlarmFunctionActivity extends BaseActivity {
+    private Lw006ActivityAlarmFunctionBinding mBind;
+    private boolean mReceiverTag;
+    private final ArrayList<String> mValues = new ArrayList<>(4);
     private int mSelected;
+    private int alarmTypeFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = Lw006ActivityDownlinkForPosBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityAlarmFunctionBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
-        mValues = new ArrayList<>();
-        mValues.add("WIFI");
-        mValues.add("BLE");
-        mValues.add("GPS");
-        mValues.add("WIFI+GPS");
-        mValues.add("BLE+GPS");
-        mValues.add("WIFI+BLE");
-        mValues.add("WIFI+BLE+GPS");
         EventBus.getDefault().register(this);
+        mValues.add("NO");
+        mValues.add("Alert");
+        mValues.add("SOS");
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.tvDownlinkPosStrategy.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getDownLinkPosStrategy());
+        mBind.tvTitle.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>(4);
+            orderTasks.add(OrderTaskAssembler.getAlarmType());
+            orderTasks.add(OrderTaskAssembler.getAlarmExitTime());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
+        mBind.tvAlarmType.setOnClickListener(v -> {
+            if (isWindowLocked()) return;
+            BottomDialog dialog = new BottomDialog();
+            dialog.setDatas(mValues, mSelected);
+            dialog.setListener(value -> {
+                mSelected = value;
+                mBind.tvAlarmType.setText(mValues.get(value));
+            });
+            dialog.show(getSupportFragmentManager());
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -87,41 +99,47 @@ public class DownlinkForPosActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
-                    if (value.length >= 4) {
+                    if (null != value && value.length >= 4) {
                         int header = value[0] & 0xFF;// 0xED
                         int flag = value[1] & 0xFF;// read or write
                         int cmd = value[2] & 0xFF;
-                        if (header != 0xED)
-                            return;
                         ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                        if (configKeyEnum == null) {
-                            return;
-                        }
+                        if (header != 0xED || null == configKeyEnum) return;
                         int length = value[3] & 0xFF;
                         if (flag == 0x01) {
                             // write
-                            int result = value[4] & 0xFF;
-                            if (configKeyEnum == ParamsKeyEnum.KEY_DOWN_LINK_POS_STRATEGY) {
-                                if (result != 1) {
-                                    savedParamsError = true;
-                                }
-                                if (savedParamsError) {
-                                    ToastUtils.showToast(DownlinkForPosActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                } else {
-                                    ToastUtils.showToast(this, "Save Successfully！");
-                                }
+                            switch (configKeyEnum) {
+                                case KEY_ALARM_TYPE:
+                                    alarmTypeFlag = value[4] & 0xff;
+                                    break;
+
+                                case KEY_ALARM_EXIT_TIME:
+                                    if (alarmTypeFlag == 1 && (value[4] & 0xff) == 1) {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    } else {
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+                                    }
+                                    break;
                             }
                         }
                         if (flag == 0x00) {
                             // read
-                            if (configKeyEnum == ParamsKeyEnum.KEY_DOWN_LINK_POS_STRATEGY) {
-                                if (length > 0) {
-                                    mSelected = value[4] & 0xFF;
-                                    mBind.tvDownlinkPosStrategy.setText(mValues.get(mSelected));
-                                }
+                            switch (configKeyEnum) {
+                                case KEY_ALARM_TYPE:
+                                    if (length == 1) {
+                                        mSelected = value[4] & 0xff;
+                                        mBind.tvAlarmType.setText(mValues.get(mSelected));
+                                    }
+                                    break;
+
+                                case KEY_ALARM_EXIT_TIME:
+                                    if (length == 1) {
+                                        int time = value[4] & 0xff;
+                                        mBind.etExitAlarmTime.setText(String.valueOf(time));
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -130,8 +148,32 @@ public class DownlinkForPosActivity extends BaseActivity {
         });
     }
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    public void onSave(View view) {
+        if (isWindowLocked()) return;
+        if (isValid()) {
+            showSyncingProgressDialog();
+            saveParams();
+        } else {
+            ToastUtils.showToast(this, "Para error!");
+        }
+    }
 
+    private void saveParams() {
+        int time = Integer.parseInt(mBind.etExitAlarmTime.getText().toString());
+        List<OrderTask> orderTasks = new ArrayList<>(2);
+        orderTasks.add(OrderTaskAssembler.setAlarmType(mSelected));
+        orderTasks.add(OrderTaskAssembler.setAlarmExitTime(time));
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    private boolean isValid() {
+        if (TextUtils.isEmpty(mBind.etExitAlarmTime.getText())) return false;
+        String timeStr = mBind.etExitAlarmTime.getText().toString();
+        int time = Integer.parseInt(timeStr);
+        return time >= 5 && time <= 15;
+    }
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
@@ -172,30 +214,6 @@ public class DownlinkForPosActivity extends BaseActivity {
     }
 
     public void onBack(View view) {
-        backHome();
-    }
-
-    @Override
-    public void onBackPressed() {
-        backHome();
-    }
-
-    private void backHome() {
-        setResult(RESULT_OK);
         finish();
-    }
-
-    public void selectPosStrategy(View view) {
-        if (isWindowLocked()) return;
-        BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mValues, mSelected);
-        dialog.setListener(value -> {
-            mSelected = value;
-            mBind.tvDownlinkPosStrategy.setText(mValues.get(value));
-            savedParamsError = false;
-            showSyncingProgressDialog();
-            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDownLinkPosStrategy(mSelected));
-        });
-        dialog.show(getSupportFragmentManager());
     }
 }

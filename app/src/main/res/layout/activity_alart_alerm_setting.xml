@@ -6,6 +6,7 @@
     android:background="@color/lw006_grey_f2f2f2"
     android:orientation="vertical">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -30,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/man_down_detection"
+            android:text="Alert Alarm Settings"
             android:textColor="@color/lw006_white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -44,7 +45,6 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:src="@drawable/lw006_ic_save" />
-
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,91 +57,28 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp">
 
-        <CheckBox
-            android:id="@+id/cb_man_down_detection"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:button="@null"
-            android:checked="false"
-            android:drawableRight="@drawable/lw006_selector_cb_btn"
-            android:gravity="center_vertical"
-            android:text="Man Down Detection"
-            android:textColor="@color/lw006_black_333333"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <View
-            android:id="@+id/line1"
-            style="@style/lw006_divider_line"
-            app:layout_constraintTop_toBottomOf="@id/cb_man_down_detection" />
-
-        <TextView
-            android:id="@+id/tvDetectionTimeout"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:text="Detection Timeout"
-            android:textColor="@color/lw006_black_333333"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/line1" />
-
-        <EditText
-            android:id="@+id/et_detection_timeout"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:hint="1~120"
-            android:inputType="number"
-            android:maxLength="3"
-            android:text=""
-            android:textColor="@color/lw006_black_333333"
-            android:textColorHint="@color/lw006_grey_ebebeb"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvDetectionTimeout"
-            app:layout_constraintRight_toLeftOf="@+id/tvTimeoutUnit"
-            app:layout_constraintTop_toTopOf="@+id/tvDetectionTimeout" />
-
-        <TextView
-            android:id="@+id/tvTimeoutUnit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mins"
-            android:textColor="@color/lw006_black_333333"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tvDetectionTimeout"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvDetectionTimeout" />
-
-        <View
-            android:id="@+id/line3"
-            style="@style/lw006_divider_line"
-            app:layout_constraintTop_toBottomOf="@id/tvDetectionTimeout" />
-
         <TextView
             android:id="@+id/tv1"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:text="Positioning Strategy"
+            android:text="Trigger Mode"
             android:textColor="@color/lw006_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/line3" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvPosStrategy"
+            android:id="@+id/tvTriggerMode"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:background="@drawable/lw006_shape_radius_blue_btn_bg"
-            android:clickable="true"
             android:gravity="center"
-            android:minWidth="70dp"
+            android:minWidth="105dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            android:text="GPS"
+            android:text="Single Click"
             android:textColor="@color/lw006_white_ffffff"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv1"
@@ -149,50 +86,38 @@
             app:layout_constraintTop_toTopOf="@+id/tv1" />
 
         <View
-            android:id="@+id/line4"
+            android:id="@+id/line1"
             style="@style/lw006_divider_line"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv1" />
 
         <TextView
-            android:id="@+id/tvReportInterval"
+            android:id="@+id/tv2"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:text="Report Interval"
+            android:text="Positioning Strategy"
             android:textColor="@color/lw006_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/line4" />
-
-        <EditText
-            android:id="@+id/etReportInterval"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:hint="10~600"
-            android:inputType="number"
-            android:maxLength="3"
-            android:text=""
-            android:textColor="@color/lw006_black_333333"
-            android:textColorHint="@color/lw006_grey_ebebeb"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvReportInterval"
-            app:layout_constraintRight_toLeftOf="@+id/tvTimeoutUnit1"
-            app:layout_constraintTop_toTopOf="@+id/tvReportInterval" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line1" />
 
         <TextView
-            android:id="@+id/tvTimeoutUnit1"
+            android:id="@+id/tvPosStrategy"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="s"
-            android:textColor="@color/lw006_black_333333"
+            android:layout_height="40dp"
+            android:background="@drawable/lw006_shape_radius_blue_btn_bg"
+            android:gravity="center"
+            android:minWidth="70dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="GPS"
+            android:textColor="@color/lw006_white_ffffff"
             android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tvReportInterval"
+            app:layout_constraintBottom_toBottomOf="@+id/tv2"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvReportInterval" />
-
+            app:layout_constraintTop_toTopOf="@+id/tv2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -207,14 +132,14 @@
         android:paddingEnd="10dp">
 
         <CheckBox
-            android:id="@+id/cbNotifyManDownStart"
+            android:id="@+id/cbNotifyAlertStart"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:button="@null"
             android:checked="false"
             android:drawableRight="@drawable/lw006_selector_cb_btn"
             android:gravity="center_vertical"
-            android:text="Notify Event On Man Down Start"
+            android:text="Notify Event On Alert Start"
             android:textColor="@color/lw006_black_333333"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -222,14 +147,14 @@
         <View style="@style/lw006_divider_line" />
 
         <CheckBox
-            android:id="@+id/cbNotifyManDownEnd"
+            android:id="@+id/cbNotifyAlertEnd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:button="@null"
             android:checked="false"
             android:drawableRight="@drawable/lw006_selector_cb_btn"
             android:gravity="center_vertical"
-            android:text="Notify Event On Man Down End"
+            android:text="Notify Event On Alert End"
             android:textColor="@color/lw006_black_333333"
             android:textSize="15sp"
             android:textStyle="bold" />

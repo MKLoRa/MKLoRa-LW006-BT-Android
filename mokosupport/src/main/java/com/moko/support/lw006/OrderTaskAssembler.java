@@ -205,7 +205,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask getStandbyPosStrategy(){
+    public static OrderTask getStandbyPosStrategy() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_STANDBY_MODE_POS_STRATEGY);
         return task;
@@ -272,13 +272,13 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask getMotionStationaryPosStrategy(){
+    public static OrderTask getMotionStationaryPosStrategy() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_MOTION_MODE_STATIONARY_POS_STRATEGY);
         return task;
     }
 
-    public static OrderTask getMotionStationaryReportInterval(){
+    public static OrderTask getMotionStationaryReportInterval() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_MOTION_MODE_STATIONARY_REPORT_INTERVAL);
         return task;
@@ -820,6 +820,48 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask getManDownPosStrategy() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_MAN_DOWN_POS_STRATEGY);
+        return task;
+    }
+
+    public static OrderTask getManDownReportInterval() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_REPORT_INTERVAL);
+        return task;
+    }
+
+    public static OrderTask getAlarmType() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_TYPE);
+        return task;
+    }
+
+    public static OrderTask getAlarmExitTime() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_EXIT_TIME);
+        return task;
+    }
+
+    public static OrderTask getAlarmAlertTriggerType(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_ALERT_TRIGGER_TYPE);
+        return task;
+    }
+
+    public static OrderTask getAlarmAlertPosStrategy(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_ALERT_POS_STRATEGY);
+        return task;
+    }
+
+    public static OrderTask getAlarmAlertNotifyEnable(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_ALERT_NOTIFY_ENABLE);
+        return task;
+    }
+
     public static OrderTask getManDownIdleReset() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_MAN_DOWN_IDLE_RESET);
@@ -1081,13 +1123,13 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setMotionStationaryPosStrategy(@IntRange(from = 0, to = 6) int strategy){
+    public static OrderTask setMotionStationaryPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setMotionStationaryPosStrategy(strategy);
         return task;
     }
 
-    public static OrderTask setMotionStationaryReportInterval(@IntRange(from = 1,to = 14400) int interval){
+    public static OrderTask setMotionStationaryReportInterval(@IntRange(from = 1, to = 14400) int interval) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setMotionStationaryReportInterval(interval);
         return task;
@@ -1635,17 +1677,60 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setManDownDetectionEnable(@IntRange(from = 0, to = 1) int enable) {
+    public static OrderTask setManDownDetectionEnable(int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setManDownDetectionEnable(enable);
         return task;
     }
 
-    public static OrderTask setManDownDetectionTimeout(@IntRange(from = 1, to = 8760) int timeout) {
+    public static OrderTask setManDownDetectionTimeout(@IntRange(from = 1, to = 120) int timeout) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setManDownDetectionTimeout(timeout);
         return task;
     }
+
+    public static OrderTask setManDownPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setManDownPosStrategy(strategy);
+        return task;
+    }
+
+    public static OrderTask setManDownReportInterval(@IntRange(from = 10, to = 600) int interval) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setManDownReportInterval(interval);
+        return task;
+    }
+
+    public static OrderTask setAlarmType(@IntRange(from = 0, to = 2) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmType(type);
+        return task;
+    }
+
+    public static OrderTask setAlarmExitTime(@IntRange(from = 5, to = 15) int time) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmExitTime(time);
+        return task;
+    }
+
+    public static OrderTask setAlarmAlertTriggerType(@IntRange(from = 0,to = 4)int type){
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmAlertTriggerType(type);
+        return task;
+    }
+
+    public static OrderTask setAlarmAlertPosStrategy(@IntRange(from = 0,to = 6) int strategy){
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmAlertPosStrategy(strategy);
+        return task;
+    }
+
+    public static OrderTask setAlarmAlertNotifyEnable(int enable){
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmAlertNotifyEnable(enable);
+        return task;
+    }
+
 
     public static OrderTask setManDownIdleReset() {
         ParamsWriteTask task = new ParamsWriteTask();

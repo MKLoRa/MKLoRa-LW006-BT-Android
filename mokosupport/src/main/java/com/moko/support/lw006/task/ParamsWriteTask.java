@@ -1585,7 +1585,7 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setManDownDetectionEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setManDownDetectionEnable(int enable) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
@@ -1597,18 +1597,90 @@ public class ParamsWriteTask extends OrderTask {
     }
 
 
-    public void setManDownDetectionTimeout(@IntRange(from = 1, to = 8760) int timeout) {
-        byte[] timeoutBytes = MokoUtils.toByteArray(timeout, 2);
+    public void setManDownDetectionTimeout(@IntRange(from = 1, to = 120) int timeout) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_TIMEOUT.getParamsKey(),
-                (byte) 0x02,
-                timeoutBytes[0],
-                timeoutBytes[1]
+                (byte) 0x01,
+                (byte) timeout
         };
         response.responseValue = data;
     }
+
+    public void setManDownPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MAN_DOWN_POS_STRATEGY.getParamsKey(),
+                (byte) 0x01,
+                (byte) strategy
+        };
+    }
+
+    public void setManDownReportInterval(@IntRange(from = 10, to = 600) int interval) {
+        byte[] bytes = MokoUtils.toByteArray(interval, 2);
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_REPORT_INTERVAL.getParamsKey(),
+                (byte) 0x02,
+                bytes[0],
+                bytes[1]
+        };
+    }
+
+    public void setAlarmType(@IntRange(from = 0, to = 2) int type) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_TYPE.getParamsKey(),
+                (byte) 0x01,
+                (byte) type
+        };
+    }
+
+    public void setAlarmExitTime(@IntRange(from = 5, to = 15) int time) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_EXIT_TIME.getParamsKey(),
+                (byte) 0x01,
+                (byte) time
+        };
+    }
+
+    public void setAlarmAlertTriggerType(@IntRange(from = 0,to = 4)int type){
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_ALERT_TRIGGER_TYPE.getParamsKey(),
+                (byte) 0x01,
+                (byte) type
+        };
+    }
+
+    public void setAlarmAlertPosStrategy(@IntRange(from = 0,to = 6) int strategy){
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_ALERT_POS_STRATEGY.getParamsKey(),
+                (byte) 0x01,
+                (byte) strategy
+        };
+    }
+
+    public void setAlarmAlertNotifyEnable(int enable){
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_ALERT_NOTIFY_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+    }
+
+
 
     public void setManDownIdleReset() {
         data = new byte[]{

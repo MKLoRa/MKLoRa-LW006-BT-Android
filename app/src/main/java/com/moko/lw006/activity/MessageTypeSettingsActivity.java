@@ -14,7 +14,7 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.ActivityMsgTypeSettingsBinding;
+import com.moko.lw006.databinding.Lw006ActivityMsgTypeSettingsBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
@@ -36,7 +36,7 @@ import java.util.List;
  * @des:
  */
 public class MessageTypeSettingsActivity extends BaseActivity {
-    private ActivityMsgTypeSettingsBinding mBind;
+    private Lw006ActivityMsgTypeSettingsBinding mBind;
     private boolean mReceiverTag = false;
     private static final String unconfirmed = "Unconfirmed";
     private static final String confirmed = "Confirmed";
@@ -52,7 +52,7 @@ public class MessageTypeSettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = ActivityMsgTypeSettingsBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityMsgTypeSettingsBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         // 注册广播接收器

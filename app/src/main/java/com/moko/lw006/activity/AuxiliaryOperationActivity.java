@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +16,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class AuxiliaryOperationActivity extends BaseActivity {
-
     private Lw006ActivityAuxiliaryOperationBinding mBind;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,26 +89,18 @@ public class AuxiliaryOperationActivity extends BaseActivity {
     }
 
     public void onDownlinkForPos(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         startActivity(new Intent(this, DownlinkForPosActivity.class));
     }
 
-    public void onVibrationDetection(View view) {
-        if (isWindowLocked())
-            return;
-        startActivity(new Intent(this, VibrationDetectionActivity.class));
-    }
-
     public void onManDownDetection(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         startActivity(new Intent(this, ManDownDetectionActivity.class));
     }
 
-    public void onActiveStateCount(View view) {
-        if (isWindowLocked())
-            return;
-        startActivity(new Intent(this, ActiveStateCountActivity.class));
+    public void onAlarmFunction(View view) {
+        if (isWindowLocked()) return;
+        startActivity(new Intent(this, AlarmFunctionActivity.class));
     }
+
 }

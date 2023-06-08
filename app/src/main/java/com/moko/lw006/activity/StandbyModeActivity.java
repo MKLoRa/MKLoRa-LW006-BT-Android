@@ -12,7 +12,7 @@ import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.databinding.ActivityStandbyModeBinding;
+import com.moko.lw006.databinding.Lw006ActivityStandbyModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * @des:
  */
 public class StandbyModeActivity extends BaseActivity {
-    private ActivityStandbyModeBinding mBind;
+    private Lw006ActivityStandbyModeBinding mBind;
     private boolean mReceiverTag = false;
     private int mSelected;
     private final ArrayList<String> mValues = new ArrayList<>(8);
@@ -41,7 +41,7 @@ public class StandbyModeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBind = ActivityStandbyModeBinding.inflate(getLayoutInflater());
+        mBind = Lw006ActivityStandbyModeBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         // 注册广播接收器

@@ -272,21 +272,37 @@ public enum ParamsKeyEnum implements Serializable {
     // 下行请求定位策略
     KEY_DOWN_LINK_POS_STRATEGY(0xB0),
     // 三轴唤醒条件
-    KEY_ACC_WAKEUP_CONDITION(0xB1),
+    KEY_ACC_WAKEUP_CONDITION(0xB110),
     // 运动检测判断
-    KEY_ACC_MOTION_CONDITION(0xB2),
+    KEY_ACC_MOTION_CONDITION(0xB22),
     // 震动检测使能
-    KEY_SHOCK_DETECTION_ENABLE(0xB3),
+    KEY_SHOCK_DETECTION_ENABLE(0xB333),
     // 震动检测阈值
-    KEY_ACC_SHOCK_THRESHOLD(0xB4),
+    KEY_ACC_SHOCK_THRESHOLD(0xB44),
     // 震动上发间隔
-    KEY_SHOCK_REPORT_INTERVAL(0xB5),
+    KEY_SHOCK_REPORT_INTERVAL(0xB55),
     // 震动次数判断间隔
-    KEY_SHOCK_TIMEOUT(0xB6),
+    KEY_SHOCK_TIMEOUT(0xB66),
     // 闲置功能使能
-    KEY_MAN_DOWN_DETECTION_ENABLE(0xB7),
+    KEY_MAN_DOWN_DETECTION_ENABLE(0xB1),
+    //ManDown 定位策略
+    KEY_MAN_DOWN_POS_STRATEGY(0xB2),
     // 闲置超时时间
-    KEY_MAN_DOWN_DETECTION_TIMEOUT(0xB8),
+    KEY_MAN_DOWN_DETECTION_TIMEOUT(0xB3),
+    //ManDown 定 位 数 据上报间隔
+    KEY_MAN_DOWN_DETECTION_REPORT_INTERVAL(0xB4),
+    //报警类型选择
+    KEY_ALARM_TYPE(0xB5),
+    //退出报警按键时间
+    KEY_ALARM_EXIT_TIME(0xB6),
+    //Alert 报警触发按键模式
+    KEY_ALARM_ALERT_TRIGGER_TYPE(0xB7),
+    //Alert 报警定位策略
+    KEY_ALARM_ALERT_POS_STRATEGY(0xB8),
+    //Alert 报警事件通知
+    KEY_ALARM_ALERT_NOTIFY_ENABLE(0xB9),
+
+
     // 闲置清除
     KEY_MAN_DOWN_IDLE_RESET(0xB9),
     // 活动记录使能
