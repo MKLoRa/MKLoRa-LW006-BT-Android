@@ -1,6 +1,7 @@
 package com.moko.support.lw006;
 
 import androidx.annotation.IntRange;
+import androidx.fragment.app.Fragment;
 
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.support.lw006.entity.ParamsKeyEnum;
@@ -61,6 +62,12 @@ public class OrderTaskAssembler {
     public static OrderTask getTimeUTC() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_TIME_UTC);
+        return task;
+    }
+
+    public static OrderTask getLowPowerPercent(){
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_LOW_POWER_PERCENT);
         return task;
     }
 
@@ -184,6 +191,12 @@ public class OrderTaskAssembler {
     public static OrderTask getAdvName() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_ADV_NAME);
+        return task;
+    }
+
+    public static OrderTask getAdvInterval() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ADV_INTERVAL);
         return task;
     }
 
@@ -844,21 +857,45 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask getAlarmAlertTriggerType(){
+    public static OrderTask getAlarmAlertTriggerType() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_ALARM_ALERT_TRIGGER_TYPE);
         return task;
     }
 
-    public static OrderTask getAlarmAlertPosStrategy(){
+    public static OrderTask getAlarmAlertPosStrategy() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_ALARM_ALERT_POS_STRATEGY);
         return task;
     }
 
-    public static OrderTask getAlarmAlertNotifyEnable(){
+    public static OrderTask getAlarmAlertNotifyEnable() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_ALARM_ALERT_NOTIFY_ENABLE);
+        return task;
+    }
+
+    public static OrderTask getAlarmSosTriggerType() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_SOS_TRIGGER_TYPE);
+        return task;
+    }
+
+    public static OrderTask getAlarmSosPosStrategy() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_SOS_POS_STRATEGY);
+        return task;
+    }
+
+    public static OrderTask getAlarmSosReportInterval() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_SOS_REPORT_INTERVAL);
+        return task;
+    }
+
+    public static OrderTask getAlarmSosNotifyEnable() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_ALARM_SOS_NOTIFY_ENABLE);
         return task;
     }
 
@@ -956,6 +993,12 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask setLowPowerPercent(@IntRange(from = 0,to = 5) int percent){
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setLowPowerPercent(percent);
+        return task;
+    }
+
     public static OrderTask setDeviceMode(@IntRange(from = 1, to = 4) int mode) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setDeviceMode(mode);
@@ -1037,6 +1080,11 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask setAdvInterval(@IntRange(from = 1, to = 100) int interval) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAdvInterval(interval);
+        return task;
+    }
 
     public static OrderTask setPeriodicPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         ParamsWriteTask task = new ParamsWriteTask();
@@ -1713,21 +1761,46 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setAlarmAlertTriggerType(@IntRange(from = 0,to = 4)int type){
+    public static OrderTask setAlarmAlertTriggerType(@IntRange(from = 0, to = 4) int type) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setAlarmAlertTriggerType(type);
         return task;
     }
 
-    public static OrderTask setAlarmAlertPosStrategy(@IntRange(from = 0,to = 6) int strategy){
+    public static OrderTask setAlarmAlertPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setAlarmAlertPosStrategy(strategy);
         return task;
     }
 
-    public static OrderTask setAlarmAlertNotifyEnable(int enable){
+    public static OrderTask setAlarmAlertNotifyEnable(int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setAlarmAlertNotifyEnable(enable);
+        return task;
+    }
+
+    //
+    public static OrderTask setAlarmSosTriggerType(@IntRange(from = 0, to = 4) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmSosTriggerType(type);
+        return task;
+    }
+
+    public static OrderTask setAlarmSosPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmSosPosStrategy(strategy);
+        return task;
+    }
+
+    public static OrderTask setAlarmSosReportInterval(@IntRange(from = 10, to = 600) int interval) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmSosReportInterval(interval);
+        return task;
+    }
+
+    public static OrderTask setAlarmSosNotifyEnable(int enable) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAlarmSosNotifyEnable(enable);
         return task;
     }
 

@@ -34,19 +34,20 @@ public enum ParamsKeyEnum implements Serializable {
     // 读取当前系统时区时间
     KEY_SYSTEM_TIME(0x1E),
     // 读取当前需求版本
-    KEY_DEMAND_VERSION(0x1F),
+    KEY_DEMAND_VERSION(0x1FF),
     // 电池电量
     KEY_BATTERY_POWER(0x200),
     // 芯片MAC
-    KEY_CHIP_MAC(0x21),
+    KEY_CHIP_MAC(0x210),
     // 产测状态
-    KEY_PCBA_STATUS(0x22),
+    KEY_PCBA_STATUS(0x220),
     // 自检状态
     KEY_SELFTEST_STATUS(0x23),
     // 电池信息信息
     KEY_BATTERY_INFO(0x25),
     // 电池信息清除
     KEY_BATTERY_RESET(0x26),
+    KEY_LOW_POWER_PERCENT(0x1F),
 
 
     //// 蓝牙相关参数
@@ -56,6 +57,7 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_ADV_TIMEOUT(0x32),
     KEY_ADV_TX_POWER(0x33),
     KEY_ADV_NAME(0x34),
+    KEY_ADV_INTERVAL(0x35),
 
     //// 模式相关参数
     // 定期模式定位策略
@@ -272,9 +274,9 @@ public enum ParamsKeyEnum implements Serializable {
     // 下行请求定位策略
     KEY_DOWN_LINK_POS_STRATEGY(0xB0),
     // 三轴唤醒条件
-    KEY_ACC_WAKEUP_CONDITION(0xB110),
+    KEY_ACC_WAKEUP_CONDITION(0x21),
     // 运动检测判断
-    KEY_ACC_MOTION_CONDITION(0xB22),
+    KEY_ACC_MOTION_CONDITION(0x22),
     // 震动检测使能
     KEY_SHOCK_DETECTION_ENABLE(0xB333),
     // 震动检测阈值
@@ -301,14 +303,22 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_ALARM_ALERT_POS_STRATEGY(0xB8),
     //Alert 报警事件通知
     KEY_ALARM_ALERT_NOTIFY_ENABLE(0xB9),
+    //SOS 报警触发按键
+    KEY_ALARM_SOS_TRIGGER_TYPE(0xBA),
+    //SOS 报警定位策略
+    KEY_ALARM_SOS_POS_STRATEGY(0xBB),
+    //SOS 定位数据上报间隔
+    KEY_ALARM_SOS_REPORT_INTERVAL(0xBC),
+    //SOS 报警事件通知
+    KEY_ALARM_SOS_NOTIFY_ENABLE(0xBD),
 
 
     // 闲置清除
-    KEY_MAN_DOWN_IDLE_RESET(0xB9),
+    KEY_MAN_DOWN_IDLE_RESET(0xB99),
     // 活动记录使能
-    KEY_ACTIVE_STATE_COUNT_ENABLE(0xBA),
+    KEY_ACTIVE_STATE_COUNT_ENABLE(0xBA9),
     // 活动判定间隔
-    KEY_ACTIVE_STATE_TIMEOUT(0xBB),
+    KEY_ACTIVE_STATE_TIMEOUT(0xBB9),
 
     //// 存储协议
     // 读取存储的数据

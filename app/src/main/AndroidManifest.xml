@@ -188,6 +188,9 @@
         <activity android:name=".activity.AlertAlarmSettingActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.SOSAlarmSettingActivity"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.moko.lw006.fileprovider"

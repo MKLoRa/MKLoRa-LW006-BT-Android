@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -51,7 +50,6 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
             if (!(source + "").matches(FILTER_ASCII)) {
                 return "";
             }
-
             return null;
         };
         mBind.etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16), inputFilter});
@@ -60,6 +58,7 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
         mBind.etAdvName.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getAdvName());
+            orderTasks.add(OrderTaskAssembler.getAdvInterval());
             orderTasks.add(OrderTaskAssembler.getAdvTxPower());
             orderTasks.add(OrderTaskAssembler.getAdvTimeout());
             orderTasks.add(OrderTaskAssembler.getPasswordVerifyEnable());
@@ -93,77 +92,82 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_ADV_NAME:
-                                    case KEY_ADV_TIMEOUT:
-                                    case KEY_ADV_TX_POWER:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_PASSWORD_VERIFY_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(BleSettingsActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_ADV_NAME:
-                                        if (length > 0) {
-                                            mBind.etAdvName.setText(new String(Arrays.copyOfRange(value, 4, 4 + length)));
-                                        }
-                                        break;
-                                    case KEY_ADV_TIMEOUT:
-                                        if (length > 0) {
-                                            int timeout = value[4] & 0xFF;
-                                            mBind.etAdvTimeout.setText(String.valueOf(timeout));
-                                        }
-                                        break;
-                                    case KEY_PASSWORD_VERIFY_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mPasswordVerifyEnable = enable == 1;
-                                            mPasswordVerifyDisable = enable == 0;
-                                            mBind.ivLoginMode.setImageResource(mPasswordVerifyEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
-                                            mBind.tvChangePassword.setVisibility(mPasswordVerifyEnable ? View.VISIBLE : View.GONE);
-                                        }
-                                        break;
-                                    case KEY_ADV_TX_POWER:
-                                        if (length > 0) {
-                                            int txPower = value[4];
-                                            int progress = TxPowerEnum.fromTxPower(txPower).ordinal();
-                                            mBind.sbTxPower.setProgress(progress);
-                                            mBind.tvTxPowerValue.setText(String.format("%ddBm", txPower));
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED) return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_ADV_NAME:
+                                case KEY_ADV_INTERVAL:
+                                case KEY_ADV_TIMEOUT:
+                                case KEY_ADV_TX_POWER:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_PASSWORD_VERIFY_ENABLE:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_ADV_NAME:
+                                    if (length > 0) {
+                                        mBind.etAdvName.setText(new String(Arrays.copyOfRange(value, 4, 4 + length)));
+                                    }
+                                    break;
+                                case KEY_ADV_TIMEOUT:
+                                    if (length > 0) {
+                                        int timeout = value[4] & 0xFF;
+                                        mBind.etAdvTimeout.setText(String.valueOf(timeout));
+                                    }
+                                    break;
+                                case KEY_PASSWORD_VERIFY_ENABLE:
+                                    if (length > 0) {
+                                        int enable = value[4] & 0xFF;
+                                        mPasswordVerifyEnable = enable == 1;
+                                        mPasswordVerifyDisable = enable == 0;
+                                        mBind.ivLoginMode.setImageResource(mPasswordVerifyEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                        mBind.tvChangePassword.setVisibility(mPasswordVerifyEnable ? View.VISIBLE : View.GONE);
+                                    }
+                                    break;
+                                case KEY_ADV_TX_POWER:
+                                    if (length > 0) {
+                                        int txPower = value[4];
+                                        int progress = TxPowerEnum.fromTxPower(txPower).ordinal();
+                                        mBind.sbTxPower.setProgress(progress);
+                                        mBind.tvTxPowerValue.setText(String.format("%ddBm", txPower));
+                                    }
+                                    break;
+
+                                case KEY_ADV_INTERVAL:
+                                    if (length > 0) {
+                                        int interval = value[4] & 0xff;
+                                        mBind.etAdInterval.setText(String.valueOf(interval));
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -181,14 +185,12 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();
@@ -205,8 +207,7 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -216,14 +217,14 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
     }
 
     private boolean isValid() {
+        if (TextUtils.isEmpty(mBind.etAdvTimeout.getText())) return false;
         final String advTimeoutStr = mBind.etAdvTimeout.getText().toString();
-        if (TextUtils.isEmpty(advTimeoutStr))
-            return false;
         final int timeout = Integer.parseInt(advTimeoutStr);
-        if (timeout < 1 || timeout > 60) {
-            return false;
-        }
-        return true;
+        if (timeout < 1 || timeout > 60) return false;
+
+        if (TextUtils.isEmpty(mBind.etAdInterval.getText())) return false;
+        int interval = Integer.parseInt(mBind.etAdInterval.getText().toString().trim());
+        return interval >= 1 && interval <= 100;
     }
 
 
@@ -232,10 +233,12 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
         final String timeoutStr = mBind.etAdvTimeout.getText().toString();
         final int timeout = Integer.parseInt(timeoutStr);
         final int progress = mBind.sbTxPower.getProgress();
+        int interval = Integer.parseInt(mBind.etAdInterval.getText().toString().trim());
         TxPowerEnum txPowerEnum = TxPowerEnum.fromOrdinal(progress);
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setAdvName(advName));
+        orderTasks.add(OrderTaskAssembler.setAdvInterval(interval));
         orderTasks.add(OrderTaskAssembler.setAdvTimeout(timeout));
         if (txPowerEnum != null) {
             orderTasks.add(OrderTaskAssembler.setAdvTxPower(txPowerEnum.getTxPower()));
@@ -245,10 +248,8 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
     }
 
     public void onChangePassword(View view) {
-        if (isWindowLocked())
-            return;
-        if (mPasswordVerifyDisable)
-            return;
+        if (isWindowLocked()) return;
+        if (mPasswordVerifyDisable) return;
         final ChangePasswordDialog dialog = new ChangePasswordDialog(this);
         dialog.setOnPasswordClicked(password -> {
             showSyncingProgressDialog();
@@ -258,7 +259,6 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
-
             public void run() {
                 runOnUiThread(() -> dialog.showKeyboard());
             }
@@ -266,8 +266,7 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
     }
 
     public void onChangeLoginMode(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         mPasswordVerifyEnable = !mPasswordVerifyEnable;
         mBind.ivLoginMode.setImageResource(mPasswordVerifyEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
         mBind.tvChangePassword.setVisibility(mPasswordVerifyEnable ? View.VISIBLE : View.GONE);
@@ -276,8 +275,7 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
         TxPowerEnum txPowerEnum = TxPowerEnum.fromOrdinal(progress);
-        if (txPowerEnum == null)
-            return;
+        if (txPowerEnum == null) return;
         int txPower = txPowerEnum.getTxPower();
         mBind.tvTxPowerValue.setText(String.format("%ddBm", txPower));
     }

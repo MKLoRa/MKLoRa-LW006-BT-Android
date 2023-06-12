@@ -201,6 +201,9 @@
         <activity android:name=".activity.AlertAlarmSettingActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.SOSAlarmSettingActivity"
+            android:screenOrientation="portrait"/>
+
 
         <service android:name="com.moko.lw006.service.DfuService" />
     </application>

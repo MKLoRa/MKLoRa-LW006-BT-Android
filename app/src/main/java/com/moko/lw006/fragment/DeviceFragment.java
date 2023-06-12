@@ -28,12 +28,10 @@ public class DeviceFragment extends Fragment {
     private boolean mLowPowerPayloadEnable;
     private boolean mShutdownPayloadEnable;
 
-
     private DeviceInfoActivity activity;
 
     public DeviceFragment() {
     }
-
 
     public static DeviceFragment newInstance() {
         DeviceFragment fragment = new DeviceFragment();
@@ -41,8 +39,7 @@ public class DeviceFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
         mBind = Lw006FragmentDeviceBinding.inflate(inflater, container, false);
         activity = (DeviceInfoActivity) getActivity();
@@ -89,12 +86,6 @@ public class DeviceFragment extends Fragment {
         });
         dialog.show(activity.getSupportFragmentManager());
     }
-
-    public void setShutdownPayload(int enable) {
-        mShutdownPayloadEnable = enable == 1;
-        mBind.ivShutdownPayload.setImageResource(mShutdownPayloadEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
-    }
-
 
     public void setLowPowerPayload(int enable) {
         mLowPowerPayloadEnable = enable == 1;

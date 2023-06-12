@@ -1,6 +1,5 @@
 package com.moko.lw006.activity;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AxisSettingActivity extends BaseActivity {
-
     private Lw006ActivityAxisSettingBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -53,7 +51,6 @@ public class AxisSettingActivity extends BaseActivity {
             ArrayList<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getAccWakeupCondition());
             orderTasks.add(OrderTaskAssembler.getAccMotionCondition());
-            orderTasks.add(OrderTaskAssembler.getAccShockThreshold());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
@@ -84,92 +81,76 @@ public class AxisSettingActivity extends BaseActivity {
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_ACC_WAKEUP_CONDITION:
-                                    case KEY_ACC_MOTION_CONDITION:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_ACC_SHOCK_THRESHOLD:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(AxisSettingActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_ACC_WAKEUP_CONDITION:
-                                        if (length == 2) {
-                                            int threshold = value[4] & 0xFF;
-                                            int duration = value[5] & 0xFF;
-                                            mBind.etWakeupThreshold.setText(String.valueOf(threshold));
-                                            mBind.etWakeupDuration.setText(String.valueOf(duration));
-
-                                        }
-                                        break;
-                                    case KEY_ACC_MOTION_CONDITION:
-                                        if (length == 2) {
-                                            int threshold = value[4] & 0xFF;
-                                            int duration = value[5] & 0xFF;
-                                            mBind.etMotionThreshold.setText(String.valueOf(threshold));
-                                            mBind.etMotionDuration.setText(String.valueOf(duration));
-                                        }
-                                        break;
-                                    case KEY_ACC_SHOCK_THRESHOLD:
-                                        if (length > 0) {
-                                            int threshold = value[4] & 0xFF;
-                                            mBind.etVibrationThresholds.setText(String.valueOf(threshold));
-                                        }
-                                        break;
-
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED) return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) {
+                            return;
+                        }
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_ACC_WAKEUP_CONDITION:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_ACC_MOTION_CONDITION:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(AxisSettingActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_ACC_WAKEUP_CONDITION:
+                                    if (length == 2) {
+                                        int threshold = value[4] & 0xFF;
+                                        int duration = value[5] & 0xFF;
+                                        mBind.etWakeupThreshold.setText(String.valueOf(threshold));
+                                        mBind.etWakeupDuration.setText(String.valueOf(duration));
+                                    }
+                                    break;
+                                case KEY_ACC_MOTION_CONDITION:
+                                    if (length == 2) {
+                                        int threshold = value[4] & 0xFF;
+                                        int duration = value[5] & 0xFF;
+                                        mBind.etMotionThreshold.setText(String.valueOf(threshold));
+                                        mBind.etMotionDuration.setText(String.valueOf(duration));
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
     }
 
-
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent != null) {
                 String action = intent.getAction();
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
-                    switch (blueState) {
-                        case BluetoothAdapter.STATE_TURNING_OFF:
-                            dismissSyncProgressDialog();
-                            finish();
-                            break;
+                    if (blueState == BluetoothAdapter.STATE_TURNING_OFF) {
+                        dismissSyncProgressDialog();
+                        finish();
                     }
                 }
             }
@@ -193,14 +174,12 @@ public class AxisSettingActivity extends BaseActivity {
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null)
             mLoadingMessageDialog.dismissAllowingStateLoss();
     }
-
 
     public void onBack(View view) {
         backHome();
@@ -217,8 +196,7 @@ public class AxisSettingActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -228,38 +206,25 @@ public class AxisSettingActivity extends BaseActivity {
     }
 
     private boolean isValid() {
+        if (TextUtils.isEmpty(mBind.etWakeupThreshold.getText())) return false;
         final String wakeUpThresholdStr = mBind.etWakeupThreshold.getText().toString();
-        if (TextUtils.isEmpty(wakeUpThresholdStr))
-            return false;
         final int wakeUpThreshold = Integer.parseInt(wakeUpThresholdStr);
-        if (wakeUpThreshold < 1 || wakeUpThreshold > 20)
-            return false;
-        final String wakeUpDurationStr = mBind.etWakeupDuration.getText().toString();
-        if (TextUtils.isEmpty(wakeUpDurationStr))
-            return false;
-        final int wakeUpDuration = Integer.parseInt(wakeUpDurationStr);
-        if (wakeUpDuration < 1 || wakeUpDuration > 10)
-            return false;
-        final String motionThresholdStr = mBind.etMotionThreshold.getText().toString();
-        if (TextUtils.isEmpty(motionThresholdStr))
-            return false;
-        final int motionThreshold = Integer.parseInt(motionThresholdStr);
-        if (motionThreshold < 10 || motionThreshold > 250)
-            return false;
-        final String motionDurationStr = mBind.etMotionDuration.getText().toString();
-        if (TextUtils.isEmpty(motionDurationStr))
-            return false;
-        final int motionDuration = Integer.parseInt(motionDurationStr);
-        if (motionDuration < 1 || motionDuration > 50)
-            return false;
-        final String vibrationThresholdStr = mBind.etVibrationThresholds.getText().toString();
-        if (TextUtils.isEmpty(vibrationThresholdStr))
-            return false;
-        final int vibrationThreshold = Integer.parseInt(vibrationThresholdStr);
-        if (vibrationThreshold < 10 || vibrationThreshold > 255)
-            return false;
-        return true;
+        if (wakeUpThreshold < 1 || wakeUpThreshold > 20) return false;
 
+        if (TextUtils.isEmpty(mBind.etWakeupDuration.getText())) return false;
+        final String wakeUpDurationStr = mBind.etWakeupDuration.getText().toString();
+        final int wakeUpDuration = Integer.parseInt(wakeUpDurationStr);
+        if (wakeUpDuration < 1 || wakeUpDuration > 10) return false;
+
+        if (TextUtils.isEmpty(mBind.etMotionThreshold.getText())) return false;
+        final String motionThresholdStr = mBind.etMotionThreshold.getText().toString();
+        final int motionThreshold = Integer.parseInt(motionThresholdStr);
+        if (motionThreshold < 10 || motionThreshold > 250) return false;
+
+        if (TextUtils.isEmpty(mBind.etMotionDuration.getText())) return false;
+        final String motionDurationStr = mBind.etMotionDuration.getText().toString();
+        final int motionDuration = Integer.parseInt(motionDurationStr);
+        return motionDuration >= 1 && motionDuration <= 50;
     }
 
     private void saveParams() {
@@ -271,13 +236,10 @@ public class AxisSettingActivity extends BaseActivity {
         final int motionThreshold = Integer.parseInt(motionThresholdStr);
         final String motionDurationStr = mBind.etMotionDuration.getText().toString();
         final int motionDuration = Integer.parseInt(motionDurationStr);
-        final String vibrationThresholdStr = mBind.etVibrationThresholds.getText().toString();
-        final int vibrationThreshold = Integer.parseInt(vibrationThresholdStr);
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setAccWakeupCondition(wakeUpThreshold, wakeUpDuration));
         orderTasks.add(OrderTaskAssembler.setAccMotionCondition(motionThreshold, motionDuration));
-        orderTasks.add(OrderTaskAssembler.setAccShockThreshold(vibrationThreshold));
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 }

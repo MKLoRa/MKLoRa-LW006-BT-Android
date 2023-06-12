@@ -106,6 +106,16 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
+    public void setLowPowerPercent(@IntRange(from = 0, to = 5) int percent) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_LOW_POWER_PERCENT.getParamsKey(),
+                (byte) 0x01,
+                (byte) percent
+        };
+    }
+
     public void setDeviceMode(@IntRange(from = 1, to = 4) int mode) {
         data = new byte[]{
                 (byte) 0xED,
@@ -259,6 +269,16 @@ public class ParamsWriteTask extends OrderTask {
             data[i + 4] = advNameBytes[i];
         }
         response.responseValue = data;
+    }
+
+    public void setAdvInterval(@IntRange(from = 1, to = 100) int interval) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ADV_INTERVAL.getParamsKey(),
+                (byte) 0x01,
+                (byte) interval
+        };
     }
 
     public void setPeriodicPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
@@ -1650,7 +1670,7 @@ public class ParamsWriteTask extends OrderTask {
         };
     }
 
-    public void setAlarmAlertTriggerType(@IntRange(from = 0,to = 4)int type){
+    public void setAlarmAlertTriggerType(@IntRange(from = 0, to = 4) int type) {
         response.responseValue = data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
@@ -1660,7 +1680,7 @@ public class ParamsWriteTask extends OrderTask {
         };
     }
 
-    public void setAlarmAlertPosStrategy(@IntRange(from = 0,to = 6) int strategy){
+    public void setAlarmAlertPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         response.responseValue = data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
@@ -1670,7 +1690,7 @@ public class ParamsWriteTask extends OrderTask {
         };
     }
 
-    public void setAlarmAlertNotifyEnable(int enable){
+    public void setAlarmAlertNotifyEnable(int enable) {
         response.responseValue = data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
@@ -1680,6 +1700,48 @@ public class ParamsWriteTask extends OrderTask {
         };
     }
 
+    //
+    public void setAlarmSosTriggerType(@IntRange(from = 0, to = 4) int type) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_SOS_TRIGGER_TYPE.getParamsKey(),
+                (byte) 0x01,
+                (byte) type
+        };
+    }
+
+    public void setAlarmSosPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_SOS_POS_STRATEGY.getParamsKey(),
+                (byte) 0x01,
+                (byte) strategy
+        };
+    }
+
+    public void setAlarmSosReportInterval(@IntRange(from = 10, to = 600) int interval) {
+        byte[] bytes = MokoUtils.toByteArray(interval, 2);
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_SOS_REPORT_INTERVAL.getParamsKey(),
+                (byte) 0x02,
+                bytes[0],
+                bytes[1]
+        };
+    }
+
+    public void setAlarmSosNotifyEnable(int enable) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ALARM_SOS_NOTIFY_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+    }
 
 
     public void setManDownIdleReset() {
