@@ -23,6 +23,16 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
+import com.moko.lw006.activity.device.ExportDataActivity;
+import com.moko.lw006.activity.device.IndicatorSettingsActivity;
+import com.moko.lw006.activity.device.OnOffSettingsActivity;
+import com.moko.lw006.activity.device.SystemInfoActivity;
+import com.moko.lw006.activity.lora.LoRaAppSettingActivity;
+import com.moko.lw006.activity.lora.LoRaConnSettingActivity;
+import com.moko.lw006.activity.setting.AuxiliaryOperationActivity;
+import com.moko.lw006.activity.setting.AxisSettingActivity;
+import com.moko.lw006.activity.setting.BleSettingsActivity;
+import com.moko.lw006.activity.setting.DeviceModeActivity;
 import com.moko.lw006.databinding.Lw006ActivityDeviceInfoBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
 import com.moko.lw006.dialog.ChangePasswordDialog;
@@ -147,29 +157,27 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_DISCONNECTED_NOTIFY:
-                        final int length = value.length;
-                        if (length != 5)
-                            return;
-                        int header = value[0] & 0xFF;
-                        int flag = value[1] & 0xFF;
-                        int cmd = value[2] & 0xFF;
-                        int len = value[3] & 0xFF;
-                        int type = value[4] & 0xFF;
-                        if (header == 0xED && flag == 0x02 && cmd == 0x01 && len == 0x01) {
-                            disConnectType = type;
-                            if (type == 1) {
-                                // valid password timeout
-                            } else if (type == 2) {
-                                // change password success
-                            } else if (type == 3) {
-                                // no data exchange timeout
-                            } else if (type == 4) {
-                                // reset success
-                            }
+                if (orderCHAR == OrderCHAR.CHAR_DISCONNECTED_NOTIFY) {
+                    final int length = value.length;
+                    if (length != 5)
+                        return;
+                    int header = value[0] & 0xFF;
+                    int flag = value[1] & 0xFF;
+                    int cmd = value[2] & 0xFF;
+                    int len = value[3] & 0xFF;
+                    int type = value[4] & 0xFF;
+                    if (header == 0xED && flag == 0x02 && cmd == 0x01 && len == 0x01) {
+                        disConnectType = type;
+                        if (type == 1) {
+                            // valid password timeout
+                        } else if (type == 2) {
+                            // change password success
+                        } else if (type == 3) {
+                            // no data exchange timeout
+                        } else if (type == 4) {
+                            // reset success
                         }
-                        break;
+                    }
                 }
             }
             if (MokoConstants.ACTION_ORDER_TIMEOUT.equals(action)) {
@@ -260,24 +268,37 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                         deviceFragment.setTimeZone(timeZone);
                                     }
                                     break;
-                                case KEY_SHUTDOWN_PAYLOAD_ENABLE:
-                                    if (length > 0) {
-                                        int enable = value[4] & 0xFF;
-                                        deviceFragment.setShutdownPayload(enable);
-                                    }
-                                    break;
+//                                case KEY_SHUTDOWN_PAYLOAD_ENABLE:
+//                                    if (length > 0) {
+//                                        int enable = value[4] & 0xFF;
+//                                        deviceFragment.setShutdownPayload(enable);
+//                                    }
+//                                    break;
                                 case KEY_LOW_POWER_PAYLOAD_ENABLE:
                                     if (length > 0) {
                                         int enable = value[4] & 0xFF;
                                         deviceFragment.setLowPowerPayload(enable);
                                     }
                                     break;
-//                                    case KEY_LOW_POWER_PERCENT:
-//                                        if (length > 0) {
-//                                            int lowPower = value[4] & 0xFF;
-//                                            deviceFragment.setLowPower(lowPower);
-//                                        }
-//                                        break;
+
+                                case KEY_LOW_POWER_PERCENT:
+                                    if (length > 0) {
+                                        int lowPower = value[4] & 0xFF;
+                                        deviceFragment.setLowPower(lowPower);
+                                    }
+                                    break;
+
+                                case KEY_BUZZER_SOUND_CHOOSE:
+                                    if (length == 1) {
+                                        deviceFragment.setBuzzerSound(value[4] & 0xff);
+                                    }
+                                    break;
+
+                                case KEY_VIBRATION_INTENSITY:
+                                    if (length == 1) {
+                                        deviceFragment.setVibrationIntensity(value[4] & 0xff);
+                                    }
+                                    break;
                             }
                         }
 
@@ -357,32 +378,28 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         }
     }
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent != null) {
                 String action = intent.getAction();
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
-                    switch (blueState) {
-                        case BluetoothAdapter.STATE_TURNING_OFF:
-                            dismissSyncProgressDialog();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
-                            builder.setTitle("Dismiss");
-                            builder.setCancelable(false);
-                            builder.setMessage("The current system of bluetooth is not available!");
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DeviceInfoActivity.this.setResult(RESULT_OK);
-                                    finish();
-                                }
-                            });
-                            builder.show();
-                            break;
-
+                    if (blueState == BluetoothAdapter.STATE_TURNING_OFF) {
+                        dismissSyncProgressDialog();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
+                        builder.setTitle("Dismiss");
+                        builder.setCancelable(false);
+                        builder.setMessage("The current system of bluetooth is not available!");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DeviceInfoActivity.this.setResult(RESULT_OK);
+                                finish();
+                            }
+                        });
+                        builder.show();
                     }
                 }
             }
@@ -404,8 +421,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                     LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
                 }, 1000);
             }
-        }
-        if (requestCode == AppConstants.REQUEST_CODE_SYSTEM_INFO) {
+        } else if (requestCode == AppConstants.REQUEST_CODE_SYSTEM_INFO) {
             if (resultCode == RESULT_OK) {
                 AlertMessageDialog dialog = new AlertMessageDialog();
                 dialog.setTitle("Update Firmware");
@@ -448,7 +464,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Syncing..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     public void dismissSyncProgressDialog() {
@@ -457,8 +472,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     public void onBack(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         back();
     }
 
@@ -514,9 +528,10 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         List<OrderTask> orderTasks = new ArrayList<>();
         // device
         orderTasks.add(OrderTaskAssembler.getTimeZone());
-        orderTasks.add(OrderTaskAssembler.getShutdownPayloadEnable());
+        orderTasks.add(OrderTaskAssembler.getLowPowerPercent());
         orderTasks.add(OrderTaskAssembler.getLowPowerPayloadEnable());
-//        orderTasks.add(OrderTaskAssembler.getLowPowerPercent());
+        orderTasks.add(OrderTaskAssembler.getBuzzerSoundChoose());
+        orderTasks.add(OrderTaskAssembler.getVibrationIntensity());
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -565,8 +580,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     public void onChangePassword(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         final ChangePasswordDialog dialog = new ChangePasswordDialog(this);
         dialog.setOnPasswordClicked(password -> {
             showSyncingProgressDialog();
@@ -576,37 +590,32 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
-
             public void run() {
-                runOnUiThread(() -> dialog.showKeyboard());
+                runOnUiThread(dialog::showKeyboard);
             }
         }, 200);
     }
 
     public void onLoRaConnSetting(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, LoRaConnSettingActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_LORA_CONN_SETTING);
     }
 
     public void onLoRaAppSetting(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, LoRaAppSettingActivity.class);
         startActivity(intent);
     }
 
     public void onWifiFix(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, PosWifiFixActivity.class);
         startActivity(intent);
     }
 
     public void onBleFix(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, PosBleFixActivity.class);
         startActivity(intent);
     }
@@ -622,85 +631,76 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     public void onOfflineFix(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         posFragment.changeOfflineFix();
     }
 
     public void onDeviceMode(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, DeviceModeActivity.class);
         startActivity(intent);
     }
 
     public void onAuxiliaryInterval(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, AuxiliaryOperationActivity.class);
         startActivity(intent);
     }
 
     public void onBleSettings(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, BleSettingsActivity.class);
         startActivity(intent);
     }
 
     public void onAxisSettings(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, AxisSettingActivity.class);
         startActivity(intent);
     }
 
     public void onLocalDataSync(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         startActivity(new Intent(this, ExportDataActivity.class));
     }
 
     public void onIndicatorSettings(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         startActivity(new Intent(this, IndicatorSettingsActivity.class));
     }
 
     public void selectTimeZone(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         deviceFragment.showTimeZoneDialog();
     }
 
-    public void onShutdownPayload(View view) {
-        if (isWindowLocked())
-            return;
-        deviceFragment.changeShutdownPayload();
-    }
-
     public void onLowPowerPayload(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         deviceFragment.changeLowPowerPayload();
     }
 
+    public void onBuzzer(View view) {
+        if (isWindowLocked()) return;
+        deviceFragment.showBuzzerDialog();
+    }
 
-//    public void selectLowPowerPrompt(View view) {
-//        if (isWindowLocked())
-//            return;
-//        deviceFragment.showLowPowerDialog();
-//    }
+    public void onVibration(View view) {
+        if (isWindowLocked()) return;
+        deviceFragment.showVibrationDialog();
+    }
+
+    public void selectLowPowerPrompt(View view) {
+        if (isWindowLocked()) return;
+        deviceFragment.showLowPowerDialog();
+    }
 
     public void onDeviceInfo(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         startActivityForResult(new Intent(this, SystemInfoActivity.class), AppConstants.REQUEST_CODE_SYSTEM_INFO);
     }
 
     public void onFactoryReset(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         AlertMessageDialog dialog = new AlertMessageDialog();
         dialog.setTitle("Factory Reset!");
         dialog.setMessage("After factory reset,all the data will be reseted to the factory values.");
@@ -712,17 +712,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         dialog.show(getSupportFragmentManager());
     }
 
-    public void onPowerOff(View view) {
-        if (isWindowLocked())
-            return;
-        AlertMessageDialog dialog = new AlertMessageDialog();
-        dialog.setTitle("Warning!");
-        dialog.setMessage("Are you sure to turn off the device? Please make sure the device has a button to turn on!");
-        dialog.setConfirm("OK");
-        dialog.setOnAlertConfirmListener(() -> {
-            showSyncingProgressDialog();
-            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.close());
-        });
-        dialog.show(getSupportFragmentManager());
+    public void onOffSetting(View view) {
+        if (isWindowLocked()) return;
+        Intent intent = new Intent(this, OnOffSettingsActivity.class);
+        startActivity(intent);
     }
 }

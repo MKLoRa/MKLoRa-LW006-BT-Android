@@ -30,6 +30,7 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.BuildConfig;
 import com.moko.lw006.R;
+import com.moko.lw006.activity.device.LogDataActivity;
 import com.moko.lw006.adapter.DeviceListAdapter;
 import com.moko.lw006.databinding.Lw006ActivityMainBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;

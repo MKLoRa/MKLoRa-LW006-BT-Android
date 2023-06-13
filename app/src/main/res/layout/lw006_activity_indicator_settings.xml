@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lw006_grey_ebebeb"
+    android:background="@color/lw006_grey_f2f2f2"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -47,143 +46,172 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@color/lw006_white_ffffff"
-                android:padding="10dp">
+                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <CheckBox
+                    android:id="@+id/cbDeviceState"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableRight="@drawable/lw006_selector_cb_btn"
+                    android:text="Device State"
+                    android:textColor="@color/lw006_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <View style="@style/lw006_divider_line" />
 
                 <CheckBox
                     android:id="@+id/cb_low_power"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:button="@null"
-                    android:checked="false"
+                    android:checked="true"
                     android:drawableRight="@drawable/lw006_selector_cb_btn"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
                     android:text="Low-power"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
-                <View
-                    style="@style/lw006_divider_line"
-                    android:layout_width="0dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cb_low_power" />
+                <View style="@style/lw006_divider_line" />
 
                 <CheckBox
-                    android:id="@+id/cb_network_check"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:id="@+id/cbCharging"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:button="@null"
-                    android:checked="false"
+                    android:checked="true"
                     android:drawableRight="@drawable/lw006_selector_cb_btn"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
+                    android:text="Charging"
+                    android:textColor="@color/lw006_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <View style="@style/lw006_divider_line" />
+
+                <CheckBox
+                    android:id="@+id/cbFullCharge"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableRight="@drawable/lw006_selector_cb_btn"
+                    android:text="Full Charge"
+                    android:textColor="@color/lw006_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/lw006_white_ffffff"
+                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <CheckBox
+                    android:id="@+id/cbBleConnection"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableRight="@drawable/lw006_selector_cb_btn"
+                    android:text="Bluetooth Connection"
+                    android:textColor="@color/lw006_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <View style="@style/lw006_divider_line" />
+
+                <CheckBox
+                    android:id="@+id/cbNetworkCheck"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableRight="@drawable/lw006_selector_cb_btn"
                     android:text="Network Check"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cb_low_power" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@color/lw006_white_ffffff"
-                android:padding="10dp">
+                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
 
                 <CheckBox
-                    android:id="@+id/cb_fix"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/cbInfix"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:button="@null"
-                    android:checked="false"
+                    android:checked="true"
                     android:drawableRight="@drawable/lw006_selector_cb_btn"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
-                    android:text="In Fix"
+                    android:text="In  Fix"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
-                <View
-                    style="@style/lw006_divider_line"
-                    android:layout_width="0dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cb_fix" />
+                <View style="@style/lw006_divider_line" />
 
                 <CheckBox
-                    android:id="@+id/cb_fix_success"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:id="@+id/cbFixSuccessful"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:button="@null"
-                    android:checked="false"
+                    android:checked="true"
                     android:drawableRight="@drawable/lw006_selector_cb_btn"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
                     android:text="Fix Successful"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cb_fix" />
+                    android:textStyle="bold" />
 
-                <View
-                    style="@style/lw006_divider_line"
-                    android:layout_width="0dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cb_fix_success" />
+                <View style="@style/lw006_divider_line" />
 
                 <CheckBox
-                    android:id="@+id/cb_fix_fail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:id="@+id/cbFailToFix"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:button="@null"
-                    android:checked="false"
+                    android:checked="true"
                     android:drawableRight="@drawable/lw006_selector_cb_btn"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
                     android:text="Fail To Fix"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cb_fix_success" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

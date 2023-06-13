@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/lw006_grey_f2f2f2"
     android:orientation="vertical">
 
@@ -86,7 +86,7 @@
                         android:background="@drawable/lw006_shape_radius_blue_btn_bg"
                         android:clickable="true"
                         android:onClick="selectMode"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:text="ABP"
                         android:textColor="@color/lw006_white_ffffff"
                         android:textSize="15sp" />
@@ -164,6 +164,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        tools:visibility="visible"
                         android:visibility="gone">
 
                         <RelativeLayout
@@ -202,7 +203,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="visible">
-
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -292,75 +292,36 @@
                 </FrameLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/lw006_white_ffffff"
-                android:orientation="vertical"
                 android:padding="10dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="Region/Subnet"
-                        android:textColor="@color/lw006_black_333333"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_region"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/lw006_shape_radius_blue_btn_bg"
-                        android:clickable="true"
-                        android:onClick="selectRegion"
-                        android:padding="12dp"
-                        android:text="EU868"
-                        android:textColor="@color/lw006_white_ffffff"
-                        android:textSize="15sp" />
-
-                </RelativeLayout>
-
-                <View
-                    style="@style/lw006_divider_line"
-                    android:layout_marginTop="10dp" />
-
-                <RelativeLayout
-                    android:id="@+id/ll_msg_type"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_centerVertical="true"
+                    android:text="Region/Subnet"
+                    android:textColor="@color/lw006_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="Message Type"
-                        android:textColor="@color/lw006_black_333333"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/lw006_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:onClick="selectRegion"
+                    android:padding="10dp"
+                    android:text="EU868"
+                    android:textColor="@color/lw006_white_ffffff"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/tv_message_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/lw006_shape_radius_blue_btn_bg"
-                        android:clickable="true"
-                        android:onClick="selectMessageType"
-                        android:padding="12dp"
-                        android:text="Unconfirmed"
-                        android:textColor="@color/lw006_white_ffffff"
-                        android:textSize="15sp" />
-                </RelativeLayout>
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -397,8 +358,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                tools:visibility="visible"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -413,8 +374,8 @@
                         android:padding="10dp"
                         android:paddingTop="6dp"
                         android:paddingBottom="6dp"
-                        tools:visibility="visible"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -477,8 +438,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="10dp"
-                        tools:visibility="visible"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <CheckBox
                             android:id="@+id/cb_duty_cycle"
@@ -512,8 +473,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        tools:visibility="visible"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -593,8 +554,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        tools:visibility="visible"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <View
                             style="@style/lw006_divider_line"
@@ -654,8 +615,8 @@
                     android:background="@color/lw006_white_ffffff"
                     android:orientation="horizontal"
                     android:padding="10dp"
-                    tools:visibility="visible"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <TextView
                         android:layout_width="match_parent"

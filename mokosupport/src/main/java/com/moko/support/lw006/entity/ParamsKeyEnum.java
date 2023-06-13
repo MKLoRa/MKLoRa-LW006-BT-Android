@@ -4,7 +4,6 @@ package com.moko.support.lw006.entity;
 import java.io.Serializable;
 
 public enum ParamsKeyEnum implements Serializable {
-
     //// 系统相关参数
     KEY_CLOSE(0x10),
     KEY_REBOOT(0x11),
@@ -13,59 +12,76 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_TIME_UTC(0x13),
     // 时区
     KEY_TIME_ZONE(0x14),
+    // 芯片MAC
+    KEY_CHIP_MAC(0x15),
+    // 自检状态
+    KEY_SELFTEST_STATUS(0x16),
+    // 产测状态
+    KEY_PCBA_STATUS(0x17),
+    // 读取当前需求版本
+    KEY_DEMAND_VERSION(0x18),
+    // 电池电量
+    KEY_BATTERY_POWER(0x19),
+    // 厂家信息
+    KEY_MANUFACTURER(0x1A),
     // 工作模式选择
     KEY_DEVICE_MODE(0x1B),
-    // 指示灯开关
-    KEY_INDICATOR_STATUS(0x16),
+    // 关机信息上报
+    KEY_SHUTDOWN_PAYLOAD_ENABLE(0x1C),
+    //按键关机
+    KEY_OFF_BY_BUTTON(0x1D),
+    // 低电触发心跳开关
+    KEY_LOW_POWER_PAYLOAD_ENABLE(0x1E),
+    //低电百分比
+    KEY_LOW_POWER_PERCENT(0x1F),
     // 设备心跳间隔
     KEY_HEARTBEAT_INTERVAL(0x20),
-    // 厂家信息
-    KEY_MANUFACTURER(0x18),
-    // 关机信息上报
-    KEY_SHUTDOWN_PAYLOAD_ENABLE(0x19),
-    // 离线定位功能开关
-    KEY_OFFLINE_LOCATION_ENABLE(0x1A),
-    // 低电触发心跳开关
-    KEY_LOW_POWER_PAYLOAD_ENABLE(0x1B0),
-    // 低电百分比
-//    KEY_LOW_POWER_PERCENT(0x1C),
-    // 芯片温度
-    KEY_CHIP_TEMP(0x1D),
-    // 读取当前系统时区时间
-    KEY_SYSTEM_TIME(0x1E),
-    // 读取当前需求版本
-    KEY_DEMAND_VERSION(0x1FF),
-    // 电池电量
-    KEY_BATTERY_POWER(0x200),
-    // 芯片MAC
-    KEY_CHIP_MAC(0x210),
-    // 产测状态
-    KEY_PCBA_STATUS(0x220),
-    // 自检状态
-    KEY_SELFTEST_STATUS(0x23),
+    // 三轴唤醒条件
+    KEY_ACC_WAKEUP_CONDITION(0x21),
+    // 运动检测判断
+    KEY_ACC_MOTION_CONDITION(0x22),
+    //蜂鸣器声效选择
+    KEY_BUZZER_SOUND_CHOOSE(0x23),
+    //马达震动强度选择
+    KEY_VIBRATION_INTENSITY(0x24),
+    //马达异常状态
+    KEY_MOTOR_STATE(0x25),
+    //清除马达异常状态
+    KEY_RESET_MOTOR_STATE(0x26),
+    // 指示灯开关
+    KEY_INDICATOR_STATUS(0x27),
     // 电池信息信息
-    KEY_BATTERY_INFO(0x25),
+    KEY_BATTERY_INFO(0x28),
     // 电池信息清除
-    KEY_BATTERY_RESET(0x26),
-    KEY_LOW_POWER_PERCENT(0x1F),
+    KEY_BATTERY_RESET(0x29),
+    //充电自动开机
+    KEY_AUTO_POWER_ON_ENABLE(0x2B),
+    //硬件版本
+    KEY_HARDWARE_VERSION(0x2C),
 
 
     //// 蓝牙相关参数
     // 登录是否需要密码
     KEY_PASSWORD_VERIFY_ENABLE(0x30),
+    //连接密码
     KEY_PASSWORD(0x31),
+    //蓝牙广播超时时间
     KEY_ADV_TIMEOUT(0x32),
+    //蓝牙 TX power
     KEY_ADV_TX_POWER(0x33),
+    //广播名称
     KEY_ADV_NAME(0x34),
+    //广播间隔
     KEY_ADV_INTERVAL(0x35),
 
+
     //// 模式相关参数
+    //待机模式定位策略
+    KEY_STANDBY_MODE_POS_STRATEGY(0x3F),
     // 定期模式定位策略
     KEY_PERIODIC_MODE_POS_STRATEGY(0x40),
     // 定期模式上报间隔
     KEY_PERIODIC_MODE_REPORT_INTERVAL(0x41),
-    //待机模式定位策略
-    KEY_STANDBY_MODE_POS_STRATEGY(0x3F),
     // 定时模式定位策略
     KEY_TIME_MODE_POS_STRATEGY(0x42),
     // 定时模式时间点
@@ -93,19 +109,9 @@ public enum ParamsKeyEnum implements Serializable {
     //运动禁止状态上报间隔
     KEY_MOTION_MODE_STATIONARY_REPORT_INTERVAL(0x4E),
 
-    //// 定位参数
-    // WIFI定位数据格式
-    KEY_WIFI_POS_DATA_TYPE(0x7D),
-    //wifi定位机制
-    KEY_WIFI_POS_MECHANISM(0x7E),
-    // WIFI定位超时时间
-    KEY_WIFI_POS_TIMEOUT(0x7F),
-    // WIFI定位成功BSSID数量
-    KEY_WIFI_POS_BSSID_NUMBER(0x80),
-    // 蓝牙定位超时时间
-    KEY_BLE_POS_TIMEOUT(0x82),
-    // 蓝牙定位成功MAC数量
-    KEY_BLE_POS_MAC_NUMBER(0x83),
+
+
+    ////蓝牙扫描过滤参数
     // 蓝牙扫描PHY选择
     KEY_FILTER_BLE_SCAN_PHY(0x50),
     // RSSI过滤规则
@@ -134,6 +140,20 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_FILTER_IBEACON_MINOR_RANGE(0x5C),
     // iBeacon类型UUID
     KEY_FILTER_IBEACON_UUID(0x5D),
+    // eddystone-UID类型过滤开关
+    KEY_FILTER_EDDYSTONE_UID_ENABLE(0x5E),
+    // eddystone-UID类型Namespace
+    KEY_FILTER_EDDYSTONE_UID_NAMESPACE(0x5F),
+    // eddystone-UID类型Instance
+    KEY_FILTER_EDDYSTONE_UID_INSTANCE(0x60),
+    // eddystone-URL类型过滤开关
+    KEY_FILTER_EDDYSTONE_URL_ENABLE(0x61),
+    // eddystone-URL类型URL
+    KEY_FILTER_EDDYSTONE_URL(0x62),
+    // eddystone-TLM类型过滤开关
+    KEY_FILTER_EDDYSTONE_TLM_ENABLE(0x63),
+    // eddystone- TLM类型TLMVersion
+    KEY_FILTER_EDDYSTONE_TLM_VERSION(0x64),
     // BXP-iBeacon类型过滤开关
     KEY_FILTER_BXP_IBEACON_ENABLE(0x65),
     // BXP-iBeacon类型Major范围
@@ -142,6 +162,16 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_FILTER_BXP_IBEACON_MINOR_RANGE(0x67),
     // BXP-iBeacon类型UUID
     KEY_FILTER_BXP_IBEACON_UUID(0x68),
+    // BXP-Device类型过滤开关
+    KEY_FILTER_BXP_DEVICE(0x69),
+    // BeaconX Pro-ACC设备过滤开关
+    KEY_FILTER_BXP_ACC(0x6A),
+    // BeaconX Pro-T&H设备过滤开关
+    KEY_FILTER_BXP_TH(0x6B),
+    // BXP-Button类型过滤开关
+    KEY_FILTER_BXP_BUTTON_ENABLE(0x6C),
+    // BXP-Button类型过滤规则
+    KEY_FILTER_BXP_BUTTON_RULES(0x6D),
     // BXP-Tag开关类型过滤开关
     KEY_FILTER_BXP_TAG_ENABLE(0x6E),
     // 精准过滤BXP-Tag开关
@@ -169,45 +199,45 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_FILTER_MK_PIR_MAJOR(0x77),
     //MK-PIR 设备
     //Minor 过滤范围
-    KEY_FILTER_MK_PIR_MINOR(0x77),
-
-
-    // eddystone-UID类型过滤开关
-    KEY_FILTER_EDDYSTONE_UID_ENABLE(0x5E),
-    // eddystone-UID类型Namespace
-    KEY_FILTER_EDDYSTONE_UID_NAMESPACE(0x5F),
-    // eddystone-UID类型Instance
-    KEY_FILTER_EDDYSTONE_UID_INSTANCE(0x60),
-    // eddystone-URL类型过滤开关
-    KEY_FILTER_EDDYSTONE_URL_ENABLE(0x61),
-    // eddystone-URL类型URL
-    KEY_FILTER_EDDYSTONE_URL(0x62),
-    // eddystone-TLM类型过滤开关
-    KEY_FILTER_EDDYSTONE_TLM_ENABLE(0x63),
-    // eddystone- TLM类型TLMVersion
-    KEY_FILTER_EDDYSTONE_TLM_VERSION(0x64),
-    // BeaconX Pro-ACC设备过滤开关
-    KEY_FILTER_BXP_ACC(0x6A),
-    // BeaconX Pro-T&H设备过滤开关
-    KEY_FILTER_BXP_TH(0x6B),
+    KEY_FILTER_MK_PIR_MINOR(0x78),
     // Unknown设备过滤开关
     KEY_FILTER_OTHER_ENABLE(0x79),
     // 3组unknown过滤规则逻辑
     KEY_FILTER_OTHER_RELATIONSHIP(0x7A),
     // unknown类型过滤规则
     KEY_FILTER_OTHER_RULES(0x7B),
+
+
+
+    //// 定位参数
+    // WIFI定位数据格式
+    KEY_WIFI_POS_DATA_TYPE(0x7D),
+    //wifi定位机制
+    KEY_WIFI_POS_MECHANISM(0x7E),
+    // WIFI定位超时时间
+    KEY_WIFI_POS_TIMEOUT(0x7F),
+    // WIFI定位成功BSSID数量
+    KEY_WIFI_POS_BSSID_NUMBER(0x80),
+    // 蓝牙定位机制选择
+    KEY_BLE_POS_MECHANISM(0x81),
+    // 蓝牙定位超时时间
+    KEY_BLE_POS_TIMEOUT(0x82),
+    // 蓝牙定位成功MAC数量
+    KEY_BLE_POS_MAC_NUMBER(0x83),
+    //gps型号选择
+    KEY_GPS_MODULE(0x84),
+    // GPS极限上传模式（L76版本）
+    KEY_GPS_EXTREME_MODE_L76C(0x85),
     // GPS定位超时时间（L76版本）
     KEY_GPS_POS_TIMEOUT_L76C(0x86),
     // GPS位置精度因子PDOP（L76版本）
     KEY_GPS_PDOP_LIMIT_L76C(0x87),
-    // GPS极限上传模式（L76版本）
-    KEY_GPS_EXTREME_MODE_L76C(0x85),
+    // GPS定位数据格式（LR1110版本）
+    KEY_GPS_POS_DATA_TYPE(0x88),
     // GPS定位超时时间（LR1110版本）
     KEY_GPS_POS_TIMEOUT(0x89),
     // GPS搜星数量（LR1110版本）
     KEY_GPS_POS_SATELLITE_THRESHOLD(0x8A),
-    // GPS定位数据格式（LR1110版本）
-    KEY_GPS_POS_DATA_TYPE(0x88),
     // GPS定位星座（LR1110版本）
     KEY_GPS_POS_SYSTEM(0x8B),
     // 定位方式选择（LR1110版本）
@@ -216,14 +246,10 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_GPS_POS_AUXILIARY_LAT_LON(0x8D),
     // 星历开始更新事件开关
     KEY_GPS_POS_EPHEMERIS_NOTIFY_ENABLE(0x8E),
-    // BXP-Device类型过滤开关
-    KEY_FILTER_BXP_DEVICE(0x69),
-    // BXP-Button类型过滤开关
-    KEY_FILTER_BXP_BUTTON_ENABLE(0x6C),
-    // BXP-Button类型过滤规则
-    KEY_FILTER_BXP_BUTTON_RULES(0x6D),
-    // 蓝牙定位机制选择
-    KEY_BLE_POS_MECHANISM(0x81),
+    // 离线定位功能开关
+    KEY_OFFLINE_LOCATION_ENABLE(0x8F),
+
+
 
     //// LoRaWAN参数
     // LoRaWAN网络状态
@@ -238,25 +264,22 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_LORA_DEV_ADDR(0x96),
     KEY_LORA_APP_SKEY(0x97),
     KEY_LORA_NWK_SKEY(0x98),
-    // 上行数据类型
-    KEY_LORA_MESSAGE_TYPE(0x99),
     // CH
-    KEY_LORA_CH(0x9A),
+    KEY_LORA_CH(0x99),
     // 入网DR
-    KEY_LORA_DR(0x9B),
+    KEY_LORA_DR(0x9A),
     // 数据发送策略
-    KEY_LORA_UPLINK_STRATEGY(0x9C),
+    KEY_LORA_UPLINK_STRATEGY(0x9B),
     // DUTYCYCLE
-    KEY_LORA_DUTYCYCLE(0x9D),
-    // 同步间隔
+    KEY_LORA_DUTYCYCLE(0x9C),
+    //ADR_ACK_LIMIT
+    KEY_LORA_ADR_ACK_LIMIT(0x9D),
+    //ADR_ACK_DELAY
+    KEY_LORA_ADR_ACK_DELAY(0x9E),
+    //devtime同步间隔
     KEY_LORA_TIME_SYNC_INTERVAL(0x9F),
     // 网络检查间隔
     KEY_LORA_NETWORK_CHECK_INTERVAL(0xA0),
-    KEY_LORA_ADR_ACK_LIMIT(0xD0),
-    KEY_LORA_ADR_ACK_DELAY(0xD1),
-    // 数据的最大传输次数
-    KEY_LORA_MAX_RETRANSMISSION_TIMES(0xD2),
-
     //设备信息包上行配置
     KEY_DEVICE_INFO_PAYLOAD(0xA1),
     //心跳数据包上行配置
@@ -270,21 +293,11 @@ public enum ParamsKeyEnum implements Serializable {
     //定位数据包上行配置
     KEY_POSITIONING_PAYLOAD(0xA6),
 
+
+
     //// 辅助功能参数
     // 下行请求定位策略
     KEY_DOWN_LINK_POS_STRATEGY(0xB0),
-    // 三轴唤醒条件
-    KEY_ACC_WAKEUP_CONDITION(0x21),
-    // 运动检测判断
-    KEY_ACC_MOTION_CONDITION(0x22),
-    // 震动检测使能
-    KEY_SHOCK_DETECTION_ENABLE(0xB333),
-    // 震动检测阈值
-    KEY_ACC_SHOCK_THRESHOLD(0xB44),
-    // 震动上发间隔
-    KEY_SHOCK_REPORT_INTERVAL(0xB55),
-    // 震动次数判断间隔
-    KEY_SHOCK_TIMEOUT(0xB66),
     // 闲置功能使能
     KEY_MAN_DOWN_DETECTION_ENABLE(0xB1),
     //ManDown 定位策略
@@ -313,27 +326,21 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_ALARM_SOS_NOTIFY_ENABLE(0xBD),
 
 
-    // 闲置清除
-    KEY_MAN_DOWN_IDLE_RESET(0xB99),
-    // 活动记录使能
-    KEY_ACTIVE_STATE_COUNT_ENABLE(0xBA9),
-    // 活动判定间隔
-    KEY_ACTIVE_STATE_TIMEOUT(0xBB9),
 
     //// 存储协议
     // 读取存储的数据
     KEY_READ_STORAGE_DATA(0xC0),
+    //清除存储的所有数据
     KEY_CLEAR_STORAGE_DATA(0xC1),
+    //暂停/恢复传输
     KEY_SYNC_ENABLE(0xC2),
-
     ;
 
-    private int paramsKey;
+    private final int paramsKey;
 
     ParamsKeyEnum(int paramsKey) {
         this.paramsKey = paramsKey;
     }
-
 
     public int getParamsKey() {
         return paramsKey;
