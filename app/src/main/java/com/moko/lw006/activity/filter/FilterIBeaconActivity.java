@@ -10,9 +10,8 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityFilterIbeaconBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FilterIBeaconActivity extends BaseActivity {
+public class FilterIBeaconActivity extends Lw006BaseActivity {
     private Lw006ActivityFilterIbeaconBinding mBind;
     private boolean savedParamsError;
 
@@ -39,14 +38,12 @@ public class FilterIBeaconActivity extends BaseActivity {
         EventBus.getDefault().register(this);
 
         showSyncingProgressDialog();
-        mBind.cbIbeacon.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterIBeaconEnable());
-            orderTasks.add(OrderTaskAssembler.getFilterIBeaconUUID());
-            orderTasks.add(OrderTaskAssembler.getFilterIBeaconMajorRange());
-            orderTasks.add(OrderTaskAssembler.getFilterIBeaconMinorRange());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getFilterIBeaconEnable());
+        orderTasks.add(OrderTaskAssembler.getFilterIBeaconUUID());
+        orderTasks.add(OrderTaskAssembler.getFilterIBeaconMajorRange());
+        orderTasks.add(OrderTaskAssembler.getFilterIBeaconMinorRange());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 400)
@@ -73,7 +70,6 @@ public class FilterIBeaconActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -120,25 +116,19 @@ public class FilterIBeaconActivity extends BaseActivity {
                                     }
                                     break;
                                 case KEY_FILTER_IBEACON_MAJOR_RANGE:
-                                    if (length > 0) {
-                                        int enable = value[4] & 0xFF;
-                                        if (enable == 1) {
-                                            int majorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 5, 7));
-                                            int majorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 7, 9));
-                                            mBind.etIbeaconMajorMin.setText(String.valueOf(majorMin));
-                                            mBind.etIbeaconMajorMax.setText(String.valueOf(majorMax));
-                                        }
+                                    if (length == 4) {
+                                        int majorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 4, 6));
+                                        int majorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 6, 8));
+                                        mBind.etIbeaconMajorMin.setText(String.valueOf(majorMin));
+                                        mBind.etIbeaconMajorMax.setText(String.valueOf(majorMax));
                                     }
                                     break;
                                 case KEY_FILTER_IBEACON_MINOR_RANGE:
-                                    if (length > 0) {
-                                        int enable = value[4] & 0xFF;
-                                        if (enable == 1) {
-                                            int minorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 5, 7));
-                                            int minorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 7, 9));
-                                            mBind.etIbeaconMinorMin.setText(String.valueOf(minorMin));
-                                            mBind.etIbeaconMinorMax.setText(String.valueOf(minorMax));
-                                        }
+                                    if (length == 4) {
+                                        int minorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 4, 6));
+                                        int minorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 6, 8));
+                                        mBind.etIbeaconMinorMin.setText(String.valueOf(minorMin));
+                                        mBind.etIbeaconMinorMax.setText(String.valueOf(minorMax));
                                     }
                                     break;
                                 case KEY_FILTER_IBEACON_ENABLE:
@@ -156,8 +146,7 @@ public class FilterIBeaconActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -239,20 +228,8 @@ public class FilterIBeaconActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
 
     public void onBack(View view) {
@@ -265,6 +242,7 @@ public class FilterIBeaconActivity extends BaseActivity {
     }
 
     private void backHome() {
+        EventBus.getDefault().unregister(this);
         setResult(RESULT_OK);
         finish();
     }

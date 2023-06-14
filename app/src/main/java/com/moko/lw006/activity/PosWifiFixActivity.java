@@ -16,7 +16,6 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.databinding.Lw006ActivityPosWifiBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -30,9 +29,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PosWifiFixActivity extends BaseActivity {
+public class PosWifiFixActivity extends Lw006BaseActivity {
     private Lw006ActivityPosWifiBinding mBind;
-    private ArrayList<String> mValues;
+    private final ArrayList<String> mValues = new ArrayList<>(2);
     private int mSelected;
     private boolean mReceiverTag = false;
     private final ArrayList<String> posMechanism = new ArrayList<>(2);
@@ -40,8 +39,6 @@ public class PosWifiFixActivity extends BaseActivity {
     private int posTimeoutFlag;
     private int numBssidFlag;
     private int wifiDataTypeFlag;
-    private int wifiFixMechanismFlag;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +46,6 @@ public class PosWifiFixActivity extends BaseActivity {
         mBind = Lw006ActivityPosWifiBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
-        mValues = new ArrayList<>();
         mValues.add("DAS");
         mValues.add("Customer");
         posMechanism.add("Time Priority");
@@ -60,14 +56,12 @@ public class PosWifiFixActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.etPosTimeout.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getWifiPosTimeout());
-            orderTasks.add(OrderTaskAssembler.getWifiPosBSSIDNumber());
-            orderTasks.add(OrderTaskAssembler.getWifiPosDataType());
-            orderTasks.add(OrderTaskAssembler.getWifiPosMechanism());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getWifiPosTimeout());
+        orderTasks.add(OrderTaskAssembler.getWifiPosBSSIDNumber());
+        orderTasks.add(OrderTaskAssembler.getWifiPosDataType());
+        orderTasks.add(OrderTaskAssembler.getWifiPosMechanism());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         mBind.tvWifiFixMechanism.setOnClickListener(v -> {
             if (isWindowLocked()) return;
             BottomDialog dialog = new BottomDialog();
@@ -104,7 +98,6 @@ public class PosWifiFixActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -132,11 +125,10 @@ public class PosWifiFixActivity extends BaseActivity {
                                     break;
 
                                 case KEY_WIFI_POS_MECHANISM:
-                                    wifiFixMechanismFlag = result;
-                                    if (posTimeoutFlag == 1 && numBssidFlag == 1 && wifiDataTypeFlag == 1 && wifiFixMechanismFlag == 1) {
+                                    if (posTimeoutFlag == 1 && numBssidFlag == 1 && wifiDataTypeFlag == 1 && result == 1) {
                                         ToastUtils.showToast(this, "Save Successfully！");
                                     } else {
-                                        ToastUtils.showToast(PosWifiFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                     }
                                     break;
                             }
@@ -178,8 +170,7 @@ public class PosWifiFixActivity extends BaseActivity {
     }
 
     public void onWifiDataType(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
@@ -193,7 +184,6 @@ public class PosWifiFixActivity extends BaseActivity {
         if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
-            wifiFixMechanismFlag = 0;
             wifiDataTypeFlag = 0;
             numBssidFlag = 0;
             posTimeoutFlag = 0;
@@ -231,7 +221,6 @@ public class PosWifiFixActivity extends BaseActivity {
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -258,21 +247,6 @@ public class PosWifiFixActivity extends BaseActivity {
         }
         EventBus.getDefault().unregister(this);
     }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
 
     public void onBack(View view) {
         backHome();

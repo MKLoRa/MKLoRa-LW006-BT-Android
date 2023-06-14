@@ -8,15 +8,14 @@ import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityAuxiliaryOperationBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class AuxiliaryOperationActivity extends BaseActivity {
+public class AuxiliaryOperationActivity extends Lw006BaseActivity {
     private Lw006ActivityAuxiliaryOperationBinding mBind;
 
     @Override
@@ -59,21 +58,6 @@ public class AuxiliaryOperationActivity extends BaseActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
 
     public void onBack(View view) {
         backHome();

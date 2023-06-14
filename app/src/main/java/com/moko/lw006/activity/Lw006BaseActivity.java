@@ -8,12 +8,13 @@ import android.os.Bundle;
 import android.os.SystemClock;
 
 import com.elvishew.xlog.XLog;
+import com.moko.lw006.dialog.LoadingMessageDialog;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 
-public class BaseActivity extends FragmentActivity {
+public class Lw006BaseActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,5 +61,22 @@ public class BaseActivity extends FragmentActivity {
 
     public boolean isLocationPermissionOpen() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private LoadingMessageDialog mLoadingMessageDialog;
+
+    public void showSyncingProgressDialog() {
+        if (null != mLoadingMessageDialog && mLoadingMessageDialog.isAdded() && !mLoadingMessageDialog.isDetached()) {
+            mLoadingMessageDialog.dismissAllowingStateLoss();
+        }
+        mLoadingMessageDialog = null;
+        mLoadingMessageDialog = new LoadingMessageDialog();
+        mLoadingMessageDialog.setMessage("Syncing..");
+        mLoadingMessageDialog.show(getSupportFragmentManager());
+    }
+
+    public void dismissSyncProgressDialog() {
+        if (mLoadingMessageDialog != null && mLoadingMessageDialog.isAdded() && !mLoadingMessageDialog.isDetached())
+            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 }

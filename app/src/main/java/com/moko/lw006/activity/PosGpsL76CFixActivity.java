@@ -11,7 +11,6 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.databinding.Lw006ActivityPosGpsL76cBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PosGpsL76CFixActivity extends BaseActivity {
+public class PosGpsL76CFixActivity extends Lw006BaseActivity {
     private Lw006ActivityPosGpsL76cBinding mBind;
     private boolean savedParamsError;
 
@@ -37,13 +36,11 @@ public class PosGpsL76CFixActivity extends BaseActivity {
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        mBind.etPdopLimit.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getGPSPosTimeoutL76());
-            orderTasks.add(OrderTaskAssembler.getGPSPDOPLimitL76());
-            orderTasks.add(OrderTaskAssembler.getGPSExtremeModeL76());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getGPSPosTimeoutL76());
+        orderTasks.add(OrderTaskAssembler.getGPSPDOPLimitL76());
+        orderTasks.add(OrderTaskAssembler.getGPSExtremeModeL76());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
@@ -176,19 +173,6 @@ public class PosGpsL76CFixActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

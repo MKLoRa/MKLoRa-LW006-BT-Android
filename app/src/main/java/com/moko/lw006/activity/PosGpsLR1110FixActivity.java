@@ -12,7 +12,6 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.databinding.Lw006ActivityPosGpsLr1110Binding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PosGpsLR1110FixActivity extends BaseActivity {
+public class PosGpsLR1110FixActivity extends Lw006BaseActivity {
     private Lw006ActivityPosGpsLr1110Binding mBind;
     private boolean savedParamsError;
     private ArrayList<String> mValues;
@@ -50,17 +49,15 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         mGpsPosSystemValues.add("GPS&Beidou");
         mBind.cbAutonomousAiding.setOnCheckedChangeListener((buttonView, isChecked) -> mBind.clAutonomousParams.setVisibility(isChecked ? View.VISIBLE : View.GONE));
         showSyncingProgressDialog();
-        mBind.etPosTimeout.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getGPSPosTimeout());
-            orderTasks.add(OrderTaskAssembler.getGPSPosSatelliteThreshold());
-            orderTasks.add(OrderTaskAssembler.getGPSPosDataType());
-            orderTasks.add(OrderTaskAssembler.getGPSPosSystem());
-            orderTasks.add(OrderTaskAssembler.getGPSPosAutoEnable());
-            orderTasks.add(OrderTaskAssembler.getGPSPosAuxiliaryLatLon());
-            orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisNotifyEnable());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getGPSPosTimeout());
+        orderTasks.add(OrderTaskAssembler.getGPSPosSatelliteThreshold());
+        orderTasks.add(OrderTaskAssembler.getGPSPosDataType());
+        orderTasks.add(OrderTaskAssembler.getGPSPosSystem());
+        orderTasks.add(OrderTaskAssembler.getGPSPosAutoEnable());
+        orderTasks.add(OrderTaskAssembler.getGPSPosAuxiliaryLatLon());
+        orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisNotifyEnable());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
@@ -87,7 +84,6 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -222,7 +218,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         if (TextUtils.isEmpty(mBind.etPosTimeout.getText())) return false;
         final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
         final int posTimeout = Integer.parseInt(posTimeoutStr);
-        if (posTimeout < 1 || posTimeout > 5) {
+        if (posTimeout < 5 || posTimeout > 50) {
             return false;
         }
         if (TextUtils.isEmpty(mBind.etSatelliteThreshold.getText())) return false;
@@ -270,19 +266,6 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

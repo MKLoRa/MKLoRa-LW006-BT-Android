@@ -11,10 +11,9 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityFilterMkpirBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -34,7 +33,7 @@ import java.util.List;
  * @date: 2023/6/7 10:43
  * @des:
  */
-public class FilterMkPirActivity extends BaseActivity {
+public class FilterMkPirActivity extends Lw006BaseActivity {
     private Lw006ActivityFilterMkpirBinding mBind;
     private final String[] detectionStatusArray = {"No motion detected", "Motion detected", "All"};
     private final String[] sensorSensitivityArray = {"Low", "Medium", "High", "All"};
@@ -51,7 +50,6 @@ public class FilterMkPirActivity extends BaseActivity {
     private int delayResStatusFlag;
     private int majorFlag;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,17 +57,15 @@ public class FilterMkPirActivity extends BaseActivity {
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        mBind.line1.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>(8);
-            orderTasks.add(OrderTaskAssembler.getMkPirEnable());
-            orderTasks.add(OrderTaskAssembler.getMkPirSensorDetectionStatus());
-            orderTasks.add(OrderTaskAssembler.getMkPirSensorSensitivity());
-            orderTasks.add(OrderTaskAssembler.getMkPirDoorStatus());
-            orderTasks.add(OrderTaskAssembler.getMkPirDelayResStatus());
-            orderTasks.add(OrderTaskAssembler.getMkPirMajor());
-            orderTasks.add(OrderTaskAssembler.getMkPirMinor());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>(8);
+        orderTasks.add(OrderTaskAssembler.getMkPirEnable());
+        orderTasks.add(OrderTaskAssembler.getMkPirSensorDetectionStatus());
+        orderTasks.add(OrderTaskAssembler.getMkPirSensorSensitivity());
+        orderTasks.add(OrderTaskAssembler.getMkPirDoorStatus());
+        orderTasks.add(OrderTaskAssembler.getMkPirDelayResStatus());
+        orderTasks.add(OrderTaskAssembler.getMkPirMajor());
+        orderTasks.add(OrderTaskAssembler.getMkPirMinor());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         setListener();
     }
 
@@ -108,19 +104,15 @@ public class FilterMkPirActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
                         int header = value[0] & 0xFF;// 0xED
                         int flag = value[1] & 0xFF;// read or write
                         int cmd = value[2] & 0xFF;
-                        if (header != 0xED)
-                            return;
+                        if (header != 0xED) return;
                         ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                        if (configKeyEnum == null) {
-                            return;
-                        }
+                        if (configKeyEnum == null) return;
                         int length = value[3] & 0xFF;
                         if (flag == 0x01) {
                             // write
@@ -286,15 +278,9 @@ public class FilterMkPirActivity extends BaseActivity {
         if (!TextUtils.isEmpty(mBind.etMajorMin.getText()) && !TextUtils.isEmpty(mBind.etMajorMax.getText())) {
             final String majorMin = mBind.etMajorMin.getText().toString();
             final String majorMax = mBind.etMajorMax.getText().toString();
-            if (Integer.parseInt(majorMin) > 65535) {
-                return false;
-            }
-            if (Integer.parseInt(majorMax) > 65535) {
-                return false;
-            }
-            if (Integer.parseInt(majorMax) < Integer.parseInt(majorMin)) {
-                return false;
-            }
+            if (Integer.parseInt(majorMin) > 65535) return false;
+            if (Integer.parseInt(majorMax) > 65535) return false;
+            if (Integer.parseInt(majorMax) < Integer.parseInt(majorMin)) return false;
         } else if (!TextUtils.isEmpty(mBind.etMajorMin.getText()) && TextUtils.isEmpty(mBind.etMajorMax.getText())) {
             return false;
         } else if (TextUtils.isEmpty(mBind.etMajorMin.getText()) && !TextUtils.isEmpty(mBind.etMajorMax.getText())) {
@@ -303,12 +289,8 @@ public class FilterMkPirActivity extends BaseActivity {
         if (!TextUtils.isEmpty(mBind.etMinorMin.getText()) && !TextUtils.isEmpty(mBind.etMinorMax.getText())) {
             final String minorMin = mBind.etMinorMin.getText().toString();
             final String minorMax = mBind.etMinorMax.getText().toString();
-            if (Integer.parseInt(minorMin) > 65535) {
-                return false;
-            }
-            if (Integer.parseInt(minorMax) > 65535) {
-                return false;
-            }
+            if (Integer.parseInt(minorMin) > 65535) return false;
+            if (Integer.parseInt(minorMax) > 65535) return false;
             return Integer.parseInt(minorMax) >= Integer.parseInt(minorMin);
         } else if (!TextUtils.isEmpty(mBind.etMinorMin.getText()) && TextUtils.isEmpty(mBind.etMinorMax.getText())) {
             return false;
@@ -319,20 +301,8 @@ public class FilterMkPirActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
 
     public void onBack(View view) {
@@ -345,6 +315,7 @@ public class FilterMkPirActivity extends BaseActivity {
     }
 
     private void backHome() {
+        EventBus.getDefault().unregister(this);
         setResult(RESULT_OK);
         finish();
     }

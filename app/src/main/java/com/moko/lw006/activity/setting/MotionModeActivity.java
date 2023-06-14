@@ -15,10 +15,9 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityMotionModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -33,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MotionModeActivity extends BaseActivity {
+public class MotionModeActivity extends Lw006BaseActivity {
     private Lw006ActivityMotionModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -63,21 +62,19 @@ public class MotionModeActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.cbFixOnStart.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getMotionModeEvent());
-            orderTasks.add(OrderTaskAssembler.getMotionModeStartNumber());
-            orderTasks.add(OrderTaskAssembler.getMotionStartPosStrategy());
-            orderTasks.add(OrderTaskAssembler.getMotionTripInterval());
-            orderTasks.add(OrderTaskAssembler.getMotionTripPosStrategy());
-            orderTasks.add(OrderTaskAssembler.getMotionEndTimeout());
-            orderTasks.add(OrderTaskAssembler.getMotionEndNumber());
-            orderTasks.add(OrderTaskAssembler.getMotionEndInterval());
-            orderTasks.add(OrderTaskAssembler.getMotionEndPosStrategy());
-            orderTasks.add(OrderTaskAssembler.getMotionStationaryPosStrategy());
-            orderTasks.add(OrderTaskAssembler.getMotionStationaryReportInterval());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getMotionModeEvent());
+        orderTasks.add(OrderTaskAssembler.getMotionModeStartNumber());
+        orderTasks.add(OrderTaskAssembler.getMotionStartPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getMotionTripInterval());
+        orderTasks.add(OrderTaskAssembler.getMotionTripPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getMotionEndTimeout());
+        orderTasks.add(OrderTaskAssembler.getMotionEndNumber());
+        orderTasks.add(OrderTaskAssembler.getMotionEndInterval());
+        orderTasks.add(OrderTaskAssembler.getMotionEndPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getMotionStationaryPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getMotionStationaryReportInterval());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -104,7 +101,6 @@ public class MotionModeActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -262,19 +258,6 @@ public class MotionModeActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
     public void onBack(View view) {
         backHome();
     }
@@ -362,8 +345,7 @@ public class MotionModeActivity extends BaseActivity {
     }
 
     public void selectPosStrategyStart(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mStartSelected);
         dialog.setListener(value -> {
@@ -374,8 +356,7 @@ public class MotionModeActivity extends BaseActivity {
     }
 
     public void selectPosStrategyTrip(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mTripSelected);
         dialog.setListener(value -> {
@@ -386,13 +367,23 @@ public class MotionModeActivity extends BaseActivity {
     }
 
     public void selectPosStrategyEnd(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mEndSelected);
         dialog.setListener(value -> {
             mEndSelected = value;
             mBind.tvPosStrategyOnEnd.setText(mValues.get(value));
+        });
+        dialog.show(getSupportFragmentManager());
+    }
+
+    public void selectPosStrategyStationary(View view){
+        if (isWindowLocked()) return;
+        BottomDialog dialog = new BottomDialog();
+        dialog.setDatas(mValues, stationarySelected);
+        dialog.setListener(value -> {
+            stationarySelected = value;
+            mBind.tvPosStrategyOnStationary.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }

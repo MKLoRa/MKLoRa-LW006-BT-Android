@@ -14,9 +14,8 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityAxisSettingBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -30,7 +29,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AxisSettingActivity extends BaseActivity {
+public class AxisSettingActivity extends Lw006BaseActivity {
     private Lw006ActivityAxisSettingBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -48,12 +47,10 @@ public class AxisSettingActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.etWakeupDuration.postDelayed(() -> {
-            ArrayList<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getAccWakeupCondition());
-            orderTasks.add(OrderTaskAssembler.getAccMotionCondition());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        ArrayList<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getAccWakeupCondition());
+        orderTasks.add(OrderTaskAssembler.getAccMotionCondition());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
@@ -80,7 +77,6 @@ public class AxisSettingActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -169,19 +165,6 @@ public class AxisSettingActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
     public void onBack(View view) {
         backHome();
     }
@@ -225,7 +208,7 @@ public class AxisSettingActivity extends BaseActivity {
         if (TextUtils.isEmpty(mBind.etMotionDuration.getText())) return false;
         final String motionDurationStr = mBind.etMotionDuration.getText().toString();
         final int motionDuration = Integer.parseInt(motionDurationStr);
-        return motionDuration >= 1 && motionDuration <= 50;
+        return motionDuration >= 1 && motionDuration <= 15;
     }
 
     private void saveParams() {

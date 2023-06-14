@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.DeviceInfoActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006FragmentDeviceBinding;
 import com.moko.lw006.dialog.BottomDialog;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
@@ -31,10 +32,7 @@ public class DeviceFragment extends Fragment {
     private int intensitySelected;
 
     private boolean mLowPowerPayloadEnable;
-    private boolean mShutdownPayloadEnable;
-
     private DeviceInfoActivity activity;
-
     public DeviceFragment() {
     }
 

@@ -22,11 +22,10 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.adapter.TimePointAdapter;
 import com.moko.lw006.databinding.Lw006ActivityTimingModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.entity.TimePoint;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
@@ -41,7 +40,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
+public class TimingModeActivity extends Lw006BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
     private Lw006ActivityTimingModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -93,12 +92,10 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.tvTimingPosStrategy.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getTimePosStrategy());
-            orderTasks.add(OrderTaskAssembler.getTimePosReportPoints());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getTimePosStrategy());
+        orderTasks.add(OrderTaskAssembler.getTimePosReportPoints());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
@@ -250,19 +247,6 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

@@ -9,10 +9,9 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivitySelftestBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
 import com.moko.support.lw006.entity.OrderCHAR;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SelfTestActivity extends BaseActivity {
+public class SelfTestActivity extends Lw006BaseActivity {
     private Lw006ActivitySelftestBinding mBind;
 
     @Override
@@ -36,16 +35,14 @@ public class SelfTestActivity extends BaseActivity {
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        mBind.tvSelftestStatus.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
-            orderTasks.add(OrderTaskAssembler.getPCBAStatus());
-            orderTasks.add(OrderTaskAssembler.getGpsModule());
-            orderTasks.add(OrderTaskAssembler.getBatteryInfo());
-            orderTasks.add(OrderTaskAssembler.getMotorState());
-            orderTasks.add(OrderTaskAssembler.getHwVersion());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
+        orderTasks.add(OrderTaskAssembler.getPCBAStatus());
+        orderTasks.add(OrderTaskAssembler.getGpsModule());
+        orderTasks.add(OrderTaskAssembler.getBatteryInfo());
+        orderTasks.add(OrderTaskAssembler.getMotorState());
+        orderTasks.add(OrderTaskAssembler.getHwVersion());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -212,19 +209,6 @@ public class SelfTestActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

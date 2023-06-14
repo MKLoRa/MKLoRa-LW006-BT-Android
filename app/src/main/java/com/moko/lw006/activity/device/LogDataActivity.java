@@ -15,7 +15,7 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.activity.LoRaLW006MainActivity;
 import com.moko.lw006.adapter.LogDataListAdapter;
 import com.moko.lw006.databinding.Lw006ActivityLogDataBinding;
@@ -38,7 +38,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.OnItemClickListener {
+public class LogDataActivity extends Lw006BaseActivity implements BaseQuickAdapter.OnItemClickListener {
     public static String TAG = LogDataActivity.class.getSimpleName();
     private Lw006ActivityLogDataBinding mBind;
     private StringBuilder storeString;

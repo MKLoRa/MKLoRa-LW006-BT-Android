@@ -14,10 +14,9 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityFilterOtherBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -32,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FilterOtherActivity extends BaseActivity {
+public class FilterOtherActivity extends Lw006BaseActivity {
     private Lw006ActivityFilterOtherBinding mBind;
     private boolean savedParamsError;
     private ArrayList<String> filterOther;
@@ -48,13 +47,11 @@ public class FilterOtherActivity extends BaseActivity {
 
         filterOther = new ArrayList<>();
         showSyncingProgressDialog();
-        mBind.cbOther.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterOtherEnable());
-            orderTasks.add(OrderTaskAssembler.getFilterOtherRelationship());
-            orderTasks.add(OrderTaskAssembler.getFilterOtherRules());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getFilterOtherEnable());
+        orderTasks.add(OrderTaskAssembler.getFilterOtherRelationship());
+        orderTasks.add(OrderTaskAssembler.getFilterOtherRules());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 400)
@@ -197,8 +194,7 @@ public class FilterOtherActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -275,7 +271,6 @@ public class FilterOtherActivity extends BaseActivity {
         }
         return true;
     }
-
 
     private void saveParams() {
         savedParamsError = false;
@@ -364,20 +359,8 @@ public class FilterOtherActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
 
     public void onBack(View view) {
@@ -390,6 +373,7 @@ public class FilterOtherActivity extends BaseActivity {
     }
 
     private void backHome() {
+        EventBus.getDefault().unregister(this);
         setResult(RESULT_OK);
         finish();
     }

@@ -62,7 +62,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDeviceCallback, BaseQuickAdapter.OnItemChildClickListener {
+public class LoRaLW006MainActivity extends Lw006BaseActivity implements MokoScanDeviceCallback, BaseQuickAdapter.OnItemChildClickListener {
     private Lw006ActivityMainBinding mBind;
     private boolean mReceiverTag = false;
     private ConcurrentHashMap<String, AdvInfo> beaconInfoHashMap;
@@ -339,7 +339,7 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
             mDeviceType = advInfo.deviceType;
             if (!isVerifyEnable) {
                 showLoadingProgressDialog();
-                mBind.ivRefresh.postDelayed(() -> LoRaLW006MokoSupport.getInstance().connDevice(advInfo.mac), 500);
+                LoRaLW006MokoSupport.getInstance().connDevice(advInfo.mac);
                 return;
             }
             // show password
@@ -359,7 +359,7 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
                         mokoBleScanner.stopScanDevice();
                     }
                     showLoadingProgressDialog();
-                    mBind.ivRefresh.postDelayed(() -> LoRaLW006MokoSupport.getInstance().connDevice(advInfo.mac), 500);
+                    LoRaLW006MokoSupport.getInstance().connDevice(advInfo.mac);
                 }
 
                 @Override
@@ -429,12 +429,10 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
                 return;
             }
             showLoadingMessageDialog();
-            mHandler.postDelayed(() -> {
-                // open password notify and set passwrord
-                List<OrderTask> orderTasks = new ArrayList<>();
-                orderTasks.add(OrderTaskAssembler.setPassword(mPassword));
-                LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-            }, 500);
+            // open password notify and set passwrord
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.setPassword(mPassword));
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }
     }
 
@@ -443,13 +441,13 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
         final String action = event.getAction();
         if (MokoConstants.ACTION_ORDER_TIMEOUT.equals(action)) {
             dismissLoadingMessageDialog();
+            LoRaLW006MokoSupport.getInstance().disConnectBle();
         }
         if (MokoConstants.ACTION_ORDER_FINISH.equals(action)) {
         }
         if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
             OrderTaskResponse response = event.getResponse();
             OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-            int responseType = response.responseType;
             byte[] value = response.responseValue;
             if (orderCHAR == OrderCHAR.CHAR_PASSWORD) {
                 dismissLoadingMessageDialog();
@@ -463,13 +461,12 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
                         int result = value[4] & 0xFF;
                         if (1 == result) {
                             mSavedPassword = mPassword;
-                            SPUtiles.setStringValue(LoRaLW006MainActivity.this, AppConstants.SP_KEY_SAVED_PASSWORD_LW006, mSavedPassword);
+                            SPUtiles.setStringValue(this, AppConstants.SP_KEY_SAVED_PASSWORD_LW006, mSavedPassword);
                             XLog.i("Success");
-                            Intent i = new Intent(LoRaLW006MainActivity.this, DeviceInfoActivity.class);
+                            Intent i = new Intent(this, DeviceInfoActivity.class);
                             i.putExtra(AppConstants.EXTRA_KEY_DEVICE_TYPE, mDeviceType);
                             startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
-                        }
-                        if (0 == result) {
+                        } else if (0 == result) {
                             isPasswordError = true;
                             ToastUtils.showToast(LoRaLW006MainActivity.this, "Password Error");
                             LoRaLW006MokoSupport.getInstance().disConnectBle();
@@ -495,7 +492,6 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
     private void showLoadingProgressDialog() {
         mLoadingDialog = new LoadingDialog();
         mLoadingDialog.show(getSupportFragmentManager());
-
     }
 
     private void dismissLoadingProgressDialog() {
@@ -509,7 +505,6 @@ public class LoRaLW006MainActivity extends BaseActivity implements MokoScanDevic
         mLoadingMessageDialog = new LoadingMessageDialog();
         mLoadingMessageDialog.setMessage("Verifying..");
         mLoadingMessageDialog.show(getSupportFragmentManager());
-
     }
 
     private void dismissLoadingMessageDialog() {

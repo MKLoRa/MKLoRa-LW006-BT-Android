@@ -12,10 +12,9 @@ import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityDeviceModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -28,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-public class DeviceModeActivity extends BaseActivity {
+public class DeviceModeActivity extends Lw006BaseActivity {
     private Lw006ActivityDeviceModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -52,9 +51,10 @@ public class DeviceModeActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.tvDeviceMode.postDelayed(() -> LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getDeviceMode()), 500);
-        mBind.tvStandbyMode.setOnClickListener(v->{
-
+        LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getDeviceMode());
+        mBind.tvStandbyMode.setOnClickListener(v -> {
+            if (isWindowLocked()) return;
+            startActivity(new Intent(this, StandbyModeActivity.class));
         });
     }
 
@@ -150,19 +150,6 @@ public class DeviceModeActivity extends BaseActivity {
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

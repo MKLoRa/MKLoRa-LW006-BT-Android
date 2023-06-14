@@ -13,9 +13,8 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityFilterRawDataSwitchBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -29,7 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterRawDataSwitchActivity extends BaseActivity {
+public class FilterRawDataSwitchActivity extends Lw006BaseActivity {
     private Lw006ActivityFilterRawDataSwitchBinding mBind;
     private boolean savedParamsError;
     private boolean isBXPDeviceOpen;
@@ -43,11 +42,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        mBind.tvFilterByIbeacon.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterRawData());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getFilterRawData());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -74,7 +69,6 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -142,19 +136,6 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
     public void onBack(View view) {
         backHome();
     }
@@ -192,7 +173,6 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         Intent i = new Intent(this, FilterTLMActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
-
 
     public void onFilterByBXPiBeacon(View view) {
         if (isWindowLocked()) return;
@@ -246,7 +226,9 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     }
 
     public void onFilterByMkPir(View view) {
-
+        if (isWindowLocked()) return;
+        Intent i = new Intent(this, FilterMkPirActivity.class);
+        startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
     public void onFilterByOther(View view) {
@@ -260,11 +242,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppConstants.REQUEST_CODE_FILTER_RAW_DATA) {
             showSyncingProgressDialog();
-            mBind.tvFilterByIbeacon.postDelayed(() -> {
-                List<OrderTask> orderTasks = new ArrayList<>();
-                orderTasks.add(OrderTaskAssembler.getFilterRawData());
-                LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-            }, 1000);
+            mBind.tvFilterByMkPir.postDelayed(()-> LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getFilterRawData()),200);
         }
     }
 }

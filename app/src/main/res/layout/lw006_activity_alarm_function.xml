@@ -114,6 +114,8 @@
             android:layout_marginRight="5dp"
             android:gravity="center"
             android:hint="5~15"
+            android:inputType="number"
+            android:maxLength="2"
             android:textColor="@color/lw006_black_333333"
             android:textColorHint="@color/lw006_grey_666666"
             android:textSize="15sp"

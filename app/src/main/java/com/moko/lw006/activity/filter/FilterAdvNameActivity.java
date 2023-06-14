@@ -14,9 +14,8 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityFilterAdvNameBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FilterAdvNameActivity extends BaseActivity {
+public class FilterAdvNameActivity extends Lw006BaseActivity {
     private final String FILTER_ASCII = "[ -~]*";
     private Lw006ActivityFilterAdvNameBinding mBind;
     private boolean savedParamsError;
@@ -52,13 +51,11 @@ public class FilterAdvNameActivity extends BaseActivity {
             return null;
         };
         showSyncingProgressDialog();
-        mBind.cbPreciseMatch.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterNamePrecise());
-            orderTasks.add(OrderTaskAssembler.getFilterNameReverse());
-            orderTasks.add(OrderTaskAssembler.getFilterNameRules());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getFilterNamePrecise());
+        orderTasks.add(OrderTaskAssembler.getFilterNameReverse());
+        orderTasks.add(OrderTaskAssembler.getFilterNameRules());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -235,24 +232,10 @@ public class FilterAdvNameActivity extends BaseActivity {
         return true;
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

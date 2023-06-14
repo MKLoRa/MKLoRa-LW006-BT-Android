@@ -13,10 +13,9 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.ActivityAlartAlermSettingBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -35,7 +34,7 @@ import java.util.List;
  * @date: 2023/6/8 15:14
  * @des:
  */
-public class AlertAlarmSettingActivity extends BaseActivity {
+public class AlertAlarmSettingActivity extends Lw006BaseActivity {
     private ActivityAlartAlermSettingBinding mBind;
     private boolean mReceiverTag;
     private final ArrayList<String> mValues = new ArrayList<>(8);
@@ -68,13 +67,12 @@ public class AlertAlarmSettingActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.tvTitle.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>(4);
-            orderTasks.add(OrderTaskAssembler.getAlarmAlertTriggerType());
-            orderTasks.add(OrderTaskAssembler.getAlarmAlertPosStrategy());
-            orderTasks.add(OrderTaskAssembler.getAlarmAlertNotifyEnable());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>(4);
+        orderTasks.add(OrderTaskAssembler.getAlarmAlertTriggerType());
+        orderTasks.add(OrderTaskAssembler.getAlarmAlertPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getAlarmAlertNotifyEnable());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+
         mBind.tvTriggerMode.setOnClickListener(v -> {
             if (isWindowLocked()) return;
             BottomDialog dialog = new BottomDialog();
@@ -219,19 +217,6 @@ public class AlertAlarmSettingActivity extends BaseActivity {
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

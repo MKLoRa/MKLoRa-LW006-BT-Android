@@ -12,10 +12,9 @@ import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityStandbyModeBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -33,7 +32,7 @@ import java.util.ArrayList;
  * @date: 2023/6/7 19:54
  * @des:
  */
-public class StandbyModeActivity extends BaseActivity {
+public class StandbyModeActivity extends Lw006BaseActivity {
     private Lw006ActivityStandbyModeBinding mBind;
     private boolean mReceiverTag = false;
     private int mSelected;
@@ -58,7 +57,7 @@ public class StandbyModeActivity extends BaseActivity {
         mValues.add("WIFI+BLE");
         mValues.add("WIFI+BLE+GPS");
         showSyncingProgressDialog();
-        mBind.tvTitle.postDelayed(() -> LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getStandbyPosStrategy()), 500);
+        LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getStandbyPosStrategy());
         mBind.tvStandbyPosStrategy.setOnClickListener(v -> {
             if (isWindowLocked()) return;
             BottomDialog dialog = new BottomDialog();
@@ -165,19 +164,6 @@ public class StandbyModeActivity extends BaseActivity {
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

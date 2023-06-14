@@ -147,15 +147,16 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setIndicatorStatus(@IntRange(from = 0, to = 31) int status) {
-        data = new byte[]{
+    public void setIndicatorStatus(@IntRange(from = 0, to = 2047) int status) {
+        byte[] bytes = MokoUtils.toByteArray(status, 2);
+        response.responseValue = data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_INDICATOR_STATUS.getParamsKey(),
-                (byte) 0x01,
-                (byte) status
+                (byte) 0x02,
+                bytes[0],
+                bytes[1]
         };
-        response.responseValue = data;
     }
 
     public void setHeartBeatInterval(@IntRange(from = 1, to = 14400) int interval) {
@@ -1578,7 +1579,7 @@ public class ParamsWriteTask extends OrderTask {
     }
 
     public void setAccMotionCondition(@IntRange(from = 10, to = 250) int threshold,
-                                      @IntRange(from = 1, to = 50) int duration) {
+                                      @IntRange(from = 1, to = 15) int duration) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,

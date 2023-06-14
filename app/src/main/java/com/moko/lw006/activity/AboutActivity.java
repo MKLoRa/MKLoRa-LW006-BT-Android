@@ -11,7 +11,7 @@ import com.moko.lw006.databinding.Lw006ActivityAboutBinding;
 import com.moko.lw006.utils.Utils;
 
 
-public class AboutActivity extends BaseActivity {
+public class AboutActivity extends Lw006BaseActivity {
     private Lw006ActivityAboutBinding mBind;
 
     @Override

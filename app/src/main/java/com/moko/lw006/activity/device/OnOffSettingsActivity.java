@@ -14,10 +14,9 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.ActivityOnOffSettingsBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -36,7 +35,7 @@ import java.util.List;
  * @date: 2023/6/12 17:39
  * @des:
  */
-public class OnOffSettingsActivity extends BaseActivity {
+public class OnOffSettingsActivity extends Lw006BaseActivity {
     private ActivityOnOffSettingsBinding mBind;
     private boolean mReceiverTag;
     private boolean shutdownPayloadOpen;
@@ -59,13 +58,11 @@ public class OnOffSettingsActivity extends BaseActivity {
             LoRaLW006MokoSupport.getInstance().enableBluetooth();
         } else {
             showSyncingProgressDialog();
-            mBind.tvBack.postDelayed(() -> {
-                List<OrderTask> orderTasks = new ArrayList<>(4);
-                orderTasks.add(OrderTaskAssembler.getShutdownPayloadEnable());
-                orderTasks.add(OrderTaskAssembler.getOffByButtonEnable());
-                orderTasks.add(OrderTaskAssembler.getAutoPowerOn());
-                LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-            }, 500);
+            List<OrderTask> orderTasks = new ArrayList<>(4);
+            orderTasks.add(OrderTaskAssembler.getShutdownPayloadEnable());
+            orderTasks.add(OrderTaskAssembler.getOffByButtonEnable());
+            orderTasks.add(OrderTaskAssembler.getAutoPowerOn());
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }
         setListener();
     }
@@ -219,19 +216,6 @@ public class OnOffSettingsActivity extends BaseActivity {
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

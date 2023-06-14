@@ -21,7 +21,6 @@ import com.moko.lw006.activity.filter.FilterMacAddressActivity;
 import com.moko.lw006.activity.filter.FilterRawDataSwitchActivity;
 import com.moko.lw006.databinding.Lw006ActivityPosBleBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -35,7 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
+public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSeekBarChangeListener {
     private Lw006ActivityPosBleBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -76,16 +75,14 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.etPosTimeout.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getBlePosTimeout());
-            orderTasks.add(OrderTaskAssembler.getBlePosNumber());
-            orderTasks.add(OrderTaskAssembler.getBlePosMechanism());
-            orderTasks.add(OrderTaskAssembler.getFilterBleScanPhy());
-            orderTasks.add(OrderTaskAssembler.getFilterRSSI());
-            orderTasks.add(OrderTaskAssembler.getFilterRelationship());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getBlePosTimeout());
+        orderTasks.add(OrderTaskAssembler.getBlePosNumber());
+        orderTasks.add(OrderTaskAssembler.getBlePosMechanism());
+        orderTasks.add(OrderTaskAssembler.getFilterBleScanPhy());
+        orderTasks.add(OrderTaskAssembler.getFilterRSSI());
+        orderTasks.add(OrderTaskAssembler.getFilterRelationship());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
@@ -282,21 +279,6 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         }
         EventBus.getDefault().unregister(this);
     }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
 
     public void onBack(View view) {
         backHome();

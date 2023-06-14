@@ -17,10 +17,9 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityConnSettingBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -35,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LoRaConnSettingActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+public class LoRaConnSettingActivity extends Lw006BaseActivity implements CompoundButton.OnCheckedChangeListener {
     private Lw006ActivityConnSettingBinding mBind;
 
     private boolean mReceiverTag = false;
@@ -62,7 +61,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         mModeList.add("ABP");
         mModeList.add("OTAA");
         mRegionsList = new ArrayList<>();
-        mRegionsList.add("AS923-1");
+        mRegionsList.add("AS923");
         mRegionsList.add("AU915");
         mRegionsList.add("CN470");
         mRegionsList.add("CN779");
@@ -75,9 +74,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         mRegionsList.add("AS923-2");
         mRegionsList.add("AS923-3");
         mRegionsList.add("AS923-4");
-        mRegionsList.add("AS923_1_JP_CH24_CH38_LBT");
-        mRegionsList.add("AS923_1_JP_CH24_CH38_DC");
-        mRegionsList.add("AS923_1_JP_CH37_CH61_LBT_DC");
         mMaxRetransmissionTimesList.add("1");
         mMaxRetransmissionTimesList.add("2");
         mBind.cbAdvanceSetting.setOnCheckedChangeListener(this);
@@ -92,24 +88,22 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             LoRaLW006MokoSupport.getInstance().enableBluetooth();
         } else {
             showSyncingProgressDialog();
-            mBind.etDevEui.postDelayed(() -> {
-                List<OrderTask> orderTasks = new ArrayList<>();
-                orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
-                orderTasks.add(OrderTaskAssembler.getLoraDevEUI());
-                orderTasks.add(OrderTaskAssembler.getLoraAppEUI());
-                orderTasks.add(OrderTaskAssembler.getLoraAppKey());
-                orderTasks.add(OrderTaskAssembler.getLoraDevAddr());
-                orderTasks.add(OrderTaskAssembler.getLoraAppSKey());
-                orderTasks.add(OrderTaskAssembler.getLoraNwkSKey());
-                orderTasks.add(OrderTaskAssembler.getLoraRegion());
-                orderTasks.add(OrderTaskAssembler.getLoraCH());
-                orderTasks.add(OrderTaskAssembler.getLoraDutyCycleEnable());
-                orderTasks.add(OrderTaskAssembler.getLoraDR());
-                orderTasks.add(OrderTaskAssembler.getLoraUplinkStrategy());
-                orderTasks.add(OrderTaskAssembler.getLoraAdrAckLimit());
-                orderTasks.add(OrderTaskAssembler.getLoraAdrAckDelay());
-                LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-            }, 300);
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
+            orderTasks.add(OrderTaskAssembler.getLoraDevEUI());
+            orderTasks.add(OrderTaskAssembler.getLoraAppEUI());
+            orderTasks.add(OrderTaskAssembler.getLoraAppKey());
+            orderTasks.add(OrderTaskAssembler.getLoraDevAddr());
+            orderTasks.add(OrderTaskAssembler.getLoraAppSKey());
+            orderTasks.add(OrderTaskAssembler.getLoraNwkSKey());
+            orderTasks.add(OrderTaskAssembler.getLoraRegion());
+            orderTasks.add(OrderTaskAssembler.getLoraCH());
+            orderTasks.add(OrderTaskAssembler.getLoraDutyCycleEnable());
+            orderTasks.add(OrderTaskAssembler.getLoraDR());
+            orderTasks.add(OrderTaskAssembler.getLoraUplinkStrategy());
+            orderTasks.add(OrderTaskAssembler.getLoraAdrAckLimit());
+            orderTasks.add(OrderTaskAssembler.getLoraAdrAckDelay());
+            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }
     }
 
@@ -174,7 +168,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                                         savedParamsError = true;
                                     }
                                     if (savedParamsError) {
-                                        ToastUtils.showToast(LoRaConnSettingActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                     } else {
                                         showSyncingProgressDialog();
                                         LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.restart());
@@ -293,6 +287,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                                         final int adr = value[4] & 0xFF;
                                         mBind.cbAdr.setChecked(adr == 1);
                                         mBind.llAdrOptions.setVisibility(mBind.cbAdr.isChecked() ? View.GONE : View.VISIBLE);
+                                        mBind.layoutMaxTimes.setVisibility(mBind.cbAdr.isChecked() ? View.GONE : View.VISIBLE);
                                         final int times = value[5] & 0xFF;
                                         mBind.tvMaxRetransmissionTimes.setText(String.valueOf(times));
                                         final int dr1 = value[6] & 0xFF;
@@ -312,7 +307,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
@@ -336,20 +330,8 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             // 注销广播
             unregisterReceiver(mReceiver);
         }
-        EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
 
     public void onBack(View view) {
@@ -362,6 +344,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     }
 
     private void backHome() {
+        EventBus.getDefault().unregister(this);
         setResult(RESULT_OK);
         finish();
     }
@@ -386,8 +369,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     }
 
     public void selectRegion(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog bottomDialog = new BottomDialog();
         bottomDialog.setDatas(mRegionsList, mSelectedRegion);
         bottomDialog.setListener(value -> {
@@ -526,8 +508,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
 
 
     public void selectCh1(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog bottomDialog = new BottomDialog();
         bottomDialog.setDatas(mCHList, mSelectedCh1);
         bottomDialog.setListener(value -> {
@@ -542,8 +523,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     }
 
     public void selectCh2(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         final ArrayList<String> ch2List = new ArrayList<>();
         for (int i = mSelectedCh1; i <= mMaxCH; i++) {
             ch2List.add(i + "");
@@ -558,8 +538,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     }
 
     public void selectDr1(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (mSelectedRegion == 0 || mSelectedRegion == 1) {
             BottomDialog bottomDialog = new BottomDialog();
             bottomDialog.setDatas(mDRList, mSelectedDr1 - 2);
@@ -588,8 +567,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     }
 
     public void selectDr2(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         final ArrayList<String> dr2List = new ArrayList<>();
         for (int i = mSelectedDr1; i <= mMaxDR; i++) {
             dr2List.add(i + "");
@@ -604,8 +582,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     }
 
     public void selectDrForJoin(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog bottomDialog = new BottomDialog();
         bottomDialog.setDatas(mDRList, mSelectedDr);
         bottomDialog.setListener(value -> {
@@ -646,6 +623,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             ToastUtils.showToast(this, "Para error!");
             return;
         }
+        showSyncingProgressDialog();
         ArrayList<OrderTask> orderTasks = new ArrayList<>();
         if (mSelectedMode == 0) {
             String devEui = mBind.etDevEui.getText().toString();
@@ -711,16 +689,17 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             // CN779,EU433,EU868 and RU864
             orderTasks.add(OrderTaskAssembler.setLoraDutyCycleEnable(mBind.cbDutyCycle.isChecked() ? 1 : 0));
         }
-        if (mSelectedRegion != 0 && mSelectedRegion != 1 && mSelectedRegion != 8) {
+        if (mSelectedRegion == 2 || mSelectedRegion == 3 || mSelectedRegion == 4 || mSelectedRegion == 5
+                || mSelectedRegion == 6 || mSelectedRegion == 7 || mSelectedRegion == 9) {
             // AS923,US915,AU915
             orderTasks.add(OrderTaskAssembler.setLoraDR(mSelectedDr));
         }
         orderTasks.add(OrderTaskAssembler.setLoraAdrAckLimit(adrAckLimit));
         orderTasks.add(OrderTaskAssembler.setLoraAdrAckDelay(adrAckDelay));
         // 数据发送次数默认为1
-        orderTasks.add(OrderTaskAssembler.setLoraUplinkStrategy(mBind.cbAdr.isChecked() ? 1 : 0, 1, mSelectedDr1, mSelectedDr2));
+        int time = Integer.parseInt(mBind.tvMaxRetransmissionTimes.getText().toString());
+        orderTasks.add(OrderTaskAssembler.setLoraUplinkStrategy(mBind.cbAdr.isChecked() ? 1 : 0, time, mSelectedDr1, mSelectedDr2));
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        showSyncingProgressDialog();
     }
 
     @Override
@@ -729,6 +708,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             mBind.llAdvancedSetting.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         } else if (buttonView.getId() == R.id.cb_adr) {
             mBind.llAdrOptions.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+            mBind.layoutMaxTimes.setVisibility(isChecked ? View.GONE : View.VISIBLE);
         }
     }
 }

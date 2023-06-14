@@ -987,7 +987,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setIndicatorStatus(@IntRange(from = 0, to = 31) int status) {
+    public static OrderTask setIndicatorStatus(@IntRange(from = 0, to = 2047) int status) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setIndicatorStatus(status);
         return task;
@@ -1173,7 +1173,7 @@ public class OrderTaskAssembler {
 
     public static OrderTask setWifiPosMechanism(@IntRange(from = 0, to = 1) int type) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setWifiPosDataType(type);
+        task.setWifiPosMechanism(type);
         return task;
     }
 
@@ -1657,7 +1657,7 @@ public class OrderTaskAssembler {
     }
 
     public static OrderTask setAccMotionCondition(@IntRange(from = 10, to = 250) int threshold,
-                                                  @IntRange(from = 1, to = 50) int duration) {
+                                                  @IntRange(from = 1, to = 15) int duration) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setAccMotionCondition(threshold, duration);
         return task;

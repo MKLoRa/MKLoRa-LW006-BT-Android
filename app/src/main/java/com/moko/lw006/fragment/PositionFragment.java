@@ -45,7 +45,6 @@ public class PositionFragment extends Fragment {
         mBind.ivOfflineFix.setImageResource(mOfflineLocationEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
     }
 
-
     public void changeOfflineFix() {
         mOfflineLocationEnable = !mOfflineLocationEnable;
         activity.showSyncingProgressDialog();

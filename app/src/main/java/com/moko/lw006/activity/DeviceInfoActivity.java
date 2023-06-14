@@ -36,7 +36,6 @@ import com.moko.lw006.activity.setting.DeviceModeActivity;
 import com.moko.lw006.databinding.Lw006ActivityDeviceInfoBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
 import com.moko.lw006.dialog.ChangePasswordDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.fragment.DeviceFragment;
 import com.moko.lw006.fragment.GeneralFragment;
 import com.moko.lw006.fragment.LoRaFragment;
@@ -57,7 +56,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
+public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.OnCheckedChangeListener {
     private Lw006ActivityDeviceInfoBinding mBind;
     private FragmentManager fragmentManager;
     private LoRaFragment loraFragment;
@@ -65,15 +64,13 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private GeneralFragment generalFragment;
     private DeviceFragment deviceFragment;
     private final String[] mUploadMode = {"ABP", "OTAA"};
-    private final String[] mRegions = {"AS923-1", "AU915", "CN470", "CN779", "EU433", "EU868", "KR920", "IN865", "US915", "RU864", "AS923-2",
-            "AS923-3", "AS923-4", "AS923_1_JP_CH24_CH38_LBT", "AS923_1_JP_CH24_CH38_DC", "AS923_1_JP_CH37_CH61_LBT_DC"};
+    private final String[] mRegions = {"AS923", "AU915", "CN470", "CN779", "EU433", "EU868", "KR920", "IN865", "US915", "RU864", "AS923-2", "AS923-3", "AS923-4"};
     private int mSelectedRegion;
     private int mSelectUploadMode;
     private boolean mReceiverTag = false;
     private int disConnectType;
     // 0x00:LR1110,0x01:L76
     private int mDeviceType;
-
     private boolean savedParamsError;
 
     @Override
@@ -97,7 +94,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             LoRaLW006MokoSupport.getInstance().enableBluetooth();
         } else {
             showSyncingProgressDialog();
-            mBind.frameContainer.postDelayed(() -> {
+            mBind.frameContainer.postDelayed(()->{
                 List<OrderTask> orderTasks = new ArrayList<>();
                 // sync time after connect success;
                 orderTasks.add(OrderTaskAssembler.setTime());
@@ -106,7 +103,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
                 orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
                 LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-            }, 500);
+            },300);
         }
     }
 
@@ -155,7 +152,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             if (MokoConstants.ACTION_CURRENT_DATA.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_DISCONNECTED_NOTIFY) {
                     final int length = value.length;
@@ -188,19 +184,15 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
                         int header = value[0] & 0xFF;// 0xED
                         int flag = value[1] & 0xFF;// read or write
                         int cmd = value[2] & 0xFF;
-                        if (header != 0xED)
-                            return;
+                        if (header != 0xED) return;
                         ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                        if (configKeyEnum == null) {
-                            return;
-                        }
+                        if (configKeyEnum == null) return;
                         int length = value[3] & 0xFF;
                         if (flag == 0x01) {
                             // write
@@ -208,19 +200,20 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                             switch (configKeyEnum) {
                                 case KEY_TIME_UTC:
                                     if (result == 1)
-                                        ToastUtils.showToast(DeviceInfoActivity.this, "Time sync completed!");
+                                        ToastUtils.showToast(this, "Time sync completed!");
                                     break;
                                 case KEY_OFFLINE_LOCATION_ENABLE:
+                                case KEY_LOW_POWER_PERCENT:
                                 case KEY_HEARTBEAT_INTERVAL:
                                 case KEY_TIME_ZONE:
-                                case KEY_SHUTDOWN_PAYLOAD_ENABLE:
+                                case KEY_BUZZER_SOUND_CHOOSE:
+                                case KEY_VIBRATION_INTENSITY:
                                 case KEY_LOW_POWER_PAYLOAD_ENABLE:
-//                                    case KEY_LOW_POWER_PERCENT:
                                     if (result != 1) {
                                         savedParamsError = true;
                                     }
                                     if (savedParamsError) {
-                                        ToastUtils.showToast(DeviceInfoActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                     } else {
                                         ToastUtils.showToast(this, "Save Successfully！");
                                     }
@@ -268,12 +261,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                         deviceFragment.setTimeZone(timeZone);
                                     }
                                     break;
-//                                case KEY_SHUTDOWN_PAYLOAD_ENABLE:
-//                                    if (length > 0) {
-//                                        int enable = value[4] & 0xFF;
-//                                        deviceFragment.setShutdownPayload(enable);
-//                                    }
-//                                    break;
                                 case KEY_LOW_POWER_PAYLOAD_ENABLE:
                                     if (length > 0) {
                                         int enable = value[4] & 0xFF;
@@ -412,14 +399,14 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         if (requestCode == AppConstants.REQUEST_CODE_LORA_CONN_SETTING) {
             if (resultCode == RESULT_OK) {
                 showSyncingProgressDialog();
-                mBind.ivSave.postDelayed(() -> {
+//                mBind.ivSave.postDelayed(() -> {
                     List<OrderTask> orderTasks = new ArrayList<>();
                     // setting
                     orderTasks.add(OrderTaskAssembler.getLoraRegion());
                     orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
                     orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
                     LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-                }, 1000);
+//                }, 500);
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_SYSTEM_INFO) {
             if (resultCode == RESULT_OK) {
@@ -456,19 +443,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

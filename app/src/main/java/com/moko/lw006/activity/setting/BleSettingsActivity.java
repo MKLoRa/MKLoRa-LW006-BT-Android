@@ -12,10 +12,9 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityBleSettingsBinding;
 import com.moko.lw006.dialog.ChangePasswordDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.entity.TxPowerEnum;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
@@ -33,7 +32,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
+public class BleSettingsActivity extends Lw006BaseActivity implements SeekBar.OnSeekBarChangeListener {
     private final String FILTER_ASCII = "[ -~]*";
 
     private Lw006ActivityBleSettingsBinding mBind;
@@ -56,15 +55,13 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
         mBind.etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16), inputFilter});
         mBind.sbTxPower.setOnSeekBarChangeListener(this);
         showSyncingProgressDialog();
-        mBind.etAdvName.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getAdvName());
-            orderTasks.add(OrderTaskAssembler.getAdvInterval());
-            orderTasks.add(OrderTaskAssembler.getAdvTxPower());
-            orderTasks.add(OrderTaskAssembler.getAdvTimeout());
-            orderTasks.add(OrderTaskAssembler.getPasswordVerifyEnable());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getAdvName());
+        orderTasks.add(OrderTaskAssembler.getAdvInterval());
+        orderTasks.add(OrderTaskAssembler.getAdvTxPower());
+        orderTasks.add(OrderTaskAssembler.getAdvTimeout());
+        orderTasks.add(OrderTaskAssembler.getPasswordVerifyEnable());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
@@ -178,19 +175,6 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {

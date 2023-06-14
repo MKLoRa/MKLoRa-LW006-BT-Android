@@ -8,9 +8,8 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityFilterBxpButtonBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -24,7 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterBXPButtonActivity extends BaseActivity {
+public class FilterBXPButtonActivity extends Lw006BaseActivity {
     private Lw006ActivityFilterBxpButtonBinding mBind;
     private boolean savedParamsError;
 
@@ -35,12 +34,10 @@ public class FilterBXPButtonActivity extends BaseActivity {
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        mBind.cbEnable.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterBXPButtonEnable());
-            orderTasks.add(OrderTaskAssembler.getFilterBXPButtonRules());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getFilterBXPButtonEnable());
+        orderTasks.add(OrderTaskAssembler.getFilterBXPButtonRules());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
 
@@ -96,7 +93,7 @@ public class FilterBXPButtonActivity extends BaseActivity {
                                         savedParamsError = true;
                                     }
                                     if (savedParamsError) {
-                                        ToastUtils.showToast(FilterBXPButtonActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                     } else {
                                         ToastUtils.showToast(this, "Save Successfully！");
                                     }
@@ -107,11 +104,11 @@ public class FilterBXPButtonActivity extends BaseActivity {
                             // read
                             switch (configKeyEnum) {
                                 case KEY_FILTER_BXP_BUTTON_RULES:
-                                    if (length > 0) {
-                                        mBind.cbSinglePress.setChecked(value[4] == 1);
-                                        mBind.cbDoublePress.setChecked(value[5] == 1);
-                                        mBind.cbLongPress.setChecked(value[6] == 1);
-                                        mBind.cbAbnormalInactivity.setChecked(value[7] == 1);
+                                    if (length == 4) {
+                                        mBind.cbSinglePress.setChecked((value[4] & 0xff) == 1);
+                                        mBind.cbDoublePress.setChecked((value[5] & 0xff) == 1);
+                                        mBind.cbLongPress.setChecked((value[6] & 0xff) == 1);
+                                        mBind.cbAbnormalInactivity.setChecked((value[7] & 0xff) == 1);
                                     }
                                     break;
                                 case KEY_FILTER_BXP_BUTTON_ENABLE:
@@ -129,8 +126,7 @@ public class FilterBXPButtonActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -140,7 +136,6 @@ public class FilterBXPButtonActivity extends BaseActivity {
     private boolean isValid() {
         return true;
     }
-
 
     private void saveParams() {
         savedParamsError = false;
@@ -153,27 +148,12 @@ public class FilterBXPButtonActivity extends BaseActivity {
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
 
     public void onBack(View view) {
         backHome();
@@ -185,6 +165,7 @@ public class FilterBXPButtonActivity extends BaseActivity {
     }
 
     private void backHome() {
+        EventBus.getDefault().unregister(this);
         setResult(RESULT_OK);
         finish();
     }

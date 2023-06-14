@@ -26,9 +26,8 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.AppConstants;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivitySystemInfoBinding;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.service.DfuService;
 import com.moko.lw006.utils.FileUtils;
 import com.moko.lw006.utils.ToastUtils;
@@ -51,7 +50,7 @@ import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
-public class SystemInfoActivity extends BaseActivity {
+public class SystemInfoActivity extends Lw006BaseActivity {
     public static final int REQUEST_CODE_SELECT_FIRMWARE = 0x10;
 
     private Lw006ActivitySystemInfoBinding mBind;
@@ -71,18 +70,16 @@ public class SystemInfoActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.tvSoftwareVersion.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getAdvName());
-            orderTasks.add(OrderTaskAssembler.getMacAddress());
-            orderTasks.add(OrderTaskAssembler.getBattery());
-            orderTasks.add(OrderTaskAssembler.getDeviceModel());
-            orderTasks.add(OrderTaskAssembler.getSoftwareVersion());
-            orderTasks.add(OrderTaskAssembler.getFirmwareVersion());
-            orderTasks.add(OrderTaskAssembler.getHardwareVersion());
-            orderTasks.add(OrderTaskAssembler.getManufacturer());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getAdvName());
+        orderTasks.add(OrderTaskAssembler.getMacAddress());
+        orderTasks.add(OrderTaskAssembler.getBattery());
+        orderTasks.add(OrderTaskAssembler.getDeviceModel());
+        orderTasks.add(OrderTaskAssembler.getSoftwareVersion());
+        orderTasks.add(OrderTaskAssembler.getFirmwareVersion());
+        orderTasks.add(OrderTaskAssembler.getHardwareVersion());
+        orderTasks.add(OrderTaskAssembler.getManufacturer());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
     }
 
@@ -96,7 +93,7 @@ public class SystemInfoActivity extends BaseActivity {
                     Intent intent = new Intent();
                     intent.putExtra(AppConstants.EXTRA_KEY_DEVICE_MAC, mDeviceMac);
                     setResult(RESULT_FIRST_USER, intent);
-                    finish();
+                    backHome();
                 }
             }
         });
@@ -116,7 +113,6 @@ public class SystemInfoActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 switch (orderCHAR) {
                     case CHAR_MODEL_NUMBER:
@@ -223,21 +219,10 @@ public class SystemInfoActivity extends BaseActivity {
             // 注销广播
             unregisterReceiver(mReceiver);
         }
-        EventBus.getDefault().unregister(this);
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     public void onBack(View view) {
@@ -250,6 +235,7 @@ public class SystemInfoActivity extends BaseActivity {
     }
 
     private void backHome() {
+        EventBus.getDefault().unregister(this);
         finish();
     }
 
@@ -288,7 +274,7 @@ public class SystemInfoActivity extends BaseActivity {
         Intent intent = new Intent();
         intent.putExtra(AppConstants.EXTRA_KEY_DEVICE_MAC, mDeviceMac);
         setResult(RESULT_FIRST_USER, intent);
-        finish();
+        backHome();
     }
 
     private boolean isUpgrade;
@@ -348,7 +334,7 @@ public class SystemInfoActivity extends BaseActivity {
         @Override
         public void onProgressChanged(String deviceAddress, int percent, float speed, float avgSpeed, int currentPart, int partsTotal) {
             XLog.i("Progress:" + percent + "%");
-            mDFUDialog.setMessage("Progress:" + percent + "%");
+            mDFUDialog.setMessage("Progress：" + percent + "%");
         }
 
         @Override
@@ -387,7 +373,6 @@ public class SystemInfoActivity extends BaseActivity {
 
     // 记录上次页面控件点击时间,屏蔽无效点击事件
     private long mLastOnClickTime = 0;
-
     private int mTriggerSum;
 
     private boolean isTriggerValid() {
@@ -395,15 +380,14 @@ public class SystemInfoActivity extends BaseActivity {
         if (current - mLastOnClickTime > 500) {
             mTriggerSum = 0;
             mLastOnClickTime = current;
-            return false;
         } else {
             mTriggerSum++;
             if (mTriggerSum == 2) {
                 mTriggerSum = 0;
                 return true;
             }
-            return false;
         }
+        return false;
     }
 
     public void onTest(View view) {

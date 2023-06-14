@@ -22,12 +22,11 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.activity.LoRaLW006MainActivity;
 import com.moko.lw006.adapter.ExportDataListAdapter;
 import com.moko.lw006.databinding.Lw006ActivityExportDataBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.lw006.utils.Utils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
@@ -47,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class ExportDataActivity extends BaseActivity {
+public class ExportDataActivity extends Lw006BaseActivity {
     private static final String TRACKED_FILE = "tracked.txt";
 
     private static String PATH_LOGCAT;
@@ -310,19 +309,6 @@ public class ExportDataActivity extends BaseActivity {
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
     }
 
     private void back() {

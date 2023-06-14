@@ -15,10 +15,9 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw006.activity.BaseActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityManDownDetectionBinding;
 import com.moko.lw006.dialog.BottomDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -33,12 +32,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ManDownDetectionActivity extends BaseActivity {
+public class ManDownDetectionActivity extends Lw006BaseActivity {
     private Lw006ActivityManDownDetectionBinding mBind;
     private boolean mReceiverTag = false;
-    private boolean savedParamsError;
     private final ArrayList<String> mValues = new ArrayList<>();
     private int mSelected;
+    private int enableFlag;
+    private int timeoutFlag;
+    private int strategyFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +60,12 @@ public class ManDownDetectionActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        mBind.cbManDownDetection.postDelayed(() -> {
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getManDownDetectionEnable());
-            orderTasks.add(OrderTaskAssembler.getManDownDetectionTimeout());
-            orderTasks.add(OrderTaskAssembler.getManDownPosStrategy());
-            orderTasks.add(OrderTaskAssembler.getManDownReportInterval());
-            LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        }, 500);
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.getManDownDetectionEnable());
+        orderTasks.add(OrderTaskAssembler.getManDownDetectionTimeout());
+        orderTasks.add(OrderTaskAssembler.getManDownPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getManDownReportInterval());
+        LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
 
         mBind.tvPosStrategy.setOnClickListener(v -> {
             if (isWindowLocked()) return;
@@ -104,7 +103,6 @@ public class ManDownDetectionActivity extends BaseActivity {
             if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                 OrderTaskResponse response = event.getResponse();
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-                int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                     if (value.length >= 4) {
@@ -122,20 +120,19 @@ public class ManDownDetectionActivity extends BaseActivity {
                             int result = value[4] & 0xFF;
                             switch (configKeyEnum) {
                                 case KEY_MAN_DOWN_DETECTION_ENABLE:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
+                                    enableFlag = result;
                                     break;
                                 case KEY_MAN_DOWN_DETECTION_TIMEOUT:
+                                    timeoutFlag = result;
+                                    break;
                                 case KEY_MAN_DOWN_POS_STRATEGY:
+                                    strategyFlag = result;
+                                    break;
                                 case KEY_MAN_DOWN_DETECTION_REPORT_INTERVAL:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
-                                    if (savedParamsError) {
-                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
-                                    } else {
+                                    if (enableFlag == 1 && timeoutFlag == 1 && strategyFlag == 1 && result == 1) {
                                         ToastUtils.showToast(this, "Save Successfully！");
+                                    } else {
+                                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                     }
                                     break;
                             }
@@ -206,19 +203,6 @@ public class ManDownDetectionActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private LoadingMessageDialog mLoadingMessageDialog;
-
-    public void showSyncingProgressDialog() {
-        mLoadingMessageDialog = new LoadingMessageDialog();
-        mLoadingMessageDialog.setMessage("Syncing..");
-        mLoadingMessageDialog.show(getSupportFragmentManager());
-    }
-
-    public void dismissSyncProgressDialog() {
-        if (mLoadingMessageDialog != null)
-            mLoadingMessageDialog.dismissAllowingStateLoss();
-    }
-
     public void onBack(View view) {
         backHome();
     }
@@ -258,7 +242,9 @@ public class ManDownDetectionActivity extends BaseActivity {
         final int timeout = Integer.parseInt(timeoutStr);
         int interval = Integer.parseInt(mBind.etReportInterval.getText().toString());
         int flag = (mBind.cbManDownDetection.isChecked() ? 1 : 0) | (mBind.cbNotifyManDownStart.isChecked() ? 2 : 0) | (mBind.cbNotifyManDownEnd.isChecked() ? 4 : 0);
-        savedParamsError = false;
+        enableFlag = 0;
+        strategyFlag = 0;
+        timeoutFlag = 0;
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setManDownDetectionEnable(flag));
         orderTasks.add(OrderTaskAssembler.setManDownDetectionTimeout(timeout));

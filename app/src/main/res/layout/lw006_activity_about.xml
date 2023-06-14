@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lw006_white_ffffff">
@@ -19,7 +20,6 @@
             android:gravity="center_vertical"
             android:onClick="onBack"
             android:paddingLeft="16dp"
-            android:text=""
             android:textColor="@color/lw006_white_ffffff"
             android:textSize="15sp" />
 
@@ -48,7 +48,7 @@
         android:layout_below="@id/iv_logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:text="LW008-MT"
+        android:text="MKLoRa"
         android:textColor="@color/lw006_grey_888888"
         android:textSize="20sp" />
 
@@ -59,9 +59,9 @@
         android:layout_below="@id/app_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="APP Version:V1.0.5"
         android:textColor="@color/lw006_grey_a8a8a8"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        tools:text="APP Version:V1.0.5" />
 
     <TextView
         android:id="@+id/fw_version"
@@ -72,7 +72,8 @@
         android:layout_marginTop="15dp"
         android:text="FW Version:V1.0"
         android:textColor="@color/lw006_grey_a8a8a8"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="wrap_content"
