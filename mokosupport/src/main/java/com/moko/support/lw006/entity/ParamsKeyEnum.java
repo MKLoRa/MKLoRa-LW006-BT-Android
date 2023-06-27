@@ -208,7 +208,6 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_FILTER_OTHER_RULES(0x7B),
 
 
-
     //// 定位参数
     // WIFI定位数据格式
     KEY_WIFI_POS_DATA_TYPE(0x7D),

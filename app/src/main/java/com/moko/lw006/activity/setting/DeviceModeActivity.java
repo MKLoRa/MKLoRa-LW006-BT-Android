@@ -175,7 +175,7 @@ public class DeviceModeActivity extends Lw006BaseActivity {
             mBind.tvDeviceMode.setText(mValues.get(value));
             savedParamsError = false;
             showSyncingProgressDialog();
-            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDeviceMode(value + 1));
+            LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDeviceMode(value));
         });
         dialog.show(getSupportFragmentManager());
     }

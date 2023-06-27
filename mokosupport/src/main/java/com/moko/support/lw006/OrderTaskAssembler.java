@@ -981,7 +981,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setDeviceMode(@IntRange(from = 1, to = 4) int mode) {
+    public static OrderTask setDeviceMode(@IntRange(from = 0, to = 3) int mode) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setDeviceMode(mode);
         return task;
@@ -1496,6 +1496,12 @@ public class OrderTaskAssembler {
     public static OrderTask setGPSExtremeModeL76C(@IntRange(from = 0, to = 1) int limit) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setGPSExtremeModeL76(limit);
+        return task;
+    }
+
+    public static OrderTask setGpsModule(@IntRange(from = 0, to = 1) int module) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setGpsModule(module);
         return task;
     }
 

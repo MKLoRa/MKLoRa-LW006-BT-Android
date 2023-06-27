@@ -173,7 +173,8 @@ public class IndicatorSettingsActivity extends Lw006BaseActivity {
                 | (mBind.cbNetworkCheck.isChecked() ? 32 : 0)
                 | (mBind.cbInfix.isChecked() ? 64 : 0)
                 | (mBind.cbFixSuccessful.isChecked() ? 128 : 0)
-                | (mBind.cbFailToFix.isChecked() ? 256 : 0);
+                | (mBind.cbFailToFix.isChecked() ? 256 : 0)
+                | 512 | 1024;
         showSyncingProgressDialog();
         LoRaLW006MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setIndicatorStatus(indicator));
     }

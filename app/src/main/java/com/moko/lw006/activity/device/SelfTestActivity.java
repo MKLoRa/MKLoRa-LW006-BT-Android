@@ -12,6 +12,7 @@ import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivitySelftestBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
+import com.moko.lw006.dialog.BottomDialog;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
 import com.moko.support.lw006.entity.OrderCHAR;
@@ -27,6 +28,8 @@ import java.util.List;
 
 public class SelfTestActivity extends Lw006BaseActivity {
     private Lw006ActivitySelftestBinding mBind;
+    private ArrayList<String> mValues = new ArrayList<>(2);
+    private int mSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class SelfTestActivity extends Lw006BaseActivity {
         mBind = Lw006ActivitySelftestBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
+        mValues.add("Traditional GPS module");
+        mValues.add("Lora Cloud");
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
@@ -43,6 +48,21 @@ public class SelfTestActivity extends Lw006BaseActivity {
         orderTasks.add(OrderTaskAssembler.getMotorState());
         orderTasks.add(OrderTaskAssembler.getHwVersion());
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+
+        mBind.tvGpsType.setOnClickListener(v -> {
+            if (isWindowLocked()) return;
+            BottomDialog dialog = new BottomDialog();
+            dialog.setDatas(mValues, mSelected);
+            dialog.setListener(value -> {
+                mSelected = value;
+                showSyncingProgressDialog();
+                List<OrderTask> orderTask = new ArrayList<>();
+                orderTask.add(OrderTaskAssembler.setGpsModule(value));
+                orderTask.add(OrderTaskAssembler.getGpsModule());
+                LoRaLW006MokoSupport.getInstance().sendOrder(orderTask.toArray(new OrderTask[]{}));
+            });
+            dialog.show(getSupportFragmentManager());
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -141,8 +161,8 @@ public class SelfTestActivity extends Lw006BaseActivity {
 
                                 case KEY_GPS_MODULE:
                                     if (length == 1) {
-                                        int result = value[4] & 0xff;
-                                        mBind.tvGpsType.setText(result == 0 ? "Traditional GPS module" : "Lora Cloud");
+                                        mSelected = value[4] & 0xff;
+                                        mBind.tvGpsType.setText(mValues.get(mSelected));
                                     }
                                     break;
 

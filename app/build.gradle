@@ -49,6 +49,11 @@ android {
         enabled = true
     }
 
+    lintOptions {
+        disable 'SetTextI18n'
+        checkReleaseBuilds false
+    }
+
     sourceSets {
         main {
             if (!isLibrary.toBoolean()) {

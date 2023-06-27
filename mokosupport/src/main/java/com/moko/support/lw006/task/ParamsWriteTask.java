@@ -136,7 +136,7 @@ public class ParamsWriteTask extends OrderTask {
         };
     }
 
-    public void setDeviceMode(@IntRange(from = 1, to = 4) int mode) {
+    public void setDeviceMode(@IntRange(from = 0, to = 3) int mode) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
@@ -1272,6 +1272,16 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) limit,
         };
         response.responseValue = data;
+    }
+
+    public void setGpsModule(@IntRange(from = 0,to = 1) int module){
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_MODULE.getParamsKey(),
+                (byte) 0x01,
+                (byte) module,
+        };
     }
 
     public void setGPSPosTimeout(@IntRange(from = 1, to = 5) int timeout) {

@@ -597,7 +597,7 @@ public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.
     public void onGPSFix(View view) {
         if (isWindowLocked()) return;
         Intent intent;
-        if (mDeviceType == 0x01)
+        if (mDeviceType == 0x00)
             intent = new Intent(this, PosGpsL76CFixActivity.class);
         else
             intent = new Intent(this, PosGpsLR1110FixActivity.class);
