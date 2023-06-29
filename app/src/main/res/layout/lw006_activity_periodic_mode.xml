@@ -54,23 +54,25 @@
         android:background="@color/lw006_white_ffffff"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:padding="10dp">
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
 
         <TextView
+            android:id="@+id/tv1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
             android:text="Positioning Strategy"
             android:textColor="@color/lw006_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/tv_periodic_pos_strategy"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_periodic_pos_strategy" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_periodic_pos_strategy"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:background="@drawable/lw006_shape_radius_blue_btn_bg"
             android:clickable="true"
             android:gravity="center"
@@ -80,47 +82,42 @@
             android:text="GPS"
             android:textColor="@color/lw006_white_ffffff"
             android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv1"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/tv1" />
 
         <View
+            android:id="@+id/line1"
             style="@style/lw006_divider_line"
-            android:layout_width="0dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_periodic_pos_strategy" />
-
+            app:layout_constraintTop_toBottomOf="@id/tv1" />
 
         <TextView
+            android:id="@+id/tv2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
             android:text="Report Interval"
             android:textColor="@color/lw006_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/et_report_interval"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/et_report_interval" />
+            app:layout_constraintTop_toBottomOf="@+id/line1" />
 
         <EditText
             android:id="@+id/et_report_interval"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
             android:hint="1~14400"
             android:inputType="number"
             android:maxLength="5"
-            android:text=""
             android:textColor="@color/lw006_black_333333"
             android:textColorHint="@color/lw006_grey_ebebeb"
             android:textSize="15sp"
-            app:layout_constraintHorizontal_bias="0.97"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv2"
             app:layout_constraintRight_toLeftOf="@+id/tvUnit"
-            app:layout_constraintTop_toBottomOf="@id/tv_periodic_pos_strategy"
-            app:layout_constraintWidth_percent="0.25" />
+            app:layout_constraintTop_toTopOf="@+id/tv2" />
 
         <TextView
             android:id="@+id/tvUnit"
@@ -130,8 +127,8 @@
             android:textColor="@color/lw006_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/et_report_interval"
+            app:layout_constraintBottom_toBottomOf="@id/tv2"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/et_report_interval" />
+            app:layout_constraintTop_toTopOf="@id/tv2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

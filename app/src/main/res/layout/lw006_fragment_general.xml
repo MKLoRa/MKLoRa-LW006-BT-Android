@@ -96,9 +96,9 @@
 
             <EditText
                 android:id="@+id/et_heartbeat_interval"
-                android:layout_width="120dp"
+                android:layout_width="110dp"
                 android:layout_height="40dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:gravity="center"
                 android:hint="1~14400"
                 android:inputType="number"
