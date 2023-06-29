@@ -172,6 +172,10 @@ public class FilterOtherActivity extends Lw006BaseActivity {
                                             etMin.setText(String.valueOf(Integer.parseInt(other.substring(2, 4), 16)));
                                             etMax.setText(String.valueOf(Integer.parseInt(other.substring(4, 6), 16)));
                                             etRawData.setText(other.substring(6));
+                                            etDataType.setSelection(etDataType.getText().length());
+                                            etMin.setSelection(etMin.getText().length());
+                                            etMax.setSelection(etMax.getText().length());
+                                            etRawData.setSelection(etRawData.getText().length());
                                             mBind.llFilterCondition.addView(v);
                                         }
                                         if (filterOther.size() > 0)

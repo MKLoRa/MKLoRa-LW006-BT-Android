@@ -207,24 +207,28 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                                     if (length > 0) {
                                         byte[] rawDataBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         mBind.etDevEui.setText(MokoUtils.bytesToHexString(rawDataBytes));
+                                        mBind.etDevEui.setSelection(mBind.etDevEui.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_APP_EUI:
                                     if (length > 0) {
                                         byte[] rawDataBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         mBind.etAppEui.setText(MokoUtils.bytesToHexString(rawDataBytes));
+                                        mBind.etAppEui.setSelection(mBind.etAppEui.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_APP_KEY:
                                     if (length > 0) {
                                         byte[] rawDataBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         mBind.etAppKey.setText(MokoUtils.bytesToHexString(rawDataBytes));
+                                        mBind.etAppKey.setSelection(mBind.etAppKey.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_DEV_ADDR:
                                     if (length > 0) {
                                         byte[] rawDataBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         mBind.etDevAddr.setText(MokoUtils.bytesToHexString(rawDataBytes));
+                                        mBind.etDevAddr.setSelection(mBind.etDevAddr.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_APP_SKEY:
@@ -237,6 +241,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                                     if (length > 0) {
                                         byte[] rawDataBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         mBind.etNwkSkey.setText(MokoUtils.bytesToHexString(rawDataBytes));
+                                        mBind.etNwkSkey.setSelection(mBind.etNwkSkey.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_REGION:
@@ -275,11 +280,13 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                                 case KEY_LORA_ADR_ACK_LIMIT:
                                     if (length > 0) {
                                         mBind.etAdrAckLimit.setText(String.valueOf(value[4] & 0xFF));
+                                        mBind.etAdrAckLimit.setSelection(mBind.etAdrAckLimit.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_ADR_ACK_DELAY:
                                     if (length > 0) {
                                         mBind.etAdrAckDelay.setText(String.valueOf(value[4] & 0xFF));
+                                        mBind.etAdrAckDelay.setSelection(mBind.etAdrAckDelay.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_UPLINK_STRATEGY:

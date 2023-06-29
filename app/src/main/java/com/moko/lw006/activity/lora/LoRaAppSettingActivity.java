@@ -117,12 +117,14 @@ public class LoRaAppSettingActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         int interval = value[4] & 0xFF;
                                         mBind.etSyncInterval.setText(String.valueOf(interval));
+                                        mBind.etSyncInterval.setSelection(mBind.etSyncInterval.getText().length());
                                     }
                                     break;
                                 case KEY_LORA_NETWORK_CHECK_INTERVAL:
                                     if (length > 0) {
                                         int interval = value[4] & 0xFF;
                                         mBind.etNetworkCheckInterval.setText(String.valueOf(interval));
+                                        mBind.etNetworkCheckInterval.setSelection(mBind.etNetworkCheckInterval.getText().length());
                                     }
                                     break;
                             }

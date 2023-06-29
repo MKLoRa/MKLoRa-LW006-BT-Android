@@ -75,6 +75,7 @@ public class ExportDataActivity extends Lw006BaseActivity {
             mIsStart = true;
             if (mStartTime > 0) {
                 mBind.etTime.setText(String.valueOf(mStartTime));
+                mBind.etTime.setSelection(mBind.etTime.getText().length());
             }
             if (mSum > 0) {
                 mBind.tvSum.setText(String.format("Sum:%d", mSum));

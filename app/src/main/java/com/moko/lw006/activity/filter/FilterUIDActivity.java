@@ -111,12 +111,14 @@ public class FilterUIDActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
                                         mBind.etUidNamespace.setText(String.valueOf(uuid));
+                                        mBind.etUidNamespace.setSelection(mBind.etUidNamespace.getText().length());
                                     }
                                     break;
                                 case KEY_FILTER_EDDYSTONE_UID_INSTANCE:
                                     if (length > 0) {
                                         String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
                                         mBind.etUidInstanceId.setText(String.valueOf(uuid));
+                                        mBind.etUidInstanceId.setSelection(mBind.etUidInstanceId.getText().length());
                                     }
                                     break;
                                 case KEY_FILTER_EDDYSTONE_UID_ENABLE:
@@ -176,6 +178,7 @@ public class FilterUIDActivity extends Lw006BaseActivity {
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
     }
+
     public void onBack(View view) {
         backHome();
     }

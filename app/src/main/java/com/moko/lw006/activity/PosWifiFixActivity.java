@@ -140,12 +140,14 @@ public class PosWifiFixActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         int number = value[4] & 0xFF;
                                         mBind.etPosTimeout.setText(String.valueOf(number));
+                                        mBind.etPosTimeout.setSelection(mBind.etPosTimeout.getText().length());
                                     }
                                     break;
                                 case KEY_WIFI_POS_BSSID_NUMBER:
                                     if (length > 0) {
                                         int number = value[4] & 0xFF;
                                         mBind.etBssidNumber.setText(String.valueOf(number));
+                                        mBind.etBssidNumber.setSelection(mBind.etBssidNumber.getText().length());
                                     }
                                     break;
                                 case KEY_WIFI_POS_DATA_TYPE:

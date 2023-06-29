@@ -131,12 +131,14 @@ public class BleSettingsActivity extends Lw006BaseActivity implements SeekBar.On
                                 case KEY_ADV_NAME:
                                     if (length > 0) {
                                         mBind.etAdvName.setText(new String(Arrays.copyOfRange(value, 4, 4 + length)));
+                                        mBind.etAdvName.setSelection(mBind.etAdvName.getText().length());
                                     }
                                     break;
                                 case KEY_ADV_TIMEOUT:
                                     if (length > 0) {
                                         int timeout = value[4] & 0xFF;
                                         mBind.etAdvTimeout.setText(String.valueOf(timeout));
+                                        mBind.etAdvTimeout.setSelection(mBind.etAdvTimeout.getText().length());
                                     }
                                     break;
                                 case KEY_PASSWORD_VERIFY_ENABLE:
@@ -161,6 +163,7 @@ public class BleSettingsActivity extends Lw006BaseActivity implements SeekBar.On
                                     if (length > 0) {
                                         int interval = value[4] & 0xff;
                                         mBind.etAdInterval.setText(String.valueOf(interval));
+                                        mBind.etAdInterval.setSelection(mBind.etAdInterval.getText().length());
                                     }
                                     break;
                             }

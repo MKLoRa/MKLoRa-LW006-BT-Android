@@ -261,6 +261,7 @@
 
 
                 <TextView
+                    android:id="@+id/textManufacture"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
@@ -273,11 +274,13 @@
 
                 <TextView
                     android:id="@+id/tv_manufacture"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0px"
                     android:layout_height="40dp"
                     android:layout_marginTop="20dp"
-                    android:gravity="center_vertical"
-                    android:text=""
+                    android:gravity="center_vertical|right"
+                    tools:text="13131313131313213213"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintLeft_toRightOf="@+id/textManufacture"
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="15sp"
                     app:layout_constraintRight_toRightOf="parent"

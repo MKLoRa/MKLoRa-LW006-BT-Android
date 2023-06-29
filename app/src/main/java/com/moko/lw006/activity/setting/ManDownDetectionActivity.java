@@ -152,6 +152,7 @@ public class ManDownDetectionActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         int timeout = value[4] & 0xff;
                                         mBind.etDetectionTimeout.setText(String.valueOf(timeout));
+                                        mBind.etDetectionTimeout.setSelection(mBind.etDetectionTimeout.getText().length());
                                     }
                                     break;
 
@@ -166,6 +167,7 @@ public class ManDownDetectionActivity extends Lw006BaseActivity {
                                     if (length == 2) {
                                         int interval = MokoUtils.toInt(Arrays.copyOfRange(value, 4, value.length));
                                         mBind.etReportInterval.setText(String.valueOf(interval));
+                                        mBind.etReportInterval.setSelection(mBind.etReportInterval.getText().length());
                                     }
                                     break;
                             }

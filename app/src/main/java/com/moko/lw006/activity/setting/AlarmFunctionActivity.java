@@ -140,6 +140,7 @@ public class AlarmFunctionActivity extends Lw006BaseActivity {
                                     if (length == 1) {
                                         int time = value[4] & 0xff;
                                         mBind.etExitAlarmTime.setText(String.valueOf(time));
+                                        mBind.etExitAlarmTime.setSelection(mBind.etExitAlarmTime.getText().length());
                                     }
                                     break;
                             }

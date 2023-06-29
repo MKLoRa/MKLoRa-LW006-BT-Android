@@ -119,6 +119,8 @@ public class AxisSettingActivity extends Lw006BaseActivity {
                                         int duration = value[5] & 0xFF;
                                         mBind.etWakeupThreshold.setText(String.valueOf(threshold));
                                         mBind.etWakeupDuration.setText(String.valueOf(duration));
+                                        mBind.etWakeupThreshold.setSelection(mBind.etWakeupThreshold.getText().length());
+                                        mBind.etWakeupDuration.setSelection(mBind.etWakeupDuration.getText().length());
                                     }
                                     break;
                                 case KEY_ACC_MOTION_CONDITION:
@@ -127,6 +129,8 @@ public class AxisSettingActivity extends Lw006BaseActivity {
                                         int duration = value[5] & 0xFF;
                                         mBind.etMotionThreshold.setText(String.valueOf(threshold));
                                         mBind.etMotionDuration.setText(String.valueOf(duration));
+                                        mBind.etMotionThreshold.setSelection(mBind.etMotionThreshold.getText().length());
+                                        mBind.etMotionDuration.setSelection(mBind.etMotionDuration.getText().length());
                                     }
                                     break;
                             }

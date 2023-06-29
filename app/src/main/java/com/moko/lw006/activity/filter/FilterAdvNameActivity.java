@@ -149,6 +149,7 @@ public class FilterAdvNameActivity extends Lw006BaseActivity {
                                             etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20), filter});
                                             title.setText(String.format("ADV Name%d", i + 1));
                                             etAdvName.setText(advName);
+                                            etAdvName.setSelection(etAdvName.getText().length());
                                             mBind.llDavName.addView(v);
                                         }
                                     }

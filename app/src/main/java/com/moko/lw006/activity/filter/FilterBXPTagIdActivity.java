@@ -150,6 +150,7 @@ public class FilterBXPTagIdActivity extends Lw006BaseActivity {
                                             EditText etMacAddress = v.findViewById(R.id.et_tag_id);
                                             title.setText(String.format("Tag ID %d", i + 1));
                                             etMacAddress.setText(macAddress);
+                                            etMacAddress.setSelection(etMacAddress.getText().length());
                                             mBind.llTagId.addView(v);
                                         }
                                     }

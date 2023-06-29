@@ -116,6 +116,7 @@ public class FilterBXPIBeaconActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
                                         mBind.etIbeaconUuid.setText(String.valueOf(uuid));
+                                        mBind.etIbeaconUuid.setSelection(mBind.etIbeaconUuid.getText().length());
                                     }
                                     break;
                                 case KEY_FILTER_BXP_IBEACON_MAJOR_RANGE:
@@ -124,6 +125,8 @@ public class FilterBXPIBeaconActivity extends Lw006BaseActivity {
                                         int majorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 6, 8));
                                         mBind.etIbeaconMajorMin.setText(String.valueOf(majorMin));
                                         mBind.etIbeaconMajorMax.setText(String.valueOf(majorMax));
+                                        mBind.etIbeaconMajorMin.setSelection(mBind.etIbeaconMajorMin.getText().length());
+                                        mBind.etIbeaconMajorMax.setSelection(mBind.etIbeaconMajorMax.getText().length());
                                     }
                                     break;
                                 case KEY_FILTER_BXP_IBEACON_MINOR_RANGE:
@@ -132,6 +135,8 @@ public class FilterBXPIBeaconActivity extends Lw006BaseActivity {
                                         int minorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 6, 8));
                                         mBind.etIbeaconMinorMin.setText(String.valueOf(minorMin));
                                         mBind.etIbeaconMinorMax.setText(String.valueOf(minorMax));
+                                        mBind.etIbeaconMinorMin.setSelection(mBind.etIbeaconMinorMin.getText().length());
+                                        mBind.etIbeaconMinorMax.setSelection(mBind.etIbeaconMinorMax.getText().length());
                                     }
                                     break;
                                 case KEY_FILTER_BXP_IBEACON_ENABLE:

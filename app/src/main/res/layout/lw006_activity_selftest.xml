@@ -292,16 +292,6 @@
                     android:textColor="@color/lw006_black_333333"
                     android:textSize="13sp"
                     tools:text="12121212312" />
-
-                <TextView
-                    android:id="@+id/tv_battery_consume"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/lw006_black_333333"
-                    android:textSize="13sp"
-                    tools:text="12121212312" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

@@ -155,12 +155,14 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
                                             mBind.etPosTimeout.setText(String.valueOf(number));
+                                            mBind.etPosTimeout.setSelection(mBind.etPosTimeout.getText().length());
                                         }
                                         break;
                                     case KEY_BLE_POS_MAC_NUMBER:
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
                                             mBind.etMacNumber.setText(String.valueOf(number));
+                                            mBind.etMacNumber.setSelection(mBind.etMacNumber.getText().length());
                                         }
                                         break;
                                     case KEY_BLE_POS_MECHANISM:

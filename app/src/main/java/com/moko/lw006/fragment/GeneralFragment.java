@@ -39,6 +39,7 @@ public class GeneralFragment extends Fragment {
 
     public void setHeartbeatInterval(int interval) {
         mBind.etHeartbeatInterval.setText(String.valueOf(interval));
+        mBind.etHeartbeatInterval.setSelection(mBind.etHeartbeatInterval.getText().length());
     }
 
     public boolean isValid() {

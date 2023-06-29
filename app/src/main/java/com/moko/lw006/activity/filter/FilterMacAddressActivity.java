@@ -141,6 +141,7 @@ public class FilterMacAddressActivity extends Lw006BaseActivity {
                                             EditText etMacAddress = v.findViewById(R.id.et_mac_address);
                                             title.setText(String.format("MAC %d", i + 1));
                                             etMacAddress.setText(macAddress);
+                                            etMacAddress.setSelection(etMacAddress.getText().length());
                                             mBind.llMacAddress.addView(v);
                                         }
                                     }

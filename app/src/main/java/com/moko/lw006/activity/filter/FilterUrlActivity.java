@@ -120,7 +120,8 @@ public class FilterUrlActivity extends Lw006BaseActivity {
                                 case KEY_FILTER_EDDYSTONE_URL:
                                     if (length > 0) {
                                         String url = new String(Arrays.copyOfRange(value, 4, 4 + length));
-                                        mBind.etUrl.setText(String.valueOf(url));
+                                        mBind.etUrl.setText(url);
+                                        mBind.etUrl.setSelection(mBind.etUrl.getText().length());
                                     }
                                     break;
                                 case KEY_FILTER_EDDYSTONE_URL_ENABLE:

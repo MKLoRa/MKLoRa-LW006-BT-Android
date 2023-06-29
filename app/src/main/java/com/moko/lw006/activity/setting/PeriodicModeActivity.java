@@ -134,6 +134,7 @@ public class PeriodicModeActivity extends Lw006BaseActivity {
                                         byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         int interval = MokoUtils.toInt(intervalBytes);
                                         mBind.etReportInterval.setText(String.valueOf(interval));
+                                        mBind.etReportInterval.setSelection(mBind.etReportInterval.getText().length());
                                     }
                                     break;
                             }

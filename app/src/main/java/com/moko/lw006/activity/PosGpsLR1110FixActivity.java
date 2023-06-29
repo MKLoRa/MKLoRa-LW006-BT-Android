@@ -129,12 +129,14 @@ public class PosGpsLR1110FixActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         int timeout = value[4] & 0xFF;
                                         mBind.etPosTimeout.setText(String.valueOf(timeout));
+                                        mBind.etPosTimeout.setSelection(mBind.etPosTimeout.getText().length());
                                     }
                                     break;
                                 case KEY_GPS_POS_SATELLITE_THRESHOLD:
                                     if (length > 0) {
                                         int threshold = value[4] & 0xFF;
                                         mBind.etSatelliteThreshold.setText(String.valueOf(threshold));
+                                        mBind.etSatelliteThreshold.setSelection(mBind.etSatelliteThreshold.getText().length());
                                     }
                                     break;
                                 case KEY_GPS_POS_DATA_TYPE:
@@ -164,6 +166,8 @@ public class PosGpsLR1110FixActivity extends Lw006BaseActivity {
                                         int lon = MokoUtils.toIntSigned(lonBytes);
                                         mBind.etAutonomousLat.setText(String.valueOf(lat));
                                         mBind.etAutonomousLon.setText(String.valueOf(lon));
+                                        mBind.etAutonomousLat.setSelection(mBind.etAutonomousLat.getText().length());
+                                        mBind.etAutonomousLon.setSelection(mBind.etAutonomousLon.getText().length());
                                     }
                                     break;
                                 case KEY_GPS_POS_EPHEMERIS_NOTIFY_ENABLE:

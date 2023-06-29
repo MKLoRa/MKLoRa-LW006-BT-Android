@@ -177,6 +177,7 @@ public class AlarmSosSettingActivity extends Lw006BaseActivity {
                                     if (length == 2) {
                                         int interval = MokoUtils.toInt(Arrays.copyOfRange(value, 4, value.length));
                                         mBind.etReportInterval.setText(String.valueOf(interval));
+                                        mBind.etReportInterval.setSelection(mBind.etReportInterval.getText().length());
                                     }
                                     break;
 

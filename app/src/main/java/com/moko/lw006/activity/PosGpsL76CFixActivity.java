@@ -111,12 +111,14 @@ public class PosGpsL76CFixActivity extends Lw006BaseActivity {
                                         byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         int timeout = MokoUtils.toInt(timeoutBytes);
                                         mBind.etPositionTimeout.setText(String.valueOf(timeout));
+                                        mBind.etPositionTimeout.setSelection(mBind.etPositionTimeout.getText().length());
                                     }
                                     break;
                                 case KEY_GPS_PDOP_LIMIT_L76C:
                                     if (length > 0) {
                                         int limit = value[4] & 0xFF;
                                         mBind.etPdopLimit.setText(String.valueOf(limit));
+                                        mBind.etPdopLimit.setSelection(mBind.etPdopLimit.getText().length());
                                     }
                                     break;
                                 case KEY_GPS_EXTREME_MODE_L76C:

@@ -163,6 +163,7 @@ public class MotionModeActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         int number = value[4] & 0xFF;
                                         mBind.etFixOnStartNumber.setText(String.valueOf(number));
+                                        mBind.etFixOnStartNumber.setSelection(mBind.etFixOnStartNumber.getText().length());
                                     }
                                     break;
                                 case KEY_MOTION_MODE_START_POS_STRATEGY:
@@ -176,6 +177,7 @@ public class MotionModeActivity extends Lw006BaseActivity {
                                         byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         int interval = MokoUtils.toInt(intervalBytes);
                                         mBind.etReportIntervalInTrip.setText(String.valueOf(interval));
+                                        mBind.etReportIntervalInTrip.setSelection(mBind.etReportIntervalInTrip.getText().length());
                                     }
                                     break;
                                 case KEY_MOTION_MODE_TRIP_POS_STRATEGY:
@@ -188,12 +190,14 @@ public class MotionModeActivity extends Lw006BaseActivity {
                                     if (length > 0) {
                                         int timeout = value[4] & 0xFF;
                                         mBind.etTripEndTimeout.setText(String.valueOf(timeout));
+                                        mBind.etTripEndTimeout.setSelection(mBind.etTripEndTimeout.getText().length());
                                     }
                                     break;
                                 case KEY_MOTION_MODE_END_NUMBER:
                                     if (length > 0) {
                                         int number = value[4] & 0xFF;
                                         mBind.etFixOnEndNumber.setText(String.valueOf(number));
+                                        mBind.etFixOnEndNumber.setSelection(mBind.etFixOnEndNumber.getText().length());
                                     }
                                     break;
                                 case KEY_MOTION_MODE_END_REPORT_INTERVAL:
@@ -201,6 +205,7 @@ public class MotionModeActivity extends Lw006BaseActivity {
                                         byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                         int interval = MokoUtils.toInt(intervalBytes);
                                         mBind.etReportIntervalOnEnd.setText(String.valueOf(interval));
+                                        mBind.etReportIntervalOnEnd.setSelection(mBind.etReportIntervalOnEnd.getText().length());
                                     }
                                     break;
                                 case KEY_MOTION_MODE_END_POS_STRATEGY:
@@ -221,6 +226,7 @@ public class MotionModeActivity extends Lw006BaseActivity {
                                     if (length == 2) {
                                         int interval = MokoUtils.toInt(Arrays.copyOfRange(value, 4, value.length));
                                         mBind.etReportIntervalOnStationary.setText(String.valueOf(interval));
+                                        mBind.etReportIntervalOnStationary.setSelection(mBind.etReportIntervalOnStationary.getText().length());
                                     }
                                     break;
                             }

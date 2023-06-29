@@ -28,7 +28,7 @@ import java.util.List;
 
 public class SelfTestActivity extends Lw006BaseActivity {
     private Lw006ActivitySelftestBinding mBind;
-    private ArrayList<String> mValues = new ArrayList<>(2);
+    private final ArrayList<String> mValues = new ArrayList<>(2);
     private int mSelected;
 
     @Override
@@ -135,7 +135,7 @@ public class SelfTestActivity extends Lw006BaseActivity {
                                     }
                                     break;
                                 case KEY_BATTERY_INFO:
-                                    if (length == 40) {
+                                    if (length == 36) {
                                         int runtime = MokoUtils.toInt(Arrays.copyOfRange(value, 4, 8));
                                         mBind.tvRuntime.setText(String.format("%d s", runtime));
                                         int advTimes = MokoUtils.toInt(Arrays.copyOfRange(value, 8, 12));
@@ -154,8 +154,6 @@ public class SelfTestActivity extends Lw006BaseActivity {
                                         mBind.tvLoraTransmissionTimes.setText(String.format("%d times", loraTransmissionTimes));
                                         int loraPower = MokoUtils.toInt(Arrays.copyOfRange(value, 36, 40));
                                         mBind.tvLoraPower.setText(String.format("%d mAS", loraPower));
-                                        String batteryConsumeStr = MokoUtils.getDecimalFormat("0.###").format(MokoUtils.toInt(Arrays.copyOfRange(value, 40, 44)) * 0.001f);
-                                        mBind.tvBatteryConsume.setText(String.format("%s mAH", batteryConsumeStr));
                                     }
                                     break;
 
