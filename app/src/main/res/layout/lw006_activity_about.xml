@@ -48,7 +48,7 @@
         android:layout_below="@id/iv_logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:text="MKLoRa"
+        android:text="LW006"
         android:textColor="@color/lw006_grey_888888"
         android:textSize="20sp" />
 
@@ -61,7 +61,7 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/lw006_grey_a8a8a8"
         android:textSize="17sp"
-        tools:text="APP Version:V1.0.5" />
+        android:text="APP Version:V1.0.0" />
 
     <TextView
         android:id="@+id/fw_version"
