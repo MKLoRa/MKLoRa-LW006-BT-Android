@@ -33,6 +33,7 @@ public class DeviceFragment extends Fragment {
 
     private boolean mLowPowerPayloadEnable;
     private DeviceInfoActivity activity;
+
     public DeviceFragment() {
     }
 
@@ -179,7 +180,17 @@ public class DeviceFragment extends Fragment {
             mBind.tvVibration.setText(intensityArr.get(value));
             activity.showSyncingProgressDialog();
             ArrayList<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.setVibrationIntensity(value));
+            int vibrationVal;
+            if (value == 0) {
+                vibrationVal = 0;
+            } else if (value == 1) {
+                vibrationVal = 10;
+            } else if (value == 2) {
+                vibrationVal = 50;
+            } else {
+                vibrationVal = 80;
+            }
+            orderTasks.add(OrderTaskAssembler.setVibrationIntensity(vibrationVal));
             orderTasks.add(OrderTaskAssembler.getVibrationIntensity());
             LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         });
