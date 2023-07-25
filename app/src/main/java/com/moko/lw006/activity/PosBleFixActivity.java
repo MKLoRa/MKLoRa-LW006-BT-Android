@@ -66,8 +66,8 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
         mScanningTypeValues.add("1M PHY(BLE 4.x + BLE 5)");
         mScanningTypeValues.add("Coded PHY(BLE 5)");
         mBleFixMechanismValues = new ArrayList<>();
-        mBleFixMechanismValues.add("Time Priority");
         mBleFixMechanismValues.add("RSSI Priority");
+        mBleFixMechanismValues.add("Time Priority");
         mBind.sbRssiFilter.setOnSeekBarChangeListener(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -111,101 +111,95 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
                 OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
-                switch (orderCHAR) {
-                    case CHAR_PARAMS:
-                        if (value.length >= 4) {
-                            int header = value[0] & 0xFF;// 0xED
-                            int flag = value[1] & 0xFF;// read or write
-                            int cmd = value[2] & 0xFF;
-                            if (header != 0xED)
-                                return;
-                            ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
-                            if (configKeyEnum == null) {
-                                return;
-                            }
-                            int length = value[3] & 0xFF;
-                            if (flag == 0x01) {
-                                // write
-                                int result = value[4] & 0xFF;
-                                switch (configKeyEnum) {
-                                    case KEY_BLE_POS_TIMEOUT:
-                                    case KEY_BLE_POS_MAC_NUMBER:
-                                    case KEY_FILTER_BLE_SCAN_PHY:
-                                    case KEY_BLE_POS_MECHANISM:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        break;
-                                    case KEY_FILTER_RELATIONSHIP:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
-                                        if (savedParamsError) {
-                                            ToastUtils.showToast(PosBleFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
-                                        } else {
-                                            ToastUtils.showToast(this, "Save Successfully！");
-                                        }
-                                        break;
-                                }
-                            }
-                            if (flag == 0x00) {
-                                // read
-                                switch (configKeyEnum) {
-                                    case KEY_BLE_POS_TIMEOUT:
-                                        if (length > 0) {
-                                            int number = value[4] & 0xFF;
-                                            mBind.etPosTimeout.setText(String.valueOf(number));
-                                            mBind.etPosTimeout.setSelection(mBind.etPosTimeout.getText().length());
-                                        }
-                                        break;
-                                    case KEY_BLE_POS_MAC_NUMBER:
-                                        if (length > 0) {
-                                            int number = value[4] & 0xFF;
-                                            mBind.etMacNumber.setText(String.valueOf(number));
-                                            mBind.etMacNumber.setSelection(mBind.etMacNumber.getText().length());
-                                        }
-                                        break;
-                                    case KEY_BLE_POS_MECHANISM:
-                                        if (length > 0) {
-                                            int mechanism = value[4] & 0xFF;
-                                            mBleFixMechanismSelected = mechanism;
-                                            mBind.tvBleFixMechanism.setText(mBleFixMechanismValues.get(mechanism));
-                                        }
-                                        break;
-                                    case KEY_FILTER_RSSI:
-                                        if (length > 0) {
-                                            final int rssi = value[4];
-                                            int progress = rssi + 127;
-                                            mBind.sbRssiFilter.setProgress(progress);
-                                            mBind.tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
-                                        }
-                                        break;
-                                    case KEY_FILTER_BLE_SCAN_PHY:
-                                        if (length > 0) {
-                                            int type = value[4] & 0xFF;
-                                            mScanningTypeSelected = type;
-                                            mBind.tvScanningType.setText(mScanningTypeValues.get(type));
-                                        }
-                                        break;
-                                    case KEY_FILTER_RELATIONSHIP:
-                                        if (length > 0) {
-                                            int relationship = value[4] & 0xFF;
-                                            mRelationshipSelected = relationship;
-                                            mBind.tvFilterRelationship.setText(mRelationshipValues.get(relationship));
-                                        }
-                                        break;
-                                }
+                if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
+                    if (value.length >= 4) {
+                        int header = value[0] & 0xFF;// 0xED
+                        int flag = value[1] & 0xFF;// read or write
+                        int cmd = value[2] & 0xFF;
+                        if (header != 0xED) return;
+                        ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
+                        if (configKeyEnum == null) return;
+                        int length = value[3] & 0xFF;
+                        if (flag == 0x01) {
+                            // write
+                            int result = value[4] & 0xFF;
+                            switch (configKeyEnum) {
+                                case KEY_BLE_POS_TIMEOUT:
+                                case KEY_BLE_POS_MAC_NUMBER:
+                                case KEY_FILTER_BLE_SCAN_PHY:
+                                case KEY_BLE_POS_MECHANISM:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    break;
+                                case KEY_FILTER_RELATIONSHIP:
+                                    if (result != 1) {
+                                        savedParamsError = true;
+                                    }
+                                    if (savedParamsError) {
+                                        ToastUtils.showToast(PosBleFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                    } else {
+                                        ToastUtils.showToast(this, "Save Successfully！");
+                                    }
+                                    break;
                             }
                         }
-                        break;
+                        if (flag == 0x00) {
+                            // read
+                            switch (configKeyEnum) {
+                                case KEY_BLE_POS_TIMEOUT:
+                                    if (length > 0) {
+                                        int number = value[4] & 0xFF;
+                                        mBind.etPosTimeout.setText(String.valueOf(number));
+                                        mBind.etPosTimeout.setSelection(mBind.etPosTimeout.getText().length());
+                                    }
+                                    break;
+                                case KEY_BLE_POS_MAC_NUMBER:
+                                    if (length > 0) {
+                                        int number = value[4] & 0xFF;
+                                        mBind.etMacNumber.setText(String.valueOf(number));
+                                        mBind.etMacNumber.setSelection(mBind.etMacNumber.getText().length());
+                                    }
+                                    break;
+                                case KEY_BLE_POS_MECHANISM:
+                                    if (length > 0) {
+                                        int mechanism = value[4] & 0xFF;
+                                        mBleFixMechanismSelected = mechanism;
+                                        mBind.tvBleFixMechanism.setText(mBleFixMechanismValues.get(mechanism));
+                                    }
+                                    break;
+                                case KEY_FILTER_RSSI:
+                                    if (length > 0) {
+                                        final int rssi = value[4];
+                                        int progress = rssi + 127;
+                                        mBind.sbRssiFilter.setProgress(progress);
+                                        mBind.tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
+                                    }
+                                    break;
+                                case KEY_FILTER_BLE_SCAN_PHY:
+                                    if (length > 0) {
+                                        int type = value[4] & 0xFF;
+                                        mScanningTypeSelected = type;
+                                        mBind.tvScanningType.setText(mScanningTypeValues.get(type));
+                                    }
+                                    break;
+                                case KEY_FILTER_RELATIONSHIP:
+                                    if (length > 0) {
+                                        int relationship = value[4] & 0xFF;
+                                        mRelationshipSelected = relationship;
+                                        mBind.tvFilterRelationship.setText(mRelationshipValues.get(relationship));
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         });
     }
 
     public void onSave(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         if (isValid()) {
             showSyncingProgressDialog();
             saveParams();
@@ -216,21 +210,13 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
 
     private boolean isValid() {
         final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
-        if (TextUtils.isEmpty(posTimeoutStr))
-            return false;
+        if (TextUtils.isEmpty(posTimeoutStr)) return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
-        if (posTimeout < 1 || posTimeout > 10) {
-            return false;
-        }
+        if (posTimeout < 1 || posTimeout > 10) return false;
         final String numberStr = mBind.etMacNumber.getText().toString();
-        if (TextUtils.isEmpty(numberStr))
-            return false;
+        if (TextUtils.isEmpty(numberStr)) return false;
         final int number = Integer.parseInt(numberStr);
-        if (number < 1 || number > 5) {
-            return false;
-        }
-        return true;
-
+        return number >= 1 && number <= 5;
     }
 
 
@@ -251,20 +237,16 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
     }
 
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent != null) {
                 String action = intent.getAction();
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
-                    switch (blueState) {
-                        case BluetoothAdapter.STATE_TURNING_OFF:
-                            dismissSyncProgressDialog();
-                            finish();
-                            break;
+                    if (blueState == BluetoothAdapter.STATE_TURNING_OFF) {
+                        dismissSyncProgressDialog();
+                        finish();
                     }
                 }
             }
@@ -297,8 +279,7 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
     }
 
     public void onBleFixMechanism(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mBleFixMechanismValues, mBleFixMechanismSelected);
         dialog.setListener(value -> {
@@ -309,8 +290,7 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
     }
 
     public void onScanningType(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mScanningTypeValues, mScanningTypeSelected);
         dialog.setListener(value -> {
@@ -321,8 +301,7 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
     }
 
     public void onFilterRelationship(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mRelationshipValues, mRelationshipSelected);
         dialog.setListener(value -> {
@@ -333,22 +312,19 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
     }
 
     public void onFilterByMac(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, FilterMacAddressActivity.class);
         startActivity(intent);
     }
 
     public void onFilterByName(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, FilterAdvNameActivity.class);
         startActivity(intent);
     }
 
     public void onFilterByRawData(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Intent intent = new Intent(this, FilterRawDataSwitchActivity.class);
         startActivity(intent);
     }

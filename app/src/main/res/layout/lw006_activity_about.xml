@@ -72,8 +72,7 @@
         android:layout_marginTop="15dp"
         android:text="FW Version:V1.0"
         android:textColor="@color/lw006_grey_a8a8a8"
-        android:textSize="17sp"
-        android:visibility="gone" />
+        android:textSize="17sp" />
 
     <TextView
         android:layout_width="wrap_content"

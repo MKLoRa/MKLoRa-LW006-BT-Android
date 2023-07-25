@@ -48,8 +48,8 @@ public class PosWifiFixActivity extends Lw006BaseActivity {
         EventBus.getDefault().register(this);
         mValues.add("DAS");
         mValues.add("Customer");
-        posMechanism.add("Time Priority");
         posMechanism.add("RSSI Priority");
+        posMechanism.add("Time Priority");
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);

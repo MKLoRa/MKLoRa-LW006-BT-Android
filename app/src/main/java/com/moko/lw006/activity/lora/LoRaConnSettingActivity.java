@@ -71,6 +71,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
         mRegionsList.add("IN865");
         mRegionsList.add("US915");
         mRegionsList.add("RU864");
+        mRegionsList.add("AS923-1");
         mRegionsList.add("AS923-2");
         mRegionsList.add("AS923-3");
         mRegionsList.add("AS923-4");
@@ -135,8 +136,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                         int header = value[0] & 0xFF;// 0xED
                         int flag = value[1] & 0xFF;// read or write
                         int cmd = value[2] & 0xFF;
-                        if (header != 0xED)
-                            return;
+                        if (header != 0xED) return;
                         ParamsKeyEnum configKeyEnum = ParamsKeyEnum.fromParamKey(cmd);
                         if (configKeyEnum == null) {
                             return;
@@ -419,13 +419,18 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 break;
             case 0:
             case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
                 // AS923、RU864
                 mSelectedCh1 = 0;
                 mSelectedCh2 = 1;
                 mSelectedDr = 0;
                 break;
         }
-        if (mSelectedRegion == 0 || mSelectedRegion == 1) {
+        if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion == 10 ||
+                mSelectedRegion == 11 || mSelectedRegion == 12 || mSelectedRegion == 13) {
             mSelectedDr1 = 2;
             mSelectedDr2 = 2;
         } else {
@@ -472,6 +477,10 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 break;
             case 0:
             case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
                 // AS923、RU864
                 mMaxCH = 1;
                 mMaxDR = 5;
@@ -481,7 +490,8 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
             mCHList.add(String.valueOf(i));
         }
         int minDR = 0;
-        if (mSelectedRegion == 0 || mSelectedRegion == 1) {
+        if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion == 10 ||
+                mSelectedRegion == 11 || mSelectedRegion == 12 || mSelectedRegion == 13) {
             // AS923,AU915
             minDR = 2;
         }
@@ -494,7 +504,8 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
         } else {
             mBind.rlCh.setVisibility(View.GONE);
         }
-        if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion == 8) {
+        if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion == 8 ||
+                mSelectedRegion == 10 || mSelectedRegion == 11 || mSelectedRegion == 12 || mSelectedRegion == 13) {
             // AS923,US915,AU915
             mBind.rlDr.setVisibility(View.GONE);
         } else {
@@ -546,8 +557,9 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
 
     public void selectDr1(View view) {
         if (isWindowLocked()) return;
-        if (mSelectedRegion == 0 || mSelectedRegion == 1) {
-            BottomDialog bottomDialog = new BottomDialog();
+        BottomDialog bottomDialog = new BottomDialog();
+        if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion == 10 ||
+                mSelectedRegion == 11 || mSelectedRegion == 12 || mSelectedRegion == 13) {
             bottomDialog.setDatas(mDRList, mSelectedDr1 - 2);
             bottomDialog.setListener(value -> {
                 mSelectedDr1 = value + 2;
@@ -557,9 +569,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                     mBind.tvDr2.setText(mDRList.get(value));
                 }
             });
-            bottomDialog.show(getSupportFragmentManager());
         } else {
-            BottomDialog bottomDialog = new BottomDialog();
             bottomDialog.setDatas(mDRList, mSelectedDr1);
             bottomDialog.setListener(value -> {
                 mSelectedDr1 = value;
@@ -569,8 +579,8 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                     mBind.tvDr2.setText(mDRList.get(value));
                 }
             });
-            bottomDialog.show(getSupportFragmentManager());
         }
+        bottomDialog.show(getSupportFragmentManager());
     }
 
     public void selectDr2(View view) {
@@ -630,7 +640,6 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
             ToastUtils.showToast(this, "Para error!");
             return;
         }
-        showSyncingProgressDialog();
         ArrayList<OrderTask> orderTasks = new ArrayList<>();
         if (mSelectedMode == 0) {
             String devEui = mBind.etDevEui.getText().toString();
@@ -706,6 +715,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
         // 数据发送次数默认为1
         int time = Integer.parseInt(mBind.tvMaxRetransmissionTimes.getText().toString());
         orderTasks.add(OrderTaskAssembler.setLoraUplinkStrategy(mBind.cbAdr.isChecked() ? 1 : 0, time, mSelectedDr1, mSelectedDr2));
+        showSyncingProgressDialog();
         LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
@@ -83,53 +84,53 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
     private void setListener() {
         mBind.tvDeviceInfoPayloadType.setOnClickListener(v -> {
             int index = unconfirmed.equals(mBind.tvDeviceInfoPayloadType.getText().toString().trim()) ? 0 : 1;
-            showBottomDialog(payloadTypes, index, mBind.tvDeviceInfoPayloadType);
+            showBottomDialog(payloadTypes, index, mBind.tvDeviceInfoPayloadType, 1);
         });
         mBind.tvHeartbeatPayloadType.setOnClickListener(v -> {
             int index = unconfirmed.equals(mBind.tvHeartbeatPayloadType.getText().toString().trim()) ? 0 : 1;
-            showBottomDialog(payloadTypes, index, mBind.tvHeartbeatPayloadType);
+            showBottomDialog(payloadTypes, index, mBind.tvHeartbeatPayloadType, 2);
         });
         mBind.tvLowPowerPayloadType.setOnClickListener(v -> {
             int index = unconfirmed.equals(mBind.tvLowPowerPayloadType.getText().toString().trim()) ? 0 : 1;
-            showBottomDialog(payloadTypes, index, mBind.tvLowPowerPayloadType);
+            showBottomDialog(payloadTypes, index, mBind.tvLowPowerPayloadType, 3);
         });
         mBind.tvEventPayloadType.setOnClickListener(v -> {
             int index = unconfirmed.equals(mBind.tvEventPayloadType.getText().toString().trim()) ? 0 : 1;
-            showBottomDialog(payloadTypes, index, mBind.tvEventPayloadType);
+            showBottomDialog(payloadTypes, index, mBind.tvEventPayloadType, 4);
         });
         mBind.tvGPSLimitPayloadType.setOnClickListener(v -> {
             int index = unconfirmed.equals(mBind.tvGPSLimitPayloadType.getText().toString().trim()) ? 0 : 1;
-            showBottomDialog(payloadTypes, index, mBind.tvGPSLimitPayloadType);
+            showBottomDialog(payloadTypes, index, mBind.tvGPSLimitPayloadType, 5);
         });
 
         mBind.tvPositioningPayloadType.setOnClickListener(v -> {
             int index = unconfirmed.equals(mBind.tvPositioningPayloadType.getText().toString().trim()) ? 0 : 1;
-            showBottomDialog(payloadTypes, index, mBind.tvPositioningPayloadType);
+            showBottomDialog(payloadTypes, index, mBind.tvPositioningPayloadType, 6);
         });
 
         mBind.tvDeviceInfoTimes.setOnClickListener(v -> {
             int index = Integer.parseInt(mBind.tvDeviceInfoTimes.getText().toString().trim());
-            showBottomDialog(retransmissionTimes, index, mBind.tvDeviceInfoTimes);
+            showBottomDialog(retransmissionTimes, index, mBind.tvDeviceInfoTimes, 0);
         });
         mBind.tvHeartbeatTimes.setOnClickListener(v -> {
             int index = Integer.parseInt(mBind.tvHeartbeatTimes.getText().toString().trim());
-            showBottomDialog(retransmissionTimes, index, mBind.tvHeartbeatTimes);
+            showBottomDialog(retransmissionTimes, index, mBind.tvHeartbeatTimes, 0);
         });
         mBind.tvLowPowerTimes.setOnClickListener(v -> {
             int index = Integer.parseInt(mBind.tvLowPowerTimes.getText().toString().trim());
-            showBottomDialog(retransmissionTimes, index, mBind.tvLowPowerTimes);
+            showBottomDialog(retransmissionTimes, index, mBind.tvLowPowerTimes, 0);
         });
         mBind.tvEventTimes.setOnClickListener(v -> {
             int index = Integer.parseInt(mBind.tvEventTimes.getText().toString().trim());
-            showBottomDialog(retransmissionTimes, index, mBind.tvEventTimes);
+            showBottomDialog(retransmissionTimes, index, mBind.tvEventTimes, 0);
         });
         mBind.tvGPSLimitTimes.setOnClickListener(v -> {
             int index = Integer.parseInt(mBind.tvGPSLimitTimes.getText().toString().trim());
-            showBottomDialog(retransmissionTimes, index, mBind.tvGPSLimitTimes);
+            showBottomDialog(retransmissionTimes, index, mBind.tvGPSLimitTimes, 0);
         });
         mBind.tvPositioningTimes.setOnClickListener(v -> {
             int index = Integer.parseInt(mBind.tvPositioningTimes.getText().toString().trim());
-            showBottomDialog(retransmissionTimes, index, mBind.tvPositioningTimes);
+            showBottomDialog(retransmissionTimes, index, mBind.tvPositioningTimes, 0);
         });
     }
 
@@ -174,6 +175,7 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
                                         int times = (value[5] & 0xff) - 1;
                                         mBind.tvDeviceInfoPayloadType.setText(enable == 1 ? confirmed : unconfirmed);
                                         mBind.tvDeviceInfoTimes.setText(String.valueOf(times));
+                                        setMaxTimes(enable, mBind.lineDeviceInfoTimes, mBind.layoutDeviceInfoTimes);
                                     }
                                     break;
 
@@ -183,6 +185,7 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
                                         int times = (value[5] & 0xff) - 1;
                                         mBind.tvHeartbeatPayloadType.setText(enable == 1 ? confirmed : unconfirmed);
                                         mBind.tvHeartbeatTimes.setText(String.valueOf(times));
+                                        setMaxTimes(enable, mBind.lineHeartbeatTime, mBind.layoutHeartbeatTime);
                                     }
                                     break;
 
@@ -192,6 +195,7 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
                                         int times = (value[5] & 0xff) - 1;
                                         mBind.tvLowPowerPayloadType.setText(enable == 1 ? confirmed : unconfirmed);
                                         mBind.tvLowPowerTimes.setText(String.valueOf(times));
+                                        setMaxTimes(enable, mBind.lineLowPowerTime, mBind.layoutLowPowerTime);
                                     }
                                     break;
 
@@ -201,6 +205,7 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
                                         int times = (value[5] & 0xff) - 1;
                                         mBind.tvEventPayloadType.setText(enable == 1 ? confirmed : unconfirmed);
                                         mBind.tvEventTimes.setText(String.valueOf(times));
+                                        setMaxTimes(enable, mBind.lineEventTimes, mBind.layoutEventTimes);
                                     }
                                     break;
 
@@ -210,6 +215,7 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
                                         int times = (value[5] & 0xff) - 1;
                                         mBind.tvGPSLimitPayloadType.setText(enable == 1 ? confirmed : unconfirmed);
                                         mBind.tvGPSLimitTimes.setText(String.valueOf(times));
+                                        setMaxTimes(enable, mBind.lineGpsLimitTimes, mBind.layoutGpsLimitTimes);
                                     }
                                     break;
 
@@ -219,6 +225,7 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
                                         int times = (value[5] & 0xff) - 1;
                                         mBind.tvPositioningPayloadType.setText(enable == 1 ? confirmed : unconfirmed);
                                         mBind.tvPositioningTimes.setText(String.valueOf(times));
+                                        setMaxTimes(enable, mBind.linePosTimes, mBind.layoutPosTimes);
                                     }
                                     break;
                             }
@@ -261,11 +268,31 @@ public class MessageTypeSettingsActivity extends Lw006BaseActivity {
         });
     }
 
-    private void showBottomDialog(ArrayList<String> mValues, int mSelected, TextView textView) {
+    private void setMaxTimes(int enable, View view, LinearLayout linearLayout) {
+        view.setVisibility(enable == 1 ? View.VISIBLE : View.GONE);
+        linearLayout.setVisibility(enable == 1 ? View.VISIBLE : View.GONE);
+    }
+
+    private void showBottomDialog(ArrayList<String> mValues, int mSelected, TextView textView, int type) {
         if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, mSelected);
-        dialog.setListener(value -> textView.setText(mValues.get(value)));
+        dialog.setListener(value -> {
+            textView.setText(mValues.get(value));
+            if (type == 1) {
+                setMaxTimes(value, mBind.lineDeviceInfoTimes, mBind.layoutDeviceInfoTimes);
+            } else if (type == 2) {
+                setMaxTimes(value, mBind.lineHeartbeatTime, mBind.layoutHeartbeatTime);
+            } else if (type == 3) {
+                setMaxTimes(value, mBind.lineLowPowerTime, mBind.layoutLowPowerTime);
+            } else if (type == 4) {
+                setMaxTimes(value, mBind.lineEventTimes, mBind.layoutEventTimes);
+            } else if (type == 5) {
+                setMaxTimes(value, mBind.lineGpsLimitTimes, mBind.layoutGpsLimitTimes);
+            } else if (type == 6) {
+                setMaxTimes(value, mBind.linePosTimes, mBind.layoutPosTimes);
+            }
+        });
         dialog.show(getSupportFragmentManager());
     }
 
