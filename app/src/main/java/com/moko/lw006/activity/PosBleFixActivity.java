@@ -216,7 +216,7 @@ public class PosBleFixActivity extends Lw006BaseActivity implements SeekBar.OnSe
         final String numberStr = mBind.etMacNumber.getText().toString();
         if (TextUtils.isEmpty(numberStr)) return false;
         final int number = Integer.parseInt(numberStr);
-        return number >= 1 && number <= 5;
+        return number >= 1 && number <= 15;
     }
 
 

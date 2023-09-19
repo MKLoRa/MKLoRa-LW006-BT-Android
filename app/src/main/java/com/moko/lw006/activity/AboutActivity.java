@@ -10,7 +10,6 @@ import com.moko.lw006.R;
 import com.moko.lw006.databinding.Lw006ActivityAboutBinding;
 import com.moko.lw006.utils.Utils;
 
-
 public class AboutActivity extends Lw006BaseActivity {
     private Lw006ActivityAboutBinding mBind;
 
@@ -29,8 +28,7 @@ public class AboutActivity extends Lw006BaseActivity {
     }
 
     public void onCompanyWebsite(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         Uri uri = Uri.parse("https://" + getString(R.string.company_website));
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);

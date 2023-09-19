@@ -1183,7 +1183,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setWifiPosBSSIDNumber(@IntRange(from = 1, to = 5) int number) {
+    public static OrderTask setWifiPosBSSIDNumber(@IntRange(from = 1, to = 15) int number) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setWifiPosBSSIDNumber(number);
         return task;
@@ -1195,7 +1195,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setBlePosNumber(@IntRange(from = 1, to = 5) int number) {
+    public static OrderTask setBlePosNumber(@IntRange(from = 1, to = 15) int number) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setBlePosNumber(number);
         return task;

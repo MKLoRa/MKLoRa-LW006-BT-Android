@@ -206,7 +206,7 @@ public class PosWifiFixActivity extends Lw006BaseActivity {
         final String numberStr = mBind.etBssidNumber.getText().toString();
         if (TextUtils.isEmpty(numberStr)) return false;
         final int number = Integer.parseInt(numberStr);
-        return number >= 1 && number <= 5;
+        return number >= 1 && number <= 15;
     }
 
 
