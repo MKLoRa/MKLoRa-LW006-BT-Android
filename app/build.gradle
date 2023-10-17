@@ -5,17 +5,16 @@ if (!isLibrary.toBoolean()) {
 }
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 33
 
     defaultConfig {
         if (!isLibrary.toBoolean()) {
             applicationId "com.moko.lw006"
         }
         minSdkVersion 18
-        targetSdkVersion 31
-        versionCode 3
-        versionName "1.0.2"
+        targetSdkVersion 33
+        versionCode 4
+        versionName "1.0.3"
 
         def formatDate = new Date().format("yyyyMMddHHmm")
         setProperty("archivesBaseName", "LW006_${versionName}_${formatDate}")
