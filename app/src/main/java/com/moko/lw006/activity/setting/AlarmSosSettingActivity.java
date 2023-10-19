@@ -59,8 +59,8 @@ public class AlarmSosSettingActivity extends Lw006BaseActivity {
         mValues.add("BLE+GPS");
         mValues.add("WIFI+BLE");
         mValues.add("WIFI+BLE+GPS");
-        triggerMode.add("Single Click");
         triggerMode.add("Double Click");
+        triggerMode.add("Triple Click");
         triggerMode.add("Long Press 1s");
         triggerMode.add("Long Press 2s");
         triggerMode.add("Long Press 3s");
