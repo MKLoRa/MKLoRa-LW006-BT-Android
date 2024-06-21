@@ -241,7 +241,7 @@ public class SystemInfoActivity extends Lw006BaseActivity {
 
     public void onUpdateFirmware(View view) {
         if (isWindowLocked()) return;
-        if (TextUtils.isEmpty(mDeviceName) || TextUtils.isEmpty(mDeviceMac)) return;
+        if (TextUtils.isEmpty(mDeviceMac)) return;
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -361,9 +361,9 @@ public class SystemInfoActivity extends Lw006BaseActivity {
                     return;
                 }
                 final DfuServiceInitiator starter = new DfuServiceInitiator(mDeviceMac)
-                        .setDeviceName(mDeviceName)
                         .setKeepBond(false)
                         .setForeground(false)
+                        .disableMtuRequest()
                         .setDisableNotification(true);
                 starter.setZip(null, firmwareFilePath);
                 starter.start(this, DfuService.class);

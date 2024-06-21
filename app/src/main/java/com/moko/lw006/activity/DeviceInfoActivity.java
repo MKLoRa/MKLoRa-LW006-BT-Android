@@ -64,7 +64,7 @@ public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.
     private GeneralFragment generalFragment;
     private DeviceFragment deviceFragment;
     private final String[] mUploadMode = {"ABP", "OTAA"};
-    private final String[] mRegions = {"AS923", "AU915", "CN470", "CN779", "EU433", "EU868", "KR920", "IN865", "US915", "RU864", "AS923-2", "AS923-3", "AS923-4"};
+    private final String[] mRegions = {"AS923", "AU915", "CN470", "CN779", "EU433", "EU868", "KR920", "IN865", "US915", "RU864", "AS923-1", "AS923-2", "AS923-3", "AS923-4"};
     private int mSelectedRegion;
     private int mSelectUploadMode;
     private boolean mReceiverTag = false;
@@ -94,7 +94,7 @@ public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.
             LoRaLW006MokoSupport.getInstance().enableBluetooth();
         } else {
             showSyncingProgressDialog();
-            mBind.frameContainer.postDelayed(()->{
+            mBind.frameContainer.postDelayed(() -> {
                 List<OrderTask> orderTasks = new ArrayList<>();
                 // sync time after connect success;
                 orderTasks.add(OrderTaskAssembler.setTime());
@@ -103,7 +103,7 @@ public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.
                 orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
                 orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
                 LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-            },300);
+            }, 300);
         }
     }
 
@@ -400,12 +400,12 @@ public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.
             if (resultCode == RESULT_OK) {
                 showSyncingProgressDialog();
 //                mBind.ivSave.postDelayed(() -> {
-                    List<OrderTask> orderTasks = new ArrayList<>();
-                    // setting
-                    orderTasks.add(OrderTaskAssembler.getLoraRegion());
-                    orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
-                    orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
-                    LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+                List<OrderTask> orderTasks = new ArrayList<>();
+                // setting
+                orderTasks.add(OrderTaskAssembler.getLoraRegion());
+                orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
+                orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
+                LoRaLW006MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
 //                }, 500);
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_SYSTEM_INFO) {
