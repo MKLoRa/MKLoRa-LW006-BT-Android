@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 
 import com.elvishew.xlog.XLog;
+import com.moko.lw006.dialog.LoadingDialog;
 import com.moko.lw006.dialog.LoadingMessageDialog;
 
 import androidx.core.content.ContextCompat;
@@ -78,5 +79,24 @@ public class Lw006BaseActivity extends FragmentActivity {
     public void dismissSyncProgressDialog() {
         if (mLoadingMessageDialog != null && mLoadingMessageDialog.isAdded() && !mLoadingMessageDialog.isDetached())
             mLoadingMessageDialog.dismissAllowingStateLoss();
+    }
+
+    private LoadingDialog mLoadingDialog;
+
+    protected void showLoadingProgressDialog() {
+        if (null != mLoadingDialog && mLoadingDialog.isAdded() && !mLoadingDialog.isDetached()) {
+            mLoadingDialog.dismissAllowingStateLoss();
+        }
+        mLoadingDialog = null;
+        mLoadingDialog = new LoadingDialog();
+        if (!mLoadingDialog.isAdded())
+            mLoadingDialog.show(getSupportFragmentManager());
+    }
+
+    protected void dismissLoadingProgressDialog() {
+        if (mLoadingDialog != null && mLoadingDialog.isAdded() && !mLoadingDialog.isDetached()) {
+            mLoadingDialog.dismissAllowingStateLoss();
+            mLoadingDialog = null;
+        }
     }
 }

@@ -6,7 +6,8 @@
         android:allowBackup="true"
         android:icon="@drawable/lw006_ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/LaunchActivityTheme">
+        android:theme="@style/LaunchActivityTheme"
+        android:usesCleartextTraffic="true">
         <activity
             android:name="com.moko.lw006.activity.GuideActivity"
             android:exported="true">
@@ -165,26 +166,33 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".activity.lora.MessageTypeSettingsActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.moko.lw006.activity.lora.MessageTypeSettingsActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.filter.FilterMkPirActivity"
+        <activity
+            android:name="com.moko.lw006.activity.filter.FilterMkPirActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".activity.setting.StandbyModeActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.moko.lw006.activity.setting.StandbyModeActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.setting.AlarmFunctionActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.setting.AlertAlarmSettingActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.moko.lw006.activity.setting.AlarmFunctionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.moko.lw006.activity.setting.AlertAlarmSettingActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.setting.AlarmSosSettingActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.moko.lw006.activity.setting.AlarmSosSettingActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.device.OnOffSettingsActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.moko.lw006.activity.device.OnOffSettingsActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
