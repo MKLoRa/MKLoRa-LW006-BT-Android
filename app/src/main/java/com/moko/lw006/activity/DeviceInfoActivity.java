@@ -10,21 +10,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioGroup;
 
-import androidx.annotation.IdRes;
-import okhttp3.RequestBody;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
-import com.lzy.okgo.model.HttpHeaders;
-import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.base.Request;
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
@@ -46,16 +34,10 @@ import com.moko.lw006.activity.setting.DeviceModeActivity;
 import com.moko.lw006.databinding.Lw006ActivityDeviceInfoBinding;
 import com.moko.lw006.dialog.AlertMessageDialog;
 import com.moko.lw006.dialog.ChangePasswordDialog;
-import com.moko.lw006.dialog.LoginDialog;
-import com.moko.lw006.net.entity.LoRaNode;
 import com.moko.lw006.fragment.DeviceFragment;
 import com.moko.lw006.fragment.GeneralFragment;
 import com.moko.lw006.fragment.LoRaFragment;
 import com.moko.lw006.fragment.PositionFragment;
-import com.moko.lw006.net.Urls;
-import com.moko.lw006.net.entity.CommonResp;
-import com.moko.lw006.net.entity.LoginEntity;
-import com.moko.lw006.utils.SPUtiles;
 import com.moko.lw006.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -66,12 +48,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.annotation.IdRes;
 
 public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.OnCheckedChangeListener {
     private Lw006ActivityDeviceInfoBinding mBind;

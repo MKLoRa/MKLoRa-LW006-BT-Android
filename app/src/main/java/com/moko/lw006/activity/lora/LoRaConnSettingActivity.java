@@ -459,6 +459,8 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 mBind.llGatewayId.setVisibility(View.GONE);
                 mBind.tvDevEUI.setVisibility(View.GONE);
                 mBind.rlCh.setVisibility(View.GONE);
+                mBind.rlRegion.setVisibility(View.VISIBLE);
+                mBind.rlServerRegion.setVisibility(View.GONE);
                 initCHDRRange();
                 updateCHDR();
                 initDutyCycle();
@@ -467,6 +469,8 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 mBind.llModemParams.setVisibility(View.GONE);
                 mBind.llGatewayId.setVisibility(View.VISIBLE);
                 mBind.tvDevEUI.setVisibility(View.VISIBLE);
+                mBind.rlRegion.setVisibility(View.GONE);
+                mBind.rlServerRegion.setVisibility(View.VISIBLE);
                 mSelectedDr = 0;
                 if (mSelectedServerRegion == 2 || mSelectedServerRegion == 4) {
                     mSelectedCh1 = 0;

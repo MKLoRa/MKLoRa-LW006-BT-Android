@@ -16,7 +16,7 @@ public class LoRaNode implements Parcelable {
     // LW005-MP 40
     // LW006 45
     // LW007-PIR 50
-    // LW0080-MT 60
+    // LW008-MT 60
     public String model;
 
     @Override
