@@ -960,6 +960,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                             dialog.show(getSupportFragmentManager());
                             return;
                         }
+                        mAccount = account;
                         SPUtiles.setStringValue(LoRaConnSettingActivity.this, AppConstants.SP_LOGIN_ACCOUNT, account);
                         SPUtiles.setStringValue(LoRaConnSettingActivity.this, AppConstants.SP_LOGIN_PASSWORD, password);
                         SPUtiles.setIntValue(LoRaConnSettingActivity.this, AppConstants.SP_LOGIN_ENV, envValue);
