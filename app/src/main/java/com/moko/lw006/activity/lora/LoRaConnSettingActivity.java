@@ -508,7 +508,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 // US915
                 mMaxCH = 63;
                 mMaxDR = 4;
-            } else if (mSelectedRegion == 0 || mSelectedRegion >= 9) {
+            } else if (mSelectedRegion == 0 || mSelectedRegion >= 10) {
                 // AS923、RU864
                 mMaxCH = 1;
                 mMaxDR = 5;
