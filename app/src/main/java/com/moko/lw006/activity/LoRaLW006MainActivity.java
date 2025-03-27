@@ -27,21 +27,20 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.lib.loraui.dialog.AlertMessageDialog;
+import com.moko.lib.loraui.dialog.LoadingMessageDialog;
+import com.moko.lib.loraui.dialog.PasswordDialog;
+import com.moko.lib.loraui.dialog.ScanFilterDialog;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.BuildConfig;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.device.LogDataActivity;
 import com.moko.lw006.adapter.DeviceListAdapter;
 import com.moko.lw006.databinding.Lw006ActivityMainBinding;
-import com.moko.lw006.dialog.AlertMessageDialog;
-import com.moko.lw006.dialog.LoadingDialog;
-import com.moko.lw006.dialog.LoadingMessageDialog;
-import com.moko.lw006.dialog.PasswordDialog;
-import com.moko.lw006.dialog.ScanFilterDialog;
 import com.moko.lw006.entity.AdvInfo;
 import com.moko.lw006.utils.AdvInfoAnalysisImpl;
 import com.moko.lw006.utils.SPUtiles;
-import com.moko.lw006.utils.ToastUtils;
+import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.MokoBleScanner;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -103,7 +102,7 @@ public class LoRaLW006MainActivity extends Lw006BaseActivity implements MokoScan
         adapter.openLoadAnimation();
         mBind.rvDevices.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.lw006_shape_recycleview_divider));
+        itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.shape_recycleview_divider));
         mBind.rvDevices.addItemDecoration(itemDecoration);
         mBind.rvDevices.setAdapter(adapter);
         mHandler = new Handler(Looper.getMainLooper());
@@ -127,15 +126,15 @@ public class LoRaLW006MainActivity extends Lw006BaseActivity implements MokoScan
             LoRaLW006MokoSupport.getInstance().enableBluetooth();
             return;
         }
-        animation = AnimationUtils.loadAnimation(this, R.anim.lw006_rotate_refresh);
+        animation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
         mBind.ivRefresh.startAnimation(animation);
-        beaconInfoParseable = new AdvInfoAnalysisImpl();
+        advInfoAnalysis = new AdvInfoAnalysisImpl();
         mokoBleScanner.startScanDevice(this);
         mHandler.postDelayed(() -> mokoBleScanner.stopScanDevice(), 1000 * 60);
     }
 
 
-    private AdvInfoAnalysisImpl beaconInfoParseable;
+    private AdvInfoAnalysisImpl advInfoAnalysis;
     public String filterName;
     public int filterRssi = -127;
 
@@ -160,7 +159,7 @@ public class LoRaLW006MainActivity extends Lw006BaseActivity implements MokoScan
 
     @Override
     public void onScanDevice(DeviceInfo deviceInfo) {
-        AdvInfo beaconInfo = beaconInfoParseable.parseDeviceInfo(deviceInfo);
+        AdvInfo beaconInfo = advInfoAnalysis.parseDeviceInfo(deviceInfo);
         if (beaconInfo == null) return;
         beaconInfoHashMap.put(beaconInfo.mac, beaconInfo);
     }

@@ -8,11 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.moko.ble.lib.task.OrderTask;
+import com.moko.lib.loraui.dialog.BottomDialog;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.DeviceInfoActivity;
-import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006FragmentDeviceBinding;
-import com.moko.lw006.dialog.BottomDialog;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
 
@@ -105,7 +104,7 @@ public class DeviceFragment extends Fragment {
 
     public void setLowPowerPayload(int enable) {
         mLowPowerPayloadEnable = enable == 1;
-        mBind.ivLowPowerPayload.setImageResource(mLowPowerPayloadEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+        mBind.ivLowPowerPayload.setImageResource(mLowPowerPayloadEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 
     public void setLowPower(int lowPower) {

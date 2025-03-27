@@ -11,12 +11,12 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.lib.loraui.dialog.ChangePasswordDialog;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityBleSettingsBinding;
-import com.moko.lw006.dialog.ChangePasswordDialog;
 import com.moko.lw006.entity.TxPowerEnum;
-import com.moko.lw006.utils.ToastUtils;
+import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
 import com.moko.support.lw006.entity.OrderCHAR;
@@ -146,7 +146,7 @@ public class BleSettingsActivity extends Lw006BaseActivity implements SeekBar.On
                                         int enable = value[4] & 0xFF;
                                         mPasswordVerifyEnable = enable == 1;
                                         mPasswordVerifyDisable = enable == 0;
-                                        mBind.ivLoginMode.setImageResource(mPasswordVerifyEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+                                        mBind.ivLoginMode.setImageResource(mPasswordVerifyEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
                                         mBind.tvChangePassword.setVisibility(mPasswordVerifyEnable ? View.VISIBLE : View.GONE);
                                     }
                                     break;
@@ -256,7 +256,7 @@ public class BleSettingsActivity extends Lw006BaseActivity implements SeekBar.On
     public void onChangeLoginMode(View view) {
         if (isWindowLocked()) return;
         mPasswordVerifyEnable = !mPasswordVerifyEnable;
-        mBind.ivLoginMode.setImageResource(mPasswordVerifyEnable ? R.drawable.lw006_ic_checked : R.drawable.lw006_ic_unchecked);
+        mBind.ivLoginMode.setImageResource(mPasswordVerifyEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
         mBind.tvChangePassword.setVisibility(mPasswordVerifyEnable ? View.VISIBLE : View.GONE);
     }
 

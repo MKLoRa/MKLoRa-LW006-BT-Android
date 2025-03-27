@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lw006_grey_f2f2f2"
+    android:background="@color/grey_f2f2f2"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/lw006_blue_2f84d0">
+        android:background="@color/blue_2f84d0">
 
         <TextView
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:drawableLeft="@drawable/lw006_ic_back"
+            android:drawableLeft="@drawable/ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:onClick="onBack"
             android:paddingLeft="16dp"
             android:text=""
-            android:textColor="@color/lw006_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="15sp" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/bluetooth_fix"
-            android:textColor="@color/lw006_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -43,7 +43,7 @@
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/lw006_ic_save" />
+            android:src="@drawable/ic_save" />
 
     </RelativeLayout>
 
@@ -61,7 +61,7 @@
                 android:id="@+id/cl_pos_ble"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lw006_white_ffffff"
+                android:background="@color/white_ffffff"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:paddingLeft="10dp"
@@ -74,10 +74,11 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:text="Positioning Timeout"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/et_pos_timeout"
@@ -88,8 +89,8 @@
                     android:hint="1~10"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:textColor="@color/lw006_black_333333"
-                    android:textColorHint="@color/lw006_grey_ebebeb"
+                    android:textColor="@color/black_333333"
+                    android:textColorHint="@color/grey_ebebeb"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/tvPosTimeout"
                     app:layout_constraintRight_toLeftOf="@+id/tvTimeoutUnit"
@@ -100,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="s"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/tvPosTimeout"
@@ -109,7 +110,7 @@
 
                 <View
                     android:id="@+id/line1"
-                    style="@style/lw006_divider_line"
+                    style="@style/divider_line"
                     android:layout_width="0dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -122,9 +123,10 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:text="Number Of MAC"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 
                 <EditText
@@ -135,8 +137,8 @@
                     android:hint="1~15"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:textColor="@color/lw006_black_333333"
-                    android:textColorHint="@color/lw006_grey_ebebeb"
+                    android:textColor="@color/black_333333"
+                    android:textColorHint="@color/grey_ebebeb"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/tvNumMac"
                     app:layout_constraintRight_toRightOf="parent"
@@ -144,7 +146,7 @@
 
                 <View
                     android:id="@+id/line2"
-                    style="@style/lw006_divider_line"
+                    style="@style/divider_line"
                     android:layout_width="0dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -156,21 +158,22 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:text="Bluetooth Fix Mechanism"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line2" />
 
                 <TextView
                     android:id="@+id/tv_ble_fix_mechanism"
                     android:layout_width="110dp"
                     android:layout_height="35dp"
-                    android:background="@drawable/lw006_shape_radius_blue_btn_bg"
+                    android:background="@drawable/shape_radius_blue_btn_bg"
                     android:clickable="true"
                     android:gravity="center"
                     android:onClick="onBleFixMechanism"
                     android:text="Time Priority"
-                    android:textColor="@color/lw006_white_ffffff"
+                    android:textColor="@color/white_ffffff"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/tvFixMechanism"
                     app:layout_constraintRight_toRightOf="parent"
@@ -178,7 +181,7 @@
 
                 <View
                     android:id="@+id/line3"
-                    style="@style/lw006_divider_line"
+                    style="@style/divider_line"
                     android:layout_width="0dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -190,24 +193,25 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:text="Scanning Type/PHY"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line3" />
 
                 <TextView
                     android:id="@+id/tv_scanning_type"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
-                    android:background="@drawable/lw006_shape_radius_blue_btn_bg"
+                    android:background="@drawable/shape_radius_blue_btn_bg"
                     android:clickable="true"
                     android:gravity="center"
                     android:minWidth="150dp"
+                    android:onClick="onScanningType"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:onClick="onScanningType"
                     android:text="1M PHY(BLE 4.x)"
-                    android:textColor="@color/lw006_white_ffffff"
+                    android:textColor="@color/white_ffffff"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/tvScanType"
                     app:layout_constraintRight_toRightOf="parent"
@@ -218,7 +222,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@color/lw006_white_ffffff"
+                android:background="@color/white_ffffff"
                 android:orientation="vertical"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
@@ -237,7 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="RSSI Filter"
-                        android:textColor="@color/lw006_black_333333"
+                        android:textColor="@color/black_333333"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toTopOf="@id/sb_rssi_filter"
@@ -248,14 +252,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="(-127dBm~0dBm)"
-                        android:textColor="@color/lw006_grey_b3b3b3"
+                        android:textColor="@color/grey_b3b3b3"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@id/sb_rssi_filter"
                         app:layout_constraintLeft_toRightOf="@id/rssi_1m" />
 
                     <SeekBar
                         android:id="@+id/sb_rssi_filter"
-                        style="@style/LW006CustomSeekbarStyle"
+                        style="@style/CustomSeekbarStyle"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="20dp"
@@ -275,7 +279,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:text="-127dBm"
-                        android:textColor="@color/lw006_black_333333"
+                        android:textColor="@color/black_333333"
                         android:textSize="15sp"
 
                         app:layout_constraintBottom_toBottomOf="@id/sb_rssi_filter"
@@ -288,14 +292,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/rssi_filter"
-                        android:textColor="@color/lw006_black_333333"
+                        android:textColor="@color/black_333333"
                         android:textSize="12sp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/sb_rssi_filter" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View style="@style/lw006_divider_line" />
+                <View style="@style/divider_line" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -307,7 +311,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Filter Relationship"
-                        android:textColor="@color/lw006_black_333333"
+                        android:textColor="@color/black_333333"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@id/tv_filter_relationship"
@@ -319,60 +323,60 @@
                         android:id="@+id/tv_filter_relationship"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/lw006_shape_radius_blue_btn_bg"
+                        android:background="@drawable/shape_radius_blue_btn_bg"
                         android:clickable="true"
                         android:gravity="center"
                         android:minWidth="150dp"
                         android:onClick="onFilterRelationship"
                         android:padding="10dp"
                         android:text="Null"
-                        android:textColor="@color/lw006_white_ffffff"
+                        android:textColor="@color/white_ffffff"
                         android:textSize="15sp"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View style="@style/lw006_divider_line" />
+                <View style="@style/divider_line" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:clickable="true"
-                    android:drawableRight="@drawable/lw006_ic_arrow_right"
+                    android:drawableRight="@drawable/ic_arrow_right"
                     android:gravity="center_vertical"
                     android:onClick="onFilterByMac"
                     android:text="Filter by MAC"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <View style="@style/lw006_divider_line" />
+                <View style="@style/divider_line" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="1dp"
                     android:clickable="true"
-                    android:drawableRight="@drawable/lw006_ic_arrow_right"
+                    android:drawableRight="@drawable/ic_arrow_right"
                     android:gravity="center_vertical"
                     android:onClick="onFilterByName"
                     android:text="Filter by ADV Name"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <View style="@style/lw006_divider_line" />
+                <View style="@style/divider_line" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="1dp"
                     android:clickable="true"
-                    android:drawableRight="@drawable/lw006_ic_arrow_right"
+                    android:drawableRight="@drawable/ic_arrow_right"
                     android:gravity="center_vertical"
                     android:onClick="onFilterByRawData"
                     android:text="Filter by Raw Data"
-                    android:textColor="@color/lw006_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
