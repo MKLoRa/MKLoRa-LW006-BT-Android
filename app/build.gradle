@@ -91,7 +91,7 @@ dependencies {
         implementation 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.7'
         implementation 'com.github.MOKO-Android-Base-Library:MKLoRaUILib:1.0.10'
     } else {
-        compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.5'
+        compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.7'
         compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaUILib:1.0.10'
         compileOnly 'com.github.MOKO-Android-Base-Library:MKBleLib:1.0.1'
         implementation files('libs/mokoSupport.jar')
