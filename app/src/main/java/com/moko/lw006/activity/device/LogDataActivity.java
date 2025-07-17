@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -16,8 +14,8 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lib.loraui.dialog.AlertMessageDialog;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.activity.LoRaLW006MainActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.adapter.LogDataListAdapter;
 import com.moko.lw006.databinding.Lw006ActivityLogDataBinding;
 import com.moko.lw006.entity.LogData;
@@ -37,6 +35,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Iterator;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class LogDataActivity extends Lw006BaseActivity implements BaseQuickAdapter.OnItemClickListener {
     public static String TAG = LogDataActivity.class.getSimpleName();

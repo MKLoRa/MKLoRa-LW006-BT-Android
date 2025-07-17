@@ -19,9 +19,7 @@
     <string name="periodic_mode">Periodic Mode</string>
     <string name="motion_mode">Motion Mode</string>
     <string name="downlink_for_position">Downlink For Position</string>
-    <string name="vibration_detection">Shock Detection</string>
     <string name="man_down_detection">ManDown Detection</string>
-    <string name="active_state_count">Active State Count</string>
     <string name="device_information">Device Information</string>
     <string name="local_data_sync">Local Data Sync</string>
     <string name="indicator_settings">Indicator Settings</string>

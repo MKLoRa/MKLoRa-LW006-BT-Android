@@ -1,7 +1,5 @@
 package com.moko.support.lw006;
 
-import androidx.annotation.IntRange;
-
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.support.lw006.entity.ParamsKeyEnum;
 import com.moko.support.lw006.task.GetFirmwareRevisionTask;
@@ -15,6 +13,8 @@ import com.moko.support.lw006.task.ParamsWriteTask;
 import com.moko.support.lw006.task.SetPasswordTask;
 
 import java.util.ArrayList;
+
+import androidx.annotation.IntRange;
 
 public class OrderTaskAssembler {
     ///////////////////////////////////////////////////////////////////////////

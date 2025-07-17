@@ -4,18 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.Nullable;
-
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityFilterRawDataSwitchBinding;
-import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
 import com.moko.support.lw006.entity.OrderCHAR;
@@ -27,6 +25,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class FilterRawDataSwitchActivity extends Lw006BaseActivity {
     private Lw006ActivityFilterRawDataSwitchBinding mBind;

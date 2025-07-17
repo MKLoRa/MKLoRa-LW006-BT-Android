@@ -2,8 +2,6 @@ package com.moko.support.lw006.task;
 
 import android.text.TextUtils;
 
-import androidx.annotation.IntRange;
-
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
@@ -13,6 +11,8 @@ import com.moko.support.lw006.entity.ParamsKeyEnum;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import androidx.annotation.IntRange;
 
 public class ParamsWriteTask extends OrderTask {
     public byte[] data;

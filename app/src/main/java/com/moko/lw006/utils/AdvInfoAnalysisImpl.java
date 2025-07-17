@@ -3,7 +3,6 @@ package com.moko.lw006.utils;
 import android.os.ParcelUuid;
 import android.os.SystemClock;
 
-import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.entity.AdvInfo;
 import com.moko.support.lw006.entity.DeviceInfo;

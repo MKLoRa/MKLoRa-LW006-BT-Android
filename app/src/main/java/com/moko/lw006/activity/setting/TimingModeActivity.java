@@ -9,10 +9,6 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
@@ -22,12 +18,12 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lib.loraui.dialog.BottomDialog;
+import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.adapter.TimePointAdapter;
 import com.moko.lw006.databinding.Lw006ActivityTimingModeBinding;
 import com.moko.lw006.entity.TimePoint;
-import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
 import com.moko.support.lw006.entity.OrderCHAR;
@@ -39,6 +35,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TimingModeActivity extends Lw006BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
     private Lw006ActivityTimingModeBinding mBind;

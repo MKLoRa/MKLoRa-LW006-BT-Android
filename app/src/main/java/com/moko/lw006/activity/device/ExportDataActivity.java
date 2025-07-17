@@ -13,21 +13,19 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lib.loraui.dialog.AlertMessageDialog;
+import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.R;
-import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.activity.LoRaLW006MainActivity;
+import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.adapter.ExportDataListAdapter;
 import com.moko.lw006.databinding.Lw006ActivityExportDataBinding;
-import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.lw006.utils.Utils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -45,6 +43,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class ExportDataActivity extends Lw006BaseActivity {
     private static final String TRACKED_FILE = "tracked.txt";

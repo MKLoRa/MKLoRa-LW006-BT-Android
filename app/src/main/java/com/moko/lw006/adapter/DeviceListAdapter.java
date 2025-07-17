@@ -8,8 +8,6 @@ import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw006.R;
 import com.moko.lw006.entity.AdvInfo;
 
-import java.util.Arrays;
-
 public class DeviceListAdapter extends BaseQuickAdapter<AdvInfo, BaseViewHolder> {
     public DeviceListAdapter() {
         super(R.layout.lw006_list_item_device);

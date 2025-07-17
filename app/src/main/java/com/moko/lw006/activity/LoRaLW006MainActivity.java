@@ -15,11 +15,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.MokoConstants;
@@ -31,6 +26,7 @@ import com.moko.lib.loraui.dialog.AlertMessageDialog;
 import com.moko.lib.loraui.dialog.LoadingMessageDialog;
 import com.moko.lib.loraui.dialog.PasswordDialog;
 import com.moko.lib.loraui.dialog.ScanFilterDialog;
+import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.lw006.AppConstants;
 import com.moko.lw006.BuildConfig;
 import com.moko.lw006.R;
@@ -40,7 +36,6 @@ import com.moko.lw006.databinding.Lw006ActivityMainBinding;
 import com.moko.lw006.entity.AdvInfo;
 import com.moko.lw006.utils.AdvInfoAnalysisImpl;
 import com.moko.lw006.utils.SPUtiles;
-import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.MokoBleScanner;
 import com.moko.support.lw006.OrderTaskAssembler;
@@ -60,6 +55,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class LoRaLW006MainActivity extends Lw006BaseActivity implements MokoScanDeviceCallback, BaseQuickAdapter.OnItemChildClickListener {
     private Lw006ActivityMainBinding mBind;
