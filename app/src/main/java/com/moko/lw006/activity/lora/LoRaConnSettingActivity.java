@@ -503,7 +503,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 // US915
                 mMaxCH = 63;
                 mMaxDR = 4;
-            } else if (mSelectedRegion == 0 || mSelectedRegion >= 10) {
+            } else if (mSelectedRegion == 0 || mSelectedRegion >= 9) {
                 // AS923、RU864
                 mMaxCH = 1;
                 mMaxDR = 5;
@@ -596,7 +596,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 mSelectedCh2 = 2;
                 mSelectedDr = 0;
             }
-            if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion >= 9) {
+            if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion >= 10) {
                 mSelectedDr1 = 2;
                 mSelectedDr2 = 2;
             } else {
