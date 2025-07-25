@@ -30,12 +30,12 @@ import com.moko.lib.loraiot.dialog.LoginDialog;
 import com.moko.lib.loraiot.dialog.LogoutDialog;
 import com.moko.lib.loraiot.entity.CommonResp;
 import com.moko.lib.loraiot.entity.LoginEntity;
+import com.moko.lib.loraiot.utils.IoTDMSPUtils;
 import com.moko.lib.loraui.dialog.BottomDialog;
 import com.moko.lib.loraui.utils.ToastUtils;
 import com.moko.lw006.R;
 import com.moko.lw006.activity.Lw006BaseActivity;
 import com.moko.lw006.databinding.Lw006ActivityConnSettingBinding;
-import com.moko.lw006.utils.SPUtiles;
 import com.moko.support.lw006.LoRaLW006MokoSupport;
 import com.moko.support.lw006.OrderTaskAssembler;
 import com.moko.support.lw006.entity.OrderCHAR;
@@ -375,8 +375,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
             // 注销广播
             unregisterReceiver(mReceiver);
         }
-        if (EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this);
+        if (EventBus.getDefault().isRegistered(this)) EventBus.getDefault().unregister(this);
     }
 
     public void onBack(View view) {
@@ -475,16 +474,12 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
             initDutyCycle();
             if (mSelectedPlatform == 0) return;
             mBind.tvDevEUI.setText(String.format("DevEUI:%s", mRemoteDevEUI.toUpperCase()));
-            mAccount = SPUtiles.getStringValue(this, IoTDMConstants.SP_LOGIN_ACCOUNT, "");
-            mPassword = SPUtiles.getStringValue(this, IoTDMConstants.SP_LOGIN_PASSWORD, "");
-            if (TextUtils.isEmpty(mAccount))
-                mBind.llAccount.setVisibility(View.GONE);
-            else
-                mBind.tvAccount.setText(String.format("Account:%s", mAccount));
-            if (TextUtils.isEmpty(mPassword))
-                mBind.llAccount.setVisibility(View.GONE);
-            else
-                mBind.llAccount.setVisibility(View.VISIBLE);
+            mAccount = IoTDMSPUtils.getStringValue(this, IoTDMConstants.SP_LOGIN_ACCOUNT, "");
+            mPassword = IoTDMSPUtils.getStringValue(this, IoTDMConstants.SP_LOGIN_PASSWORD, "");
+            if (TextUtils.isEmpty(mAccount)) mBind.llAccount.setVisibility(View.GONE);
+            else mBind.tvAccount.setText(String.format("Account:%s", mAccount));
+            if (TextUtils.isEmpty(mPassword)) mBind.llAccount.setVisibility(View.GONE);
+            else mBind.llAccount.setVisibility(View.VISIBLE);
         });
         bottomDialog.show(getSupportFragmentManager());
     }
@@ -643,8 +638,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
 
     private void initDutyCycle() {
         if (mSelectedPlatform == 0) {
-            if (mSelectedRegion == 3 || mSelectedRegion == 4
-                    || mSelectedRegion == 5 || mSelectedRegion == 9) {
+            if (mSelectedRegion == 3 || mSelectedRegion == 4 || mSelectedRegion == 5 || mSelectedRegion == 9) {
                 mBind.cbDutyCycle.setChecked(false);
                 // CN779,EU433,EU868 and RU864
                 mBind.llDutyCycle.setVisibility(View.VISIBLE);
@@ -694,11 +688,9 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
     }
 
     public void selectDr1(View view) {
-        if (isWindowLocked())
-            return;
+        if (isWindowLocked()) return;
         BottomDialog bottomDialog = new BottomDialog();
-        if ((mSelectedPlatform == 0 && (mSelectedRegion <= 1 || mSelectedRegion >= 10))
-                || (mSelectedPlatform == 1 && (mSelectedServerRegion == 0 || mSelectedServerRegion >= 4))) {
+        if ((mSelectedPlatform == 0 && (mSelectedRegion <= 1 || mSelectedRegion >= 10)) || (mSelectedPlatform == 1 && (mSelectedServerRegion == 0 || mSelectedServerRegion >= 4))) {
             bottomDialog.setDatas(mDRList, mSelectedDr1 - 2);
             bottomDialog.setListener(value -> {
                 mSelectedDr1 = value + 2;
@@ -779,7 +771,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
         LogoutDialog dialog = new LogoutDialog();
         dialog.setOnLogoutClicked(() -> {
             mPassword = "";
-            SPUtiles.setStringValue(this, IoTDMConstants.SP_LOGIN_PASSWORD, "");
+            IoTDMSPUtils.setStringValue(this, IoTDMConstants.SP_LOGIN_PASSWORD, "");
             mBind.llAccount.setVisibility(View.GONE);
         });
         dialog.show(getSupportFragmentManager());
@@ -794,9 +786,9 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
             }
         }
         // 登录
-        mAccount = SPUtiles.getStringValue(this, IoTDMConstants.SP_LOGIN_ACCOUNT, "");
-        mPassword = SPUtiles.getStringValue(this, IoTDMConstants.SP_LOGIN_PASSWORD, "");
-        int env = SPUtiles.getIntValue(this, IoTDMConstants.SP_LOGIN_ENV, 0);
+        mAccount = IoTDMSPUtils.getStringValue(this, IoTDMConstants.SP_LOGIN_ACCOUNT, "");
+        mPassword = IoTDMSPUtils.getStringValue(this, IoTDMConstants.SP_LOGIN_PASSWORD, "");
+        int env = IoTDMSPUtils.getIntValue(this, IoTDMConstants.SP_LOGIN_ENV, 0);
         if (TextUtils.isEmpty(mAccount) || TextUtils.isEmpty(mPassword)) {
             LoginDialog dialog = new LoginDialog();
             dialog.setOnLoginClicked(this::login);
@@ -878,13 +870,11 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
                 // US915,AU915,CN470
                 orderTasks.add(OrderTaskAssembler.setLoraCH(mSelectedCh1, mSelectedCh2));
             }
-            if (mSelectedRegion == 3 || mSelectedRegion == 4
-                    || mSelectedRegion == 5 || mSelectedRegion == 9) {
+            if (mSelectedRegion == 3 || mSelectedRegion == 4 || mSelectedRegion == 5 || mSelectedRegion == 9) {
                 // CN779,EU433,EU868 and RU864
                 orderTasks.add(OrderTaskAssembler.setLoraDutyCycleEnable(mBind.cbDutyCycle.isChecked() ? 1 : 0));
             }
-            if (mSelectedRegion == 2 || mSelectedRegion == 3 || mSelectedRegion == 4 || mSelectedRegion == 5
-                    || mSelectedRegion == 6 || mSelectedRegion == 7 || mSelectedRegion == 9) {
+            if (mSelectedRegion == 2 || mSelectedRegion == 3 || mSelectedRegion == 4 || mSelectedRegion == 5 || mSelectedRegion == 6 || mSelectedRegion == 7 || mSelectedRegion == 9) {
                 // AS923,US915,AU915
                 orderTasks.add(OrderTaskAssembler.setLoraDR(mSelectedDr));
             }
@@ -893,14 +883,10 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
             orderTasks.add(OrderTaskAssembler.setLoraAppEUI(mRemoteAPPEUI));
             orderTasks.add(OrderTaskAssembler.setLoraAppKey(mRemoteAPPKEY));
             orderTasks.add(OrderTaskAssembler.setLoraUploadMode(2));
-            if (mSelectedServerRegion == 0)
-                mSelectedRegion = 0;
-            else if (mSelectedServerRegion == 1)
-                mSelectedRegion = 5;
-            else if (mSelectedServerRegion == 2 || mSelectedServerRegion == 3)
-                mSelectedRegion = 8;
-            else if (mSelectedServerRegion == 4 || mSelectedServerRegion == 5)
-                mSelectedRegion = 1;
+            if (mSelectedServerRegion == 0) mSelectedRegion = 0;
+            else if (mSelectedServerRegion == 1) mSelectedRegion = 5;
+            else if (mSelectedServerRegion == 2 || mSelectedServerRegion == 3) mSelectedRegion = 8;
+            else if (mSelectedServerRegion == 4 || mSelectedServerRegion == 5) mSelectedRegion = 1;
             // 保存并连接
             orderTasks.add(OrderTaskAssembler.setLoraRegion(mSelectedRegion));
             if (mSelectedServerRegion > 1) {
@@ -945,71 +931,67 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
         entity.username = account;
         entity.password = password;
         entity.source = 1;
-        if (envValue == 0)
-            Urls.setCloudEnv(getApplicationContext());
-        else
-            Urls.setTestEnv(getApplicationContext());
+        if (envValue == 0) Urls.setCloudEnv(getApplicationContext());
+        else Urls.setTestEnv(getApplicationContext());
         RequestBody body = RequestBody.create(Urls.JSON, new Gson().toJson(entity));
-        OkGo.<String>post(Urls.loginApi(getApplicationContext()))
-                .upRequestBody(body)
-                .execute(new StringCallback() {
+        OkGo.<String>post(Urls.loginApi(getApplicationContext())).upRequestBody(body).execute(new StringCallback() {
 
-                    @Override
-                    public void onStart(Request<String, ? extends Request> request) {
-                        showLoadingProgressDialog();
-                    }
+            @Override
+            public void onStart(Request<String, ? extends Request> request) {
+                showLoadingProgressDialog();
+            }
 
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        Type type = new TypeToken<CommonResp<JsonObject>>() {
-                        }.getType();
-                        CommonResp<JsonObject> commonResp = new Gson().fromJson(response.body(), type);
-                        if (commonResp.code != 200) {
-                            ToastUtils.showToast(LoRaConnSettingActivity.this, commonResp.msg);
-                            LoginDialog dialog = new LoginDialog();
-                            dialog.setOnLoginClicked((account1, password1, env) -> login(account1, password1, env));
-                            dialog.show(getSupportFragmentManager());
-                            return;
-                        }
-                        mAccount = account;
-                        SPUtiles.setStringValue(LoRaConnSettingActivity.this, IoTDMConstants.SP_LOGIN_ACCOUNT, account);
-                        SPUtiles.setStringValue(LoRaConnSettingActivity.this, IoTDMConstants.SP_LOGIN_PASSWORD, password);
-                        SPUtiles.setIntValue(LoRaConnSettingActivity.this, IoTDMConstants.SP_LOGIN_ENV, envValue);
-                        // add header
-                        String accessToken = commonResp.data.get("access_token").getAsString();
-                        HttpHeaders headers = new HttpHeaders();
-                        headers.put("Authorization", accessToken);
-                        OkGo.getInstance().addCommonHeaders(headers);
+            @Override
+            public void onSuccess(Response<String> response) {
+                Type type = new TypeToken<CommonResp<JsonObject>>() {
+                }.getType();
+                CommonResp<JsonObject> commonResp = new Gson().fromJson(response.body(), type);
+                if (commonResp.code != 200) {
+                    ToastUtils.showToast(LoRaConnSettingActivity.this, commonResp.msg);
+                    LoginDialog dialog = new LoginDialog();
+                    dialog.setOnLoginClicked((account1, password1, env) -> login(account1, password1, env));
+                    dialog.show(getSupportFragmentManager());
+                    return;
+                }
+                mAccount = account;
+                IoTDMSPUtils.setStringValue(LoRaConnSettingActivity.this, IoTDMConstants.SP_LOGIN_ACCOUNT, account);
+                IoTDMSPUtils.setStringValue(LoRaConnSettingActivity.this, IoTDMConstants.SP_LOGIN_PASSWORD, password);
+                IoTDMSPUtils.setIntValue(LoRaConnSettingActivity.this, IoTDMConstants.SP_LOGIN_ENV, envValue);
+                // add header
+                String accessToken = commonResp.data.get("access_token").getAsString();
+                HttpHeaders headers = new HttpHeaders();
+                headers.put("Authorization", accessToken);
+                OkGo.getInstance().addCommonHeaders(headers);
 
-                        if (mSelectedServerRegion == 0) {
-                            mDeviceProfileSearch = String.format("AS923_%s", DEVICE_PROFILE_TYPE);
-                        } else if (mSelectedServerRegion == 1) {
-                            mDeviceProfileSearch = String.format("EU868_%s", DEVICE_PROFILE_TYPE);
-                        } else if (mSelectedServerRegion == 2) {
-                            mDeviceProfileSearch = String.format("US915_0_%s", DEVICE_PROFILE_TYPE);
-                        } else if (mSelectedServerRegion == 3) {
-                            mDeviceProfileSearch = String.format("US915_1_%s", DEVICE_PROFILE_TYPE);
-                        } else if (mSelectedServerRegion == 4) {
-                            mDeviceProfileSearch = String.format("AU915_0_%s", DEVICE_PROFILE_TYPE);
-                        } else if (mSelectedServerRegion == 5) {
-                            mDeviceProfileSearch = String.format("AU915_1_%s", DEVICE_PROFILE_TYPE);
-                        }
-                        syncDevices();
-                    }
+                if (mSelectedServerRegion == 0) {
+                    mDeviceProfileSearch = String.format("AS923_%s", DEVICE_PROFILE_TYPE);
+                } else if (mSelectedServerRegion == 1) {
+                    mDeviceProfileSearch = String.format("EU868_%s", DEVICE_PROFILE_TYPE);
+                } else if (mSelectedServerRegion == 2) {
+                    mDeviceProfileSearch = String.format("US915_0_%s", DEVICE_PROFILE_TYPE);
+                } else if (mSelectedServerRegion == 3) {
+                    mDeviceProfileSearch = String.format("US915_1_%s", DEVICE_PROFILE_TYPE);
+                } else if (mSelectedServerRegion == 4) {
+                    mDeviceProfileSearch = String.format("AU915_0_%s", DEVICE_PROFILE_TYPE);
+                } else if (mSelectedServerRegion == 5) {
+                    mDeviceProfileSearch = String.format("AU915_1_%s", DEVICE_PROFILE_TYPE);
+                }
+                syncDevices();
+            }
 
-                    @Override
-                    public void onError(Response<String> response) {
-                        ToastUtils.showToast(LoRaConnSettingActivity.this, R.string.request_error);
-                        LoginDialog dialog = new LoginDialog();
-                        dialog.setOnLoginClicked((account12, password12, env) -> login(account12, password12, env));
-                        dialog.show(getSupportFragmentManager());
-                    }
+            @Override
+            public void onError(Response<String> response) {
+                ToastUtils.showToast(LoRaConnSettingActivity.this, R.string.request_error);
+                LoginDialog dialog = new LoginDialog();
+                dialog.setOnLoginClicked((account12, password12, env) -> login(account12, password12, env));
+                dialog.show(getSupportFragmentManager());
+            }
 
-                    @Override
-                    public void onFinish() {
-                        dismissLoadingProgressDialog();
-                    }
-                });
+            @Override
+            public void onFinish() {
+                dismissLoadingProgressDialog();
+            }
+        });
     }
 
     private void syncDevices() {
@@ -1018,19 +1000,7 @@ public class LoRaConnSettingActivity extends Lw006BaseActivity implements Compou
         if (!TextUtils.isEmpty(mGatewayId)) {
             gwName = String.format("%s_%s", mAccount, mGatewayId.substring(12).toUpperCase());
         }
-        OkGo.<String>post(Urls.syncGatewayApi(getApplicationContext()))
-                .params("devEui", mRemoteDevEUI)
-                .params("model", PRODUCT_MODEL)
-                .params("applicationIdFull", APPLICATION_NAME)
-                .params("devName", devName)
-                .params("devDesc", mAccount)
-                .params("gwId", mGatewayId)
-                .params("gwName", gwName)
-                .params("gwSearch", gwName)
-                .params("gwDesc", mAccount)
-                .params("joinEui", mRemoteAPPEUI)
-                .params("nwkKey", mRemoteAPPKEY)
-                .params("devProfilesSearch", mDeviceProfileSearch)
+        OkGo.<String>post(Urls.syncGatewayApi(getApplicationContext())).params("devEui", mRemoteDevEUI).params("model", PRODUCT_MODEL).params("applicationIdFull", APPLICATION_NAME).params("devName", devName).params("devDesc", mAccount).params("gwId", mGatewayId).params("gwName", gwName).params("gwSearch", gwName).params("gwDesc", mAccount).params("joinEui", mRemoteAPPEUI).params("nwkKey", mRemoteAPPKEY).params("devProfilesSearch", mDeviceProfileSearch)
 
                 .execute(new StringCallback() {
 
