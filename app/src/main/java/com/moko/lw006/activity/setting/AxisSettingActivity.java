@@ -212,7 +212,7 @@ public class AxisSettingActivity extends Lw006BaseActivity {
         if (TextUtils.isEmpty(mBind.etMotionDuration.getText())) return false;
         final String motionDurationStr = mBind.etMotionDuration.getText().toString();
         final int motionDuration = Integer.parseInt(motionDurationStr);
-        return motionDuration >= 1 && motionDuration <= 15;
+        return motionDuration >= 1 && motionDuration <= 50;
     }
 
     private void saveParams() {

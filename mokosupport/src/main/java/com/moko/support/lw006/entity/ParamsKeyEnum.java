@@ -333,6 +333,10 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_CLEAR_STORAGE_DATA(0xC1),
     //暂停/恢复传输
     KEY_SYNC_ENABLE(0xC2),
+
+    KEY_OUTDOOR_BLE_REPORT_INTERVAL(0xD0),
+    // 室外GPS定位上报间隔
+    KEY_OUTDOOR_GPS_REPORT_INTERVAL(0xD1),
     ;
 
     private final int paramsKey;

@@ -41,6 +41,7 @@ public class MotionModeActivity extends Lw006BaseActivity {
     private int mTripSelected;
     private int mEndSelected;
     private int stationarySelected;
+    private final String[] tripValue = {"WIFI", "BLE", "GPS", "WIFI+GPS", "BLE+GPS", "WIFI+BLE", "WIFI+BLE+GPS", "BLE&GPS"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +184,7 @@ public class MotionModeActivity extends Lw006BaseActivity {
                                 case KEY_MOTION_MODE_TRIP_POS_STRATEGY:
                                     if (length > 0) {
                                         mTripSelected = value[4] & 0xFF;
-                                        mBind.tvPosStrategyInTrip.setText(mValues.get(mTripSelected));
+                                        mBind.tvPosStrategyInTrip.setText(tripValue[mTripSelected]);
                                     }
                                     break;
                                 case KEY_MOTION_MODE_END_TIMEOUT:
@@ -364,10 +365,10 @@ public class MotionModeActivity extends Lw006BaseActivity {
     public void selectPosStrategyTrip(View view) {
         if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mValues, mTripSelected);
+        dialog.setDatas(new ArrayList<>(Arrays.asList(tripValue)), mTripSelected);
         dialog.setListener(value -> {
             mTripSelected = value;
-            mBind.tvPosStrategyInTrip.setText(mValues.get(value));
+            mBind.tvPosStrategyInTrip.setText(tripValue[value]);
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -383,7 +384,7 @@ public class MotionModeActivity extends Lw006BaseActivity {
         dialog.show(getSupportFragmentManager());
     }
 
-    public void selectPosStrategyStationary(View view){
+    public void selectPosStrategyStationary(View view) {
         if (isWindowLocked()) return;
         BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mValues, stationarySelected);

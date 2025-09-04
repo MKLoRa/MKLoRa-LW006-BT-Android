@@ -52,6 +52,7 @@ public class PeriodicModeActivity extends Lw006BaseActivity {
         mValues.add("BLE+GPS");
         mValues.add("WIFI+BLE");
         mValues.add("WIFI+BLE+GPS");
+        mValues.add("BLE&GPS");
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();

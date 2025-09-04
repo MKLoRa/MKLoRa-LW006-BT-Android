@@ -604,11 +604,15 @@ public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.
         startActivity(intent);
     }
 
+    public void onBleAndGPS(View view) {
+        if (isWindowLocked()) return;
+        Intent intent = new Intent(this, PosBleAndGpsActivity.class);
+        startActivity(intent);
+    }
     public void onOfflineFix(View view) {
         if (isWindowLocked()) return;
         posFragment.changeOfflineFix();
     }
-
     public void onDeviceMode(View view) {
         if (isWindowLocked()) return;
         Intent intent = new Intent(this, DeviceModeActivity.class);
