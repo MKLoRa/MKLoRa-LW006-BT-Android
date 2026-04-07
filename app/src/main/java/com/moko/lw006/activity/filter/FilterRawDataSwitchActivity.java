@@ -89,9 +89,7 @@ public class FilterRawDataSwitchActivity extends Lw006BaseActivity {
                                 case KEY_FILTER_BXP_ACC:
                                 case KEY_FILTER_BXP_TH:
                                 case KEY_FILTER_BXP_DEVICE:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
+                                    savedParamsError |= result != 1;
                                     if (savedParamsError) {
                                         ToastUtils.showToast(FilterRawDataSwitchActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                     } else {

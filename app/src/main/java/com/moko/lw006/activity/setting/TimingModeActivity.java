@@ -167,14 +167,10 @@ public class TimingModeActivity extends Lw006BaseActivity implements BaseQuickAd
                             int result = value[4] & 0xFF;
                             switch (configKeyEnum) {
                                 case KEY_TIME_MODE_POS_STRATEGY:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
+                                    savedParamsError |= result != 1;
                                     break;
                                 case KEY_TIME_MODE_REPORT_TIME_POINT:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
+                                    savedParamsError |= result != 1;
                                     if (savedParamsError) {
                                         ToastUtils.showToast(TimingModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                     } else {

@@ -88,14 +88,10 @@ public class PosBleAndGpsActivity extends Lw006BaseActivity {
                             int result = value[4] & 0xFF;
                             switch (configKeyEnum) {
                                 case KEY_OUTDOOR_BLE_REPORT_INTERVAL:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
+                                    savedParamsError |= result != 1;
                                     break;
                                 case KEY_OUTDOOR_GPS_REPORT_INTERVAL:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
+                                    savedParamsError |= result != 1;
                                     if (savedParamsError || isTimeout) {
                                         ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                     } else {

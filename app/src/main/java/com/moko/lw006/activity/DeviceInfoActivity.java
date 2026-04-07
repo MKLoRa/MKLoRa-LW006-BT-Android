@@ -209,9 +209,7 @@ public class DeviceInfoActivity extends Lw006BaseActivity implements RadioGroup.
                                 case KEY_BUZZER_SOUND_CHOOSE:
                                 case KEY_VIBRATION_INTENSITY:
                                 case KEY_LOW_POWER_PAYLOAD_ENABLE:
-                                    if (result != 1) {
-                                        savedParamsError = true;
-                                    }
+                                    savedParamsError |= result != 1;
                                     if (savedParamsError) {
                                         ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                     } else {
